@@ -1,0 +1,35 @@
+// -------------------- ATTENDANCE & SMS --------------------
+
+model Attendance {
+  id                  String           @id @default(uuid()) @db.Uuid
+  studentEnrollmentId String           @db.Uuid
+  date                DateTime         @db.Date
+  status              AttendanceStatus
+  remarks             String?
+  markedBy            String           @db.Uuid
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  enrollment StudentEnrollment  @relation(fields: [studentEnrollmentId], references: [id], onDelete: Restrict)
+  marker     User               @relation("AttendanceMarkedBy", fields: [markedBy], references: [id], onDelete: Restrict)
+  smsLogs    AttendanceSmsLog[]
+
+  @@unique([studentEnrollmentId, date])
+  @@index([date, status])
+}
+
+model AttendanceSmsLog {
+  id           String    @id @default(uuid()) @db.Uuid
+  attendanceId String    @db.Uuid
+  parentId     String    @db.Uuid
+  phone        String    @db.VarChar(20)
+  message      String
+  status       SmsStatus @default(PENDING)
+  sentAt       DateTime?
+  createdAt    DateTime  @default(now())
+
+  attendance Attendance @relation(fields: [attendanceId], references: [id], onDelete: Cascade)
+  parent     Parent     @relation(fields: [parentId], references: [id], onDelete: Restrict)
+
+  @@index([status, createdAt])
+}

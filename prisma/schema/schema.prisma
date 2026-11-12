@@ -1,7 +1,10 @@
+// School Management System - Final Prisma Schema
+// Stack: PostgreSQL + Prisma ORM (Prisma 7)
+// Keep DATABASE_URL in prisma.config.ts for Prisma 7.
 
 generator client {
   provider = "prisma-client"
-  output = "../generated"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {

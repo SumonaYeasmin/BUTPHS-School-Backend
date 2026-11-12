@@ -1,0 +1,34 @@
+// -------------------- DIGITAL EDUCATION --------------------
+
+model DigitalClassroom {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(150)
+  description String?
+  location    String?  @db.VarChar(150)
+  image       String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DigitalResource {
+  id             String       @id @default(uuid()) @db.Uuid
+  academicYearId String?      @db.Uuid
+  title          String       @db.VarChar(200)
+  description    String?
+  resourceType   ResourceType
+  subjectId      String?      @db.Uuid
+  classId        String?      @db.Uuid
+  url            String
+  thumbnail      String?
+  isPublished    Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  academicYear AcademicYear? @relation(fields: [academicYearId], references: [id], onDelete: SetNull)
+  subject      Subject?      @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  schoolClass  SchoolClass?  @relation(fields: [classId], references: [id], onDelete: SetNull)
+
+  @@index([resourceType, isPublished])
+  @@index([classId, subjectId])
+}

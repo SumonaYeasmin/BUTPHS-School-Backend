@@ -1,0 +1,90 @@
+// -------------------- WEBSITE CONTENT & MEDIA --------------------
+
+model WebsiteBanner {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String?  @db.VarChar(200)
+  subtitle  String?
+  image     String
+  link      String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+}
+
+model LeadershipMessage {
+  id          String         @id @default(uuid()) @db.Uuid
+  personName  String         @db.VarChar(150)
+  designation String         @db.VarChar(100)
+  photo       String?
+  message     String
+  type        LeadershipType
+  isPublished Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([type, isPublished])
+}
+
+model Gallery {
+  id          String         @id @default(uuid()) @db.Uuid
+  title       String         @db.VarChar(150)
+  description String?
+  category    String?        @db.VarChar(100)
+  isPublished Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  media       GalleryMedia[]
+}
+
+model GalleryMedia {
+  id        String    @id @default(uuid()) @db.Uuid
+  galleryId String    @db.Uuid
+  mediaUrl  String
+  mediaType MediaType
+  caption   String?
+  sortOrder Int       @default(0)
+  createdAt DateTime  @default(now())
+
+  gallery Gallery @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+
+  @@index([galleryId, sortOrder])
+}
+
+model AdmissionContent {
+  id            String   @id @default(uuid()) @db.Uuid
+  title         String   @db.VarChar(200)
+  description   String?
+  admissionInfo String?
+  image         String?
+  isPublished   Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ContactInformation {
+  id        String   @id @default(uuid()) @db.Uuid
+  address   String
+  phone     String?  @db.VarChar(20)
+  email     String?  @db.VarChar(150)
+  mapUrl    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Aggregate-only public attendance data; never expose individual student attendance publicly.
+model AttendancePublicSummary {
+  id           String   @id @default(uuid()) @db.Uuid
+  summaryDate  DateTime @db.Date
+  title        String   @db.VarChar(200)
+  description  String?
+  presentCount Int?
+  absentCount  Int?
+  isPublished  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([summaryDate])
+}

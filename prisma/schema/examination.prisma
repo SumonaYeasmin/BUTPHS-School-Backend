@@ -1,0 +1,152 @@
+// -------------------- EXAMINATION & RESULTS --------------------
+
+model GradingScale {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String       @db.VarChar(100)
+  description String?
+  isActive    Boolean      @default(true)
+  gradeRanges GradeRange[]
+  exams       Exam[]
+
+  @@unique([name])
+}
+
+model GradeRange {
+  id             String       @id @default(uuid()) @db.Uuid
+  gradingScaleId String       @db.Uuid
+  minMarks       Decimal      @db.Decimal(5, 2)
+  maxMarks       Decimal      @db.Decimal(5, 2)
+  letterGrade    String       @db.VarChar(5)
+  gradePoint     Decimal      @db.Decimal(3, 2)
+  gradingScale   GradingScale @relation(fields: [gradingScaleId], references: [id], onDelete: Cascade)
+
+  @@unique([gradingScaleId, letterGrade])
+  @@index([gradingScaleId, minMarks, maxMarks])
+}
+
+model Exam {
+  id             String                  @id @default(uuid()) @db.Uuid
+  academicYearId String                  @db.Uuid
+  classId        String                  @db.Uuid
+  gradingScaleId String                  @db.Uuid
+  name           String                  @db.VarChar(150)
+  examType       ExamType
+  startDate      DateTime                @db.Date
+  endDate        DateTime                @db.Date
+  resultStatus   ResultPublicationStatus @default(DRAFT)
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+
+  academicYear    AcademicYear           @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+  schoolClass     SchoolClass            @relation(fields: [classId], references: [id], onDelete: Restrict)
+  gradingScale    GradingScale           @relation(fields: [gradingScaleId], references: [id], onDelete: Restrict)
+  examSubjects    ExamSubject[]
+  examRoutines    ExamRoutine[]
+  subjectResults  StudentSubjectResult[]
+  resultSummaries ResultSummary[]
+
+  @@unique([academicYearId, classId, name])
+  @@index([academicYearId, classId])
+}
+
+model ExamSubject {
+  id                 String   @id @default(uuid()) @db.Uuid
+  examId             String   @db.Uuid
+  subjectId          String   @db.Uuid
+  fullMarks          Decimal  @db.Decimal(7, 2)
+  passMarks          Decimal  @db.Decimal(7, 2)
+  hasWritten         Boolean  @default(true)
+  hasMcq             Boolean  @default(false)
+  hasPractical       Boolean  @default(false)
+  writtenFullMarks   Decimal? @db.Decimal(7, 2)
+  mcqFullMarks       Decimal? @db.Decimal(7, 2)
+  practicalFullMarks Decimal? @db.Decimal(7, 2)
+
+  exam           Exam                   @relation(fields: [examId], references: [id], onDelete: Cascade)
+  subject        Subject                @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  marks          Mark[]
+  subjectResults StudentSubjectResult[]
+  examRoutines   ExamRoutine[]
+
+  @@unique([examId, subjectId])
+}
+
+model ExamRoutine {
+  id                  String   @id @default(uuid()) @db.Uuid
+  examId              String   @db.Uuid
+  teacherAssignmentId String?  @db.Uuid
+  staffId             String?  @db.Uuid
+  examSubjectId       String   @db.Uuid
+  examDate            DateTime @db.Date
+  startTime           DateTime @db.Time(0)
+  endTime             DateTime @db.Time(0)
+  room                String?  @db.VarChar(50)
+
+  exam              Exam               @relation(fields: [examId], references: [id], onDelete: Cascade)
+  teacherAssignment TeacherAssignment? @relation(fields: [teacherAssignmentId], references: [id], onDelete: SetNull)
+  staff             Staff?             @relation(fields: [staffId], references: [id], onDelete: SetNull)
+  examSubject       ExamSubject        @relation(fields: [examSubjectId], references: [id], onDelete: Restrict)
+  academicYear      AcademicYear?      @relation(fields: [academicYearId], references: [id])
+  academicYearId    String?            @db.Uuid
+
+  @@index([examId, examDate])
+}
+
+model Mark {
+  id                  String   @id @default(uuid()) @db.Uuid
+  studentEnrollmentId String   @db.Uuid
+  examSubjectId       String   @db.Uuid
+  writtenMarks        Decimal  @default(0) @db.Decimal(7, 2)
+  mcqMarks            Decimal  @default(0) @db.Decimal(7, 2)
+  practicalMarks      Decimal  @default(0) @db.Decimal(7, 2)
+  totalMarks          Decimal  @db.Decimal(7, 2)
+  enteredBy           String   @db.Uuid
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  enrollment  StudentEnrollment @relation(fields: [studentEnrollmentId], references: [id], onDelete: Restrict)
+  examSubject ExamSubject       @relation(fields: [examSubjectId], references: [id], onDelete: Restrict)
+  creator     User              @relation("MarksEnteredBy", fields: [enteredBy], references: [id], onDelete: Restrict)
+
+  @@unique([studentEnrollmentId, examSubjectId])
+  @@index([examSubjectId])
+}
+
+model StudentSubjectResult {
+  id                  String   @id @default(uuid()) @db.Uuid
+  studentEnrollmentId String   @db.Uuid
+  examId              String   @db.Uuid
+  examSubjectId       String   @db.Uuid
+  totalMarks          Decimal  @db.Decimal(7, 2)
+  letterGrade         String?  @db.VarChar(5)
+  gradePoint          Decimal? @db.Decimal(3, 2)
+  isPassed            Boolean
+  calculatedAt        DateTime @default(now())
+
+  enrollment  StudentEnrollment @relation(fields: [studentEnrollmentId], references: [id], onDelete: Restrict)
+  exam        Exam              @relation(fields: [examId], references: [id], onDelete: Restrict)
+  examSubject ExamSubject       @relation(fields: [examSubjectId], references: [id], onDelete: Restrict)
+
+  @@unique([studentEnrollmentId, examSubjectId])
+  @@index([examId, studentEnrollmentId])
+}
+
+model ResultSummary {
+  id                  String       @id @default(uuid()) @db.Uuid
+  studentEnrollmentId String       @db.Uuid
+  examId              String       @db.Uuid
+  totalMarks          Decimal      @db.Decimal(9, 2)
+  gpa                 Decimal?     @db.Decimal(3, 2)
+  letterGrade         String?      @db.VarChar(5)
+  meritPosition       Int?
+  resultStatus        ResultStatus
+  publishedAt         DateTime?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  enrollment StudentEnrollment @relation(fields: [studentEnrollmentId], references: [id], onDelete: Restrict)
+  exam       Exam              @relation(fields: [examId], references: [id], onDelete: Restrict)
+
+  @@unique([studentEnrollmentId, examId])
+  @@index([examId, meritPosition])
+}

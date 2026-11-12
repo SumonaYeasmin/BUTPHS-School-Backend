@@ -1,0 +1,35 @@
+// -------------------- LIBRARY INFORMATION --------------------
+
+model LibraryProfile {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String   @db.VarChar(150)
+  description String?
+  image       String?
+  updatedAt   DateTime @updatedAt
+}
+
+model LibraryBook {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String   @db.VarChar(200)
+  author      String?  @db.VarChar(150)
+  publisher   String?  @db.VarChar(150)
+  category    String?  @db.VarChar(100)
+  description String?
+  coverImage  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([title])
+}
+
+model LibraryDistributionInfo {
+  id               String                  @id @default(uuid()) @db.Uuid
+  type             LibraryDistributionType
+  title            String                  @db.VarChar(200)
+  description      String?
+  distributionDate DateTime?               @db.Date
+  image            String?
+  isPublished      Boolean                 @default(true)
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+}

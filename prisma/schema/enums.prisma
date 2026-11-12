@@ -1,0 +1,150 @@
+// -------------------- ENUMS --------------------
+
+enum StaffType {
+  TEACHER
+  OFFICER
+  EMPLOYEE
+}
+
+enum StaffStatus {
+  ACTIVE
+  FORMER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  GRADUATED
+  TRANSFERRED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  PROMOTED
+  TRANSFERRED
+  COMPLETED
+}
+
+enum RelationshipType {
+  FATHER
+  MOTHER
+  GUARDIAN
+  OTHER
+}
+
+enum AcademicDocumentType {
+  CURRICULUM
+  STUDENT_RULES
+  PARENT_GUIDELINES
+  DRESS_CODE
+}
+
+enum AcademicEventType {
+  HOLIDAY
+  EVENT
+  ADMISSION
+  OTHER
+}
+
+enum WeekDay {
+  SATURDAY
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  LEAVE
+}
+
+enum SmsStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum ExamType {
+  HALF_YEARLY
+  ANNUAL
+  SELECTION
+  OTHER
+}
+
+enum ResultPublicationStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum ResultStatus {
+  PASS
+  FAIL
+  INCOMPLETE
+}
+
+enum NoticeStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum InstitutionContentType {
+  HISTORY
+  TRADITION
+  INFRASTRUCTURE
+  INTRODUCTION
+}
+
+enum FacilityType {
+  LAB
+  LIBRARY
+  PLAYGROUND
+  MULTIMEDIA
+  OTHER
+}
+
+enum ResourceType {
+  SMART_CLASS_VIDEO
+  ONLINE_CLASS_LINK
+  EDUCATIONAL_VIDEO
+  MULTIMEDIA_CONTENT
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum LeadershipType {
+  PRINCIPAL
+  CHAIRMAN
+}
+
+enum EventCategoryType {
+  SPORTS
+  DEBATE
+  SCIENCE_FAIR
+  CULTURAL
+  SCOUTS
+  GIRL_GUIDES
+  TREE_PLANTATION
+  NATIONAL_DAY
+  OTHER
+}
+
+enum LibraryDistributionType {
+  BOOK_DISTRIBUTION
+  TEXTBOOK_DISTRIBUTION
+  OTHER
+}
