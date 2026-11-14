@@ -46,3 +46,4 @@ export class StudentController {
     return this.studentService.create(dto);
   }
 }
+
