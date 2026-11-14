@@ -65,3 +65,4 @@ export class QueryStudentDto {
   @IsEnum(StudentStatus)
   status?: StudentStatus;
 }
+
