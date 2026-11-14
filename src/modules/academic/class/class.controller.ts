@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import {
 } from '@nestjs/swagger';
 import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
+import { UpdateClassDto } from './dto/update-class.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -67,5 +69,24 @@ export class ClassController {
   @ApiResponse({ status: 404, description: 'Class not found' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.classService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update class details by ID (Admin only)' })
+  @ApiParam({ name: 'id', description: 'Class UUID' })
+  @ApiResponse({ status: 200, description: 'Class updated successfully' })
+  @ApiResponse({ status: 404, description: 'Class not found' })
+  @ApiResponse({
+    status: 409,
+    description: 'Class name or numeric value already exists',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateClassDto,
+  ) {
+    return this.classService.update(id, dto);
   }
 }

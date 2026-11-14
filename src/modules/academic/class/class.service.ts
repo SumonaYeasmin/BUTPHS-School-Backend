@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateClassDto } from './dto/create-class.dto';
+import { UpdateClassDto } from './dto/update-class.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
   ConflictException,
@@ -121,6 +122,67 @@ export class ClassService {
     return ResponseHelper.success(
       schoolClass,
       'Class details retrieved successfully',
+    );
+  }
+
+  async update(id: string, dto: UpdateClassDto) {
+    const existing = await this.prisma.schoolClass.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Class');
+    }
+
+    // 1. Check duplicate name if name is being changed
+    if (dto.name && dto.name.trim() !== existing.name) {
+      const trimmedName = dto.name.trim();
+      const duplicateName = await this.prisma.schoolClass.findUnique({
+        where: { name: trimmedName },
+      });
+      if (duplicateName) {
+        throw new ConflictException(
+          `Class with name '${trimmedName}' already exists`,
+        );
+      }
+    }
+
+    // 2. Check duplicate numeric value if numeric value is being changed
+    if (
+      dto.numericValue !== undefined &&
+      dto.numericValue !== existing.numericValue
+    ) {
+      const duplicateNumeric = await this.prisma.schoolClass.findUnique({
+        where: { numericValue: dto.numericValue },
+      });
+      if (duplicateNumeric) {
+        throw new ConflictException(
+          `Class with numeric value '${dto.numericValue}' already exists (${duplicateNumeric.name})`,
+        );
+      }
+    }
+
+    const updated = await this.prisma.schoolClass.update({
+      where: { id },
+      data: {
+        ...(dto.name ? { name: dto.name.trim() } : {}),
+        ...(dto.numericValue !== undefined
+          ? { numericValue: dto.numericValue }
+          : {}),
+      },
+      include: {
+        sections: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return ResponseHelper.success(
+      updated,
+      `Class '${updated.name}' updated successfully`,
     );
   }
 }
