@@ -121,4 +121,32 @@ export class StudentController {
   ) {
     return this.studentService.update(id, dto);
   }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update student profile and active enrollment details (Admin only)',
+    description:
+      'Updates personal information and optionally corrects active section, group, or roll number.',
+  })
+  @ApiParam({ name: 'id', description: 'Student UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Student profile updated successfully',
+  })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 404, description: 'Student not found' })
+  @ApiResponse({
+    status: 409,
+    description:
+      'Duplicate roll number, birth certificate, or RFID card number',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateStudentDto,
+  ) {
+    return this.studentService.update(id, dto);
+  }
 }
