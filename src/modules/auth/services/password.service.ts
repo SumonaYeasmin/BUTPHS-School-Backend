@@ -4,8 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { RedisService } from '../../../shared/redis/redis.service';
-import { EmailService } from '../../../shared/mail/email-service';
-import { baseEmailTemplate } from '../../../shared/mail/templates/base-email.template';
+import { OtpService } from './otp.service';
+import { OtpType } from '../constants/auth.constant';
 import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { ChangePasswordDto } from '../dto/change-password.dto';
@@ -22,58 +22,27 @@ export class PasswordService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly redisService: RedisService,
-    private readonly emailService: EmailService,
+    private readonly otpService: OtpService,
   ) {}
 
   async forgotPassword(dto: ForgotPasswordDto) {
+    const normalizedInput = dto.email.trim().toLowerCase();
     const user = await this.prisma.user.findFirst({
       where: {
-        OR: [{ email: dto.email }, { phone: dto.email }],
+        OR: [{ email: normalizedInput }, { phone: dto.email.trim() }],
       },
     });
 
-    if (!user) {
+    if (!user || !user.email) {
       throw new NotFoundException('User with this email/phone not found');
     }
 
-    const resetSecret =
-      this.configService.get<string>('jwt.accessSecret') ||
-      (this.configService.get<string>('JWT_ACCESS_SECRET') as string);
-
-    // 15 minutes validity
-    const resetToken = this.jwtService.sign(
-      { sub: user.id, email: user.email, purpose: 'reset-password' },
-      { secret: resetSecret, expiresIn: '15m' },
-    );
-
-    // Save token in Redis for single-use protection (TTL: 15 min = 900s)
-    await this.redisService.set(`reset_token:${user.id}`, resetToken, 15 * 60);
-
-    // If user has email, send instructions
-    if (user.email) {
-      const subject = 'Password Reset Request';
-      const content = `
-        <p style="color: #cccccc; line-height: 1.6;">
-          Hello <strong>${user.name}</strong>,<br><br>
-          We received a request to reset your password. Use the following reset token to set a new password. This token is valid for 15 minutes:
-        </p>
-        <div style="background-color: rgba(255, 255, 255, 0.1); border: 1px solid #7F41F0; border-radius: 8px; padding: 15px; font-family: monospace; word-break: break-all; color: #fff; margin: 20px 0; font-size: 13px;">
-          ${resetToken}
-        </div>
-        <p style="color: #cccccc; font-size: 13px;">
-          If you did not request a password reset, please ignore this email.
-        </p>
-      `;
-      await this.emailService.sendEmail(
-        user.email,
-        subject,
-        baseEmailTemplate('Password Reset Request', content),
-      );
-    }
+    // Send 6-digit OTP via OtpService
+    await this.otpService.sendOtp(user.email, OtpType.PASSWORD_RESET);
 
     return ResponseHelper.success(
-      { resetToken },
-      'Password reset instructions sent. Token is valid for 15 minutes.',
+      { email: user.email },
+      'Password reset OTP has been sent to your email. Please verify the code to proceed.',
     );
   }
 
@@ -118,7 +87,7 @@ export class PasswordService {
         data: { passwordHash: hashedPassword },
       });
 
-      // Clear reset token and invalidate current sessions in Redis
+      // Clear reset token and revoke current sessions
       await this.redisService.del(`reset_token:${user.id}`);
       await this.redisService.del(`refresh_token:${user.id}`);
       await this.redisService.set(
@@ -166,4 +135,3 @@ export class PasswordService {
     return ResponseHelper.success(null, 'Password changed successfully');
   }
 }
-
