@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateAcademicGroupDto } from './dto/create-academic-group.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
-import { ConflictException } from '../../../common/exceptions/business.exception';
+import {
+  ConflictException,
+  NotFoundException,
+} from '../../../common/exceptions/business.exception';
 
 @Injectable()
 export class AcademicGroupService {
@@ -35,5 +38,46 @@ export class AcademicGroupService {
       `Academic group '${group.name}' created successfully`,
     );
   }
-}
 
+  async findAll() {
+    const groups = await this.prisma.academicGroup.findMany({
+      orderBy: { name: 'asc' },
+      include: {
+        _count: {
+          select: {
+            enrollments: true,
+            classSubjects: true,
+          },
+        },
+      },
+    });
+
+    return ResponseHelper.success(
+      groups,
+      'Academic groups retrieved successfully',
+    );
+  }
+
+  async findOne(id: string) {
+    const group = await this.prisma.academicGroup.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            enrollments: true,
+            classSubjects: true,
+          },
+        },
+      },
+    });
+
+    if (!group) {
+      throw new NotFoundException('Academic group');
+    }
+
+    return ResponseHelper.success(
+      group,
+      'Academic group details retrieved successfully',
+    );
+  }
+}

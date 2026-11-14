@@ -21,4 +21,3 @@ export class CreateAcademicGroupDto {
   @MaxLength(500)
   description?: string;
 }
-

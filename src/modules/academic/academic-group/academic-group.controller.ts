@@ -1,7 +1,16 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -33,5 +42,30 @@ export class AcademicGroupController {
   async create(@Body() dto: CreateAcademicGroupDto) {
     return this.academicGroupService.create(dto);
   }
-}
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all academic groups' })
+  @ApiResponse({
+    status: 200,
+    description: 'Academic groups retrieved successfully',
+  })
+  async findAll() {
+    return this.academicGroupService.findAll();
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get academic group details by ID' })
+  @ApiParam({ name: 'id', description: 'Academic group UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Academic group details retrieved successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Academic group not found' })
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.academicGroupService.findOne(id);
+  }
+}
