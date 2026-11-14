@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -17,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 import { QueryStudentDto } from './dto/query-student.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -89,5 +91,34 @@ export class StudentController {
   @ApiResponse({ status: 404, description: 'Student not found' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.studentService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary:
+      'Update student profile and active enrollment details (Admin only)',
+    description:
+      'Updates personal information and optionally corrects active section, group, or roll number.',
+  })
+  @ApiParam({ name: 'id', description: 'Student UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Student profile updated successfully',
+  })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 404, description: 'Student not found' })
+  @ApiResponse({
+    status: 409,
+    description:
+      'Duplicate roll number, birth certificate, or RFID card number',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateStudentDto,
+  ) {
+    return this.studentService.update(id, dto);
   }
 }

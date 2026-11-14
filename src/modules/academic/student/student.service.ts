@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Prisma } from '../../../../prisma/generated/client';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 import { QueryStudentDto } from './dto/query-student.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
@@ -317,6 +318,210 @@ export class StudentService {
     return ResponseHelper.success(
       student,
       'Student details retrieved successfully',
+    );
+  }
+
+  async update(id: string, dto: UpdateStudentDto) {
+    const student = await this.prisma.student.findUnique({
+      where: { id },
+      include: {
+        enrollments: {
+          where: { status: 'ACTIVE' },
+          orderBy: { enrollmentDate: 'desc' },
+          take: 1,
+        },
+      },
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student');
+    }
+
+    // 1. Uniqueness check on birthCertificateNo if updated
+    if (
+      dto.birthCertificateNo !== undefined &&
+      dto.birthCertificateNo.trim() !== student.birthCertificateNo
+    ) {
+      const trimmedBCN = dto.birthCertificateNo.trim();
+      if (trimmedBCN) {
+        const existingBCN = await this.prisma.student.findUnique({
+          where: { birthCertificateNo: trimmedBCN },
+        });
+        if (existingBCN && existingBCN.id !== id) {
+          throw new ConflictException(
+            `Student with birth certificate number '${trimmedBCN}' already exists`,
+          );
+        }
+      }
+    }
+
+    // 2. Uniqueness check on rfidCardNo if updated
+    if (
+      dto.rfidCardNo !== undefined &&
+      dto.rfidCardNo.trim() !== student.rfidCardNo
+    ) {
+      const trimmedRFID = dto.rfidCardNo.trim();
+      if (trimmedRFID) {
+        const existingRFID = await this.prisma.student.findUnique({
+          where: { rfidCardNo: trimmedRFID },
+        });
+        if (existingRFID && existingRFID.id !== id) {
+          throw new ConflictException(
+            `Student with RFID card number '${trimmedRFID}' already exists`,
+          );
+        }
+      }
+    }
+
+    // 3. Handle Active Enrollment corrections (sectionId, groupId, roll)
+    const hasEnrollmentUpdate =
+      dto.sectionId !== undefined ||
+      dto.groupId !== undefined ||
+      dto.roll !== undefined;
+
+    let targetEnrollmentId: string | null = null;
+    let enrollmentUpdateData: Prisma.StudentEnrollmentUpdateInput | null = null;
+
+    if (hasEnrollmentUpdate) {
+      const currentEnrollment = student.enrollments[0];
+      if (!currentEnrollment) {
+        throw new BadRequestException(
+          'Student has no active enrollment to update',
+        );
+      }
+      targetEnrollmentId = currentEnrollment.id;
+      enrollmentUpdateData = {};
+
+      const targetSectionId = dto.sectionId ?? currentEnrollment.sectionId;
+      const targetRoll = dto.roll ?? currentEnrollment.roll;
+
+      if (
+        dto.sectionId !== undefined &&
+        dto.sectionId !== currentEnrollment.sectionId
+      ) {
+        const section = await this.prisma.section.findUnique({
+          where: { id: dto.sectionId },
+        });
+        if (!section) {
+          throw new NotFoundException('Section');
+        }
+        if (section.classId !== currentEnrollment.classId) {
+          throw new BadRequestException(
+            `Section '${section.name}' does not belong to student's currently enrolled class`,
+          );
+        }
+        enrollmentUpdateData.section = { connect: { id: dto.sectionId } };
+      }
+
+      if (
+        dto.groupId !== undefined &&
+        dto.groupId !== currentEnrollment.groupId
+      ) {
+        if (dto.groupId) {
+          const group = await this.prisma.academicGroup.findUnique({
+            where: { id: dto.groupId },
+          });
+          if (!group) {
+            throw new NotFoundException('Academic group');
+          }
+          enrollmentUpdateData.group = { connect: { id: dto.groupId } };
+        } else {
+          enrollmentUpdateData.group = { disconnect: true };
+        }
+      }
+
+      if (
+        (dto.roll !== undefined && dto.roll !== currentEnrollment.roll) ||
+        (dto.sectionId !== undefined &&
+          dto.sectionId !== currentEnrollment.sectionId)
+      ) {
+        const conflictRoll = await this.prisma.studentEnrollment.findUnique({
+          where: {
+            academicYearId_classId_sectionId_roll: {
+              academicYearId: currentEnrollment.academicYearId,
+              classId: currentEnrollment.classId,
+              sectionId: targetSectionId,
+              roll: targetRoll,
+            },
+          },
+        });
+
+        if (conflictRoll && conflictRoll.id !== currentEnrollment.id) {
+          throw new ConflictException(
+            `Roll number ${targetRoll} is already assigned in this section for this academic year`,
+          );
+        }
+
+        if (dto.roll !== undefined) {
+          enrollmentUpdateData.roll = dto.roll;
+        }
+      }
+    }
+
+    // 4. Prepare student update data
+    const studentUpdateData: Prisma.StudentUpdateInput = {};
+    if (dto.name !== undefined) studentUpdateData.name = dto.name.trim();
+    if (dto.gender !== undefined) studentUpdateData.gender = dto.gender;
+    if (dto.dateOfBirth !== undefined)
+      studentUpdateData.dateOfBirth = dto.dateOfBirth
+        ? new Date(dto.dateOfBirth)
+        : null;
+    if (dto.bloodGroup !== undefined)
+      studentUpdateData.bloodGroup = dto.bloodGroup?.trim() || null;
+    if (dto.religion !== undefined)
+      studentUpdateData.religion = dto.religion?.trim() || null;
+    if (dto.birthCertificateNo !== undefined)
+      studentUpdateData.birthCertificateNo =
+        dto.birthCertificateNo?.trim() || null;
+    if (dto.rfidCardNo !== undefined)
+      studentUpdateData.rfidCardNo = dto.rfidCardNo?.trim() || null;
+    if (dto.photo !== undefined)
+      studentUpdateData.photo = dto.photo?.trim() || null;
+    if (dto.presentAddress !== undefined)
+      studentUpdateData.presentAddress = dto.presentAddress?.trim() || null;
+    if (dto.permanentAddress !== undefined)
+      studentUpdateData.permanentAddress = dto.permanentAddress?.trim() || null;
+    if (dto.status !== undefined) studentUpdateData.status = dto.status;
+
+    // 5. Execute in atomic transaction
+    const updatedResult = await this.prisma.$transaction(async (tx) => {
+      await tx.student.update({
+        where: { id },
+        data: studentUpdateData,
+      });
+
+      if (targetEnrollmentId && enrollmentUpdateData) {
+        await tx.studentEnrollment.update({
+          where: { id: targetEnrollmentId },
+          data: enrollmentUpdateData,
+        });
+      }
+
+      return tx.student.findUnique({
+        where: { id },
+        include: {
+          enrollments: {
+            where: { status: 'ACTIVE' },
+            orderBy: { enrollmentDate: 'desc' },
+            take: 1,
+            include: {
+              academicYear: {
+                select: { id: true, name: true, isActive: true },
+              },
+              schoolClass: {
+                select: { id: true, name: true, numericValue: true },
+              },
+              section: { select: { id: true, name: true } },
+              group: { select: { id: true, name: true } },
+            },
+          },
+        },
+      });
+    });
+
+    return ResponseHelper.success(
+      updatedResult,
+      'Student profile updated successfully',
     );
   }
 }
