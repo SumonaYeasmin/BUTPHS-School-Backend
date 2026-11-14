@@ -10,3 +10,4 @@ export class QuerySubjectDto {
   @IsString()
   search?: string;
 }
+
