@@ -11,3 +11,4 @@ export class UpdateSectionDto {
   @MaxLength(50)
   name?: string;
 }
+
