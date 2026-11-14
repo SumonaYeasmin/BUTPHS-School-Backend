@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
-import { ConflictException } from '../../../common/exceptions/business.exception';
+import {
+  ConflictException,
+  NotFoundException,
+} from '../../../common/exceptions/business.exception';
 
 @Injectable()
 export class ClassService {
@@ -60,5 +63,64 @@ export class ClassService {
       `Class '${schoolClass.name}' created successfully`,
     );
   }
-}
 
+  async findAll() {
+    const classes = await this.prisma.schoolClass.findMany({
+      orderBy: { numericValue: 'asc' },
+      include: {
+        sections: {
+          select: {
+            id: true,
+            name: true,
+          },
+          orderBy: { name: 'asc' },
+        },
+        _count: {
+          select: {
+            sections: true,
+            enrollments: true,
+            classSubjects: true,
+          },
+        },
+      },
+    });
+
+    return ResponseHelper.success(classes, 'Classes retrieved successfully');
+  }
+
+  async findOne(id: string) {
+    const schoolClass = await this.prisma.schoolClass.findUnique({
+      where: { id },
+      include: {
+        sections: {
+          select: {
+            id: true,
+            name: true,
+          },
+          orderBy: { name: 'asc' },
+        },
+        classSubjects: {
+          include: {
+            subject: true,
+          },
+        },
+        _count: {
+          select: {
+            enrollments: true,
+            sections: true,
+            exams: true,
+          },
+        },
+      },
+    });
+
+    if (!schoolClass) {
+      throw new NotFoundException('Class');
+    }
+
+    return ResponseHelper.success(
+      schoolClass,
+      'Class details retrieved successfully',
+    );
+  }
+}

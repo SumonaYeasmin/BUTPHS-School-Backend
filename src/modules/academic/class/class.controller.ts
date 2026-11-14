@@ -1,7 +1,16 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -33,5 +42,30 @@ export class ClassController {
   async create(@Body() dto: CreateClassDto) {
     return this.classService.create(dto);
   }
-}
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all classes list with sections' })
+  @ApiResponse({
+    status: 200,
+    description: 'Classes retrieved successfully',
+  })
+  async findAll() {
+    return this.classService.findAll();
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get class details by ID' })
+  @ApiParam({ name: 'id', description: 'Class UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Class details retrieved successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Class not found' })
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.classService.findOne(id);
+  }
+}
