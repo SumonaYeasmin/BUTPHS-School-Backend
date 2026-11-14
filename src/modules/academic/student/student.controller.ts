@@ -1,12 +1,23 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { QueryStudentDto } from './dto/query-student.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -45,5 +56,38 @@ export class StudentController {
   async create(@Body() dto: CreateStudentDto) {
     return this.studentService.create(dto);
   }
-}
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get paginated list of students with filtering and search',
+    description:
+      'Filter by academicYearId, classId, sectionId, status, and search by name/ID/birth certificate.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Students retrieved successfully',
+  })
+  async findAll(@Query() query: QueryStudentDto) {
+    return this.studentService.findAll(query);
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get single student full profile by ID',
+    description:
+      'Includes personal info, complete enrollment history, parent details, and promotion history.',
+  })
+  @ApiParam({ name: 'id', description: 'Student UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Student details retrieved successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Student not found' })
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.studentService.findOne(id);
+  }
+}

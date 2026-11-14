@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { Prisma } from '../../../../prisma/generated/client';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { QueryStudentDto } from './dto/query-student.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
   ConflictException,
@@ -184,5 +186,137 @@ export class StudentService {
       `Student '${result.name}' (${result.studentId}) admitted and enrolled successfully in ${schoolClass.name} (Section: ${section.name})`,
     );
   }
-}
 
+  async findAll(query: QueryStudentDto) {
+    const page = query.page || 1;
+    const limit = query.limit || 20;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.StudentWhereInput = {};
+
+    if (query.status) {
+      where.status = query.status;
+    }
+
+    if (query.search) {
+      const term = query.search.trim();
+      where.OR = [
+        { name: { contains: term, mode: 'insensitive' } },
+        { studentId: { contains: term, mode: 'insensitive' } },
+        { birthCertificateNo: { contains: term, mode: 'insensitive' } },
+        { rfidCardNo: { contains: term, mode: 'insensitive' } },
+      ];
+    }
+
+    if (query.academicYearId || query.classId || query.sectionId) {
+      const enrollmentFilter: Prisma.StudentEnrollmentWhereInput = {};
+      if (query.academicYearId)
+        enrollmentFilter.academicYearId = query.academicYearId;
+      if (query.classId) enrollmentFilter.classId = query.classId;
+      if (query.sectionId) enrollmentFilter.sectionId = query.sectionId;
+
+      where.enrollments = {
+        some: enrollmentFilter,
+      };
+    }
+
+    const [total, students] = await Promise.all([
+      this.prisma.student.count({ where }),
+      this.prisma.student.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          enrollments: {
+            where: query.academicYearId
+              ? { academicYearId: query.academicYearId }
+              : undefined,
+            orderBy: { enrollmentDate: 'desc' },
+            take: 1,
+            include: {
+              academicYear: {
+                select: { id: true, name: true, isActive: true },
+              },
+              schoolClass: {
+                select: { id: true, name: true, numericValue: true },
+              },
+              section: { select: { id: true, name: true } },
+              group: { select: { id: true, name: true } },
+            },
+          },
+          parents: {
+            include: {
+              parent: {
+                select: {
+                  id: true,
+                  name: true,
+                  phone: true,
+                  occupation: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+
+    const meta = ResponseHelper.buildPaginationMeta(total, page, limit);
+    return ResponseHelper.paginated(
+      students,
+      meta,
+      'Students retrieved successfully',
+    );
+  }
+
+  async findOne(id: string) {
+    const student = await this.prisma.student.findUnique({
+      where: { id },
+      include: {
+        enrollments: {
+          orderBy: { enrollmentDate: 'desc' },
+          include: {
+            academicYear: {
+              select: { id: true, name: true, isActive: true },
+            },
+            schoolClass: {
+              select: { id: true, name: true, numericValue: true },
+            },
+            section: { select: { id: true, name: true } },
+            group: { select: { id: true, name: true } },
+          },
+        },
+        parents: {
+          include: {
+            parent: true,
+          },
+        },
+        promotions: {
+          include: {
+            fromEnrollment: {
+              include: {
+                schoolClass: { select: { name: true } },
+                section: { select: { name: true } },
+              },
+            },
+            toEnrollment: {
+              include: {
+                schoolClass: { select: { name: true } },
+                section: { select: { name: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student');
+    }
+
+    return ResponseHelper.success(
+      student,
+      'Student details retrieved successfully',
+    );
+  }
+}
