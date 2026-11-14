@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -13,6 +14,7 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -120,5 +122,41 @@ export class StudentController {
     @Body() dto: UpdateStudentDto,
   ) {
     return this.studentService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary:
+      'Delete a student (Soft delete by default, Hard delete with ?permanent=true)',
+    description:
+      'By default, marks student as INACTIVE (soft delete). With ?permanent=true, permanently removes from database only if student has zero academic history (marks/attendances).',
+  })
+  @ApiParam({ name: 'id', description: 'Student UUID' })
+  @ApiQuery({
+    name: 'permanent',
+    required: false,
+    type: Boolean,
+    description:
+      'Permanently delete from database (only allowed if zero academic history)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Student deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot permanently delete student with existing academic history',
+  })
+  @ApiResponse({ status: 404, description: 'Student not found' })
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query('permanent') permanent?: string,
+  ) {
+    const isPermanent = permanent === 'true';
+    return this.studentService.remove(id, isPermanent);
   }
 }

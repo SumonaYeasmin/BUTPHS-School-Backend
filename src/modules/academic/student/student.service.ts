@@ -524,4 +524,95 @@ export class StudentService {
       'Student profile updated successfully',
     );
   }
+
+  async remove(id: string, permanent = false) {
+    const student = await this.prisma.student.findUnique({
+      where: { id },
+      include: {
+        enrollments: {
+          include: {
+            _count: {
+              select: {
+                attendances: true,
+                marks: true,
+                subjectResults: true,
+                resultSummaries: true,
+                promotionsFrom: true,
+                promotionsTo: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            promotions: true,
+          },
+        },
+      },
+    });
+
+    if (!student) {
+      throw new NotFoundException('Student');
+    }
+
+    if (permanent) {
+      // 1. Permanent (Hard Delete) Guard: Ensure zero academic history
+      let totalAttendances = 0;
+      let totalMarks = 0;
+      let totalResults = 0;
+
+      for (const enr of student.enrollments) {
+        totalAttendances += enr._count.attendances;
+        totalMarks += enr._count.marks;
+        totalResults += enr._count.subjectResults + enr._count.resultSummaries;
+      }
+
+      const issues: string[] = [];
+      if (totalAttendances > 0) {
+        issues.push(`${totalAttendances} attendance record(s)`);
+      }
+      if (totalMarks > 0) {
+        issues.push(`${totalMarks} exam mark(s)`);
+      }
+      if (totalResults > 0) {
+        issues.push(`${totalResults} result record(s)`);
+      }
+      if (student._count.promotions > 0) {
+        issues.push(`${student._count.promotions} promotion record(s)`);
+      }
+
+      if (issues.length > 0) {
+        throw new BadRequestException(
+          `Cannot permanently delete student with academic history: ${issues.join(', ')}. Please use soft delete (status INACTIVE) instead.`,
+        );
+      }
+
+      // Safe to hard delete: delete enrollments first then student atomically
+      await this.prisma.$transaction(async (tx) => {
+        await tx.studentEnrollment.deleteMany({
+          where: { studentId: id },
+        });
+
+        await tx.student.delete({
+          where: { id },
+        });
+      });
+
+      return ResponseHelper.success(
+        null,
+        `Student '${student.name}' (${student.studentId}) permanently deleted successfully`,
+      );
+    }
+
+    // 2. Default: Soft Delete (Set status to INACTIVE)
+    await this.prisma.student.update({
+      where: { id },
+      data: { status: 'INACTIVE' },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Student '${student.name}' (${student.studentId}) marked as INACTIVE (soft deleted) successfully`,
+    );
+  }
 }
