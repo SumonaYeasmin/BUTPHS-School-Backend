@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { Prisma } from '../../../../prisma/generated/client';
 import { CreateSectionDto } from './dto/create-section.dto';
+import { QuerySectionDto } from './dto/query-section.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
   ConflictException,
@@ -61,5 +63,66 @@ export class SectionService {
       `Section '${section.name}' created successfully in ${schoolClass.name}`,
     );
   }
-}
 
+  async findAll(query?: QuerySectionDto) {
+    const where: Prisma.SectionWhereInput = {};
+
+    if (query?.classId) {
+      where.classId = query.classId;
+    }
+
+    const sections = await this.prisma.section.findMany({
+      where,
+      orderBy: [{ schoolClass: { numericValue: 'asc' } }, { name: 'asc' }],
+      include: {
+        schoolClass: {
+          select: {
+            id: true,
+            name: true,
+            numericValue: true,
+          },
+        },
+        _count: {
+          select: {
+            enrollments: true,
+            teacherAssignments: true,
+            classRoutines: true,
+          },
+        },
+      },
+    });
+
+    return ResponseHelper.success(sections, 'Sections retrieved successfully');
+  }
+
+  async findOne(id: string) {
+    const section = await this.prisma.section.findUnique({
+      where: { id },
+      include: {
+        schoolClass: {
+          select: {
+            id: true,
+            name: true,
+            numericValue: true,
+          },
+        },
+        _count: {
+          select: {
+            enrollments: true,
+            teacherAssignments: true,
+            classRoutines: true,
+          },
+        },
+      },
+    });
+
+    if (!section) {
+      throw new NotFoundException('Section');
+    }
+
+    return ResponseHelper.success(
+      section,
+      'Section details retrieved successfully',
+    );
+  }
+}

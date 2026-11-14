@@ -19,4 +19,3 @@ export class CreateSectionDto {
   @MaxLength(50)
   name: string;
 }
-
