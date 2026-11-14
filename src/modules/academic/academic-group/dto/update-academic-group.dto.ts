@@ -20,3 +20,4 @@ export class UpdateAcademicGroupDto {
   @MaxLength(500)
   description?: string;
 }
+
