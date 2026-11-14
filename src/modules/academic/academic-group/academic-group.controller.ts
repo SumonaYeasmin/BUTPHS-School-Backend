@@ -34,3 +34,4 @@ export class AcademicGroupController {
     return this.academicGroupService.create(dto);
   }
 }
+
