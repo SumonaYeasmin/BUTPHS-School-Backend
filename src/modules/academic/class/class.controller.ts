@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -88,5 +89,22 @@ export class ClassController {
     @Body() dto: UpdateClassDto,
   ) {
     return this.classService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a class by ID (Admin only)' })
+  @ApiParam({ name: 'id', description: 'Class UUID' })
+  @ApiResponse({ status: 200, description: 'Class deleted successfully' })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot delete class with active student enrollments, exams, or applications',
+  })
+  @ApiResponse({ status: 404, description: 'Class not found' })
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.classService.remove(id);
   }
 }

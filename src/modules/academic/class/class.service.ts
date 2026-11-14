@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
@@ -183,6 +183,61 @@ export class ClassService {
     return ResponseHelper.success(
       updated,
       `Class '${updated.name}' updated successfully`,
+    );
+  }
+
+  async remove(id: string) {
+    const existing = await this.prisma.schoolClass.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            enrollments: true,
+            sections: true,
+            classSubjects: true,
+            teacherAssignments: true,
+            exams: true,
+            admissionApplications: true,
+          },
+        },
+      },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Class');
+    }
+
+    const counts = existing._count;
+
+    // Critical data protection: Enrolled students, Exams, or Applications
+    if (counts.enrollments > 0) {
+      throw new BadRequestException(
+        `Cannot delete class '${existing.name}' because it contains ${counts.enrollments} enrolled student(s).`,
+      );
+    }
+
+    if (counts.exams > 0) {
+      throw new BadRequestException(
+        `Cannot delete class '${existing.name}' because it is linked to ${counts.exams} exam(s).`,
+      );
+    }
+
+    if (counts.admissionApplications > 0) {
+      throw new BadRequestException(
+        `Cannot delete class '${existing.name}' because it has ${counts.admissionApplications} admission application(s).`,
+      );
+    }
+
+    // Safely delete empty sections and classSubjects, then the class
+    await this.prisma.$transaction(async (tx) => {
+      await tx.section.deleteMany({ where: { classId: id } });
+      await tx.classSubject.deleteMany({ where: { classId: id } });
+      await tx.schoolClass.delete({ where: { id } });
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Class '${existing.name}' deleted successfully`,
     );
   }
 }
