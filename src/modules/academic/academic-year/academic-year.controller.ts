@@ -1,7 +1,16 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -30,5 +39,46 @@ export class AcademicYearController {
   async create(@Body() dto: CreateAcademicYearDto) {
     return this.academicYearService.create(dto);
   }
-}
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all academic years list' })
+  @ApiResponse({
+    status: 200,
+    description: 'Academic years retrieved successfully',
+  })
+  async findAll() {
+    return this.academicYearService.findAll();
+  }
+
+  @Get('current')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get currently active running academic year' })
+  @ApiResponse({
+    status: 200,
+    description: 'Current academic year retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No active academic year found',
+  })
+  async findCurrent() {
+    return this.academicYearService.findCurrent();
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get academic year details by ID' })
+  @ApiParam({ name: 'id', description: 'Academic Year UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Academic year details retrieved successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Academic year not found' })
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.academicYearService.findOne(id);
+  }
+}
