@@ -28,15 +28,16 @@ model AcademicGroup {
 }
 
 model SchoolClass {
-  id                 String              @id @default(uuid()) @db.Uuid
-  name               String              @unique @db.VarChar(50)
-  numericValue       Int                 @unique
-  sections           Section[]
-  classSubjects      ClassSubject[]
-  enrollments        StudentEnrollment[]
-  teacherAssignments TeacherAssignment[]
-  exams              Exam[]
-  digitalResources   DigitalResource[]
+  id                    String                 @id @default(uuid()) @db.Uuid
+  name                  String                 @unique @db.VarChar(50)
+  numericValue          Int                    @unique
+  sections              Section[]
+  classSubjects         ClassSubject[]
+  enrollments           StudentEnrollment[]
+  teacherAssignments    TeacherAssignment[]
+  exams                 Exam[]
+  digitalResources      DigitalResource[]
+  admissionApplications AdmissionApplication[]
 }
 
 model Section {
@@ -86,6 +87,7 @@ model ClassSubject {
 model Student {
   id                 String        @id @default(uuid()) @db.Uuid
   studentId          String        @unique @db.VarChar(50)
+  rfidCardNo         String?       @unique @db.VarChar(50)
   birthCertificateNo String?       @unique @db.VarChar(50)
   name               String        @db.VarChar(150)
   photo              String?
@@ -245,4 +247,34 @@ model ClassRoutine {
 
   @@unique([academicYearId, sectionId, day, periodNumber])
   @@index([staffId, day])
+}
+
+model AdmissionApplication {
+  id               String                     @id @default(uuid()) @db.Uuid
+  applicationNo    String                     @unique @db.VarChar(50)
+  appliedClassId   String                     @db.Uuid
+  studentName      String                     @db.VarChar(150)
+  dateOfBirth      DateTime                   @db.Date
+  gender           Gender
+  bloodGroup       String?                    @db.VarChar(5)
+  religion         String?                    @db.VarChar(50)
+  birthCertificate String?                    @db.VarChar(50)
+  fatherName       String                     @db.VarChar(150)
+  motherName       String                     @db.VarChar(150)
+  guardianPhone    String                     @db.VarChar(20)
+  email            String?                    @db.VarChar(150)
+  presentAddress   String
+  permanentAddress String
+  previousSchool   String?                    @db.VarChar(200)
+  previousGrade    String?                    @db.VarChar(50)
+  photo            String?
+  documentsUrl     String?
+  status           AdmissionApplicationStatus @default(PENDING)
+  remarks          String?
+  submittedAt      DateTime                   @default(now())
+  updatedAt        DateTime                   @updatedAt
+
+  schoolClass SchoolClass @relation(fields: [appliedClassId], references: [id], onDelete: Restrict)
+
+  @@index([appliedClassId, status])
 }

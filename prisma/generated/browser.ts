@@ -18,12 +18,292 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
- * Model OTP
+ * Model AcademicYear
  * 
  */
-export type OTP = Prisma.OTPModel
+export type AcademicYear = Prisma.AcademicYearModel
+/**
+ * Model AcademicGroup
+ * 
+ */
+export type AcademicGroup = Prisma.AcademicGroupModel
+/**
+ * Model SchoolClass
+ * 
+ */
+export type SchoolClass = Prisma.SchoolClassModel
+/**
+ * Model Section
+ * 
+ */
+export type Section = Prisma.SectionModel
+/**
+ * Model Subject
+ * 
+ */
+export type Subject = Prisma.SubjectModel
+/**
+ * Model ClassSubject
+ * 
+ */
+export type ClassSubject = Prisma.ClassSubjectModel
+/**
+ * Model Student
+ * 
+ */
+export type Student = Prisma.StudentModel
+/**
+ * Model StudentEnrollment
+ * 
+ */
+export type StudentEnrollment = Prisma.StudentEnrollmentModel
+/**
+ * Model StudentPromotion
+ * 
+ */
+export type StudentPromotion = Prisma.StudentPromotionModel
+/**
+ * Model Parent
+ * 
+ */
+export type Parent = Prisma.ParentModel
+/**
+ * Model ParentStudent
+ * 
+ */
+export type ParentStudent = Prisma.ParentStudentModel
+/**
+ * Model TeacherAssignment
+ * 
+ */
+export type TeacherAssignment = Prisma.TeacherAssignmentModel
+/**
+ * Model AcademicDocument
+ * 
+ */
+export type AcademicDocument = Prisma.AcademicDocumentModel
+/**
+ * Model AcademicEvent
+ * 
+ */
+export type AcademicEvent = Prisma.AcademicEventModel
+/**
+ * Model ClassRoutine
+ * 
+ */
+export type ClassRoutine = Prisma.ClassRoutineModel
+/**
+ * Model AdmissionApplication
+ * 
+ */
+export type AdmissionApplication = Prisma.AdmissionApplicationModel
+/**
+ * Model Attendance
+ * 
+ */
+export type Attendance = Prisma.AttendanceModel
+/**
+ * Model AttendanceSmsLog
+ * 
+ */
+export type AttendanceSmsLog = Prisma.AttendanceSmsLogModel
 /**
  * Model User
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model Permission
+ * 
+ */
+export type Permission = Prisma.PermissionModel
+/**
+ * Model UserRole
+ * 
+ */
+export type UserRole = Prisma.UserRoleModel
+/**
+ * Model RolePermission
+ * 
+ */
+export type RolePermission = Prisma.RolePermissionModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model DigitalClassroom
+ * 
+ */
+export type DigitalClassroom = Prisma.DigitalClassroomModel
+/**
+ * Model DigitalResource
+ * 
+ */
+export type DigitalResource = Prisma.DigitalResourceModel
+/**
+ * Model GradingScale
+ * 
+ */
+export type GradingScale = Prisma.GradingScaleModel
+/**
+ * Model GradeRange
+ * 
+ */
+export type GradeRange = Prisma.GradeRangeModel
+/**
+ * Model Exam
+ * 
+ */
+export type Exam = Prisma.ExamModel
+/**
+ * Model ExamSubject
+ * 
+ */
+export type ExamSubject = Prisma.ExamSubjectModel
+/**
+ * Model ExamRoutine
+ * 
+ */
+export type ExamRoutine = Prisma.ExamRoutineModel
+/**
+ * Model Mark
+ * 
+ */
+export type Mark = Prisma.MarkModel
+/**
+ * Model StudentSubjectResult
+ * 
+ */
+export type StudentSubjectResult = Prisma.StudentSubjectResultModel
+/**
+ * Model ResultSummary
+ * 
+ */
+export type ResultSummary = Prisma.ResultSummaryModel
+/**
+ * Model SchoolProfile
+ * 
+ */
+export type SchoolProfile = Prisma.SchoolProfileModel
+/**
+ * Model InstitutionContent
+ * 
+ */
+export type InstitutionContent = Prisma.InstitutionContentModel
+/**
+ * Model SchoolFacility
+ * 
+ */
+export type SchoolFacility = Prisma.SchoolFacilityModel
+/**
+ * Model Administrator
+ * 
+ */
+export type Administrator = Prisma.AdministratorModel
+/**
+ * Model ManagingCommitteeMember
+ * 
+ */
+export type ManagingCommitteeMember = Prisma.ManagingCommitteeMemberModel
+/**
+ * Model QuickLink
+ * 
+ */
+export type QuickLink = Prisma.QuickLinkModel
+/**
+ * Model LibraryProfile
+ * 
+ */
+export type LibraryProfile = Prisma.LibraryProfileModel
+/**
+ * Model LibraryBook
+ * 
+ */
+export type LibraryBook = Prisma.LibraryBookModel
+/**
+ * Model LibraryDistributionInfo
+ * 
+ */
+export type LibraryDistributionInfo = Prisma.LibraryDistributionInfoModel
+/**
+ * Model Notice
+ * 
+ */
+export type Notice = Prisma.NoticeModel
+/**
+ * Model News
+ * 
+ */
+export type News = Prisma.NewsModel
+/**
+ * Model EventCategory
+ * 
+ */
+export type EventCategory = Prisma.EventCategoryModel
+/**
+ * Model Event
+ * 
+ */
+export type Event = Prisma.EventModel
+/**
+ * Model Staff
+ * 
+ */
+export type Staff = Prisma.StaffModel
+/**
+ * Model StaffStructure
+ * 
+ */
+export type StaffStructure = Prisma.StaffStructureModel
+/**
+ * Model WebsiteBanner
+ * 
+ */
+export type WebsiteBanner = Prisma.WebsiteBannerModel
+/**
+ * Model LeadershipMessage
+ * 
+ */
+export type LeadershipMessage = Prisma.LeadershipMessageModel
+/**
+ * Model Gallery
+ * 
+ */
+export type Gallery = Prisma.GalleryModel
+/**
+ * Model GalleryMedia
+ * 
+ */
+export type GalleryMedia = Prisma.GalleryMediaModel
+/**
+ * Model AdmissionContent
+ * 
+ */
+export type AdmissionContent = Prisma.AdmissionContentModel
+/**
+ * Model ContactInformation
+ * 
+ */
+export type ContactInformation = Prisma.ContactInformationModel
+/**
+ * Model AttendancePublicSummary
+ * 
+ */
+export type AttendancePublicSummary = Prisma.AttendancePublicSummaryModel
+/**
+ * Model Publication
+ * 
+ */
+export type Publication = Prisma.PublicationModel
+/**
+ * Model Achievement
+ * 
+ */
+export type Achievement = Prisma.AchievementModel

@@ -4,6 +4,7 @@ model SchoolProfile {
   id              String   @id @default(uuid()) @db.Uuid
   name            String   @db.VarChar(200)
   eiin            String?  @unique @db.VarChar(20)
+  schoolCode      String?  @db.VarChar(50)
   logo            String?
   establishedYear Int?
   address         String
@@ -11,6 +12,9 @@ model SchoolProfile {
   email           String?  @db.VarChar(150)
   website         String?  @db.VarChar(255)
   description     String?
+  mission         String?
+  vision          String?
+  socialLinks     Json?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -67,4 +71,17 @@ model ManagingCommitteeMember {
   endDate     DateTime? @db.Date
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+model QuickLink {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String   @db.VarChar(150)
+  url       String   @db.VarChar(255)
+  isButton  Boolean  @default(false)
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
 }

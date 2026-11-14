@@ -148,3 +148,35 @@ enum LibraryDistributionType {
   TEXTBOOK_DISTRIBUTION
   OTHER
 }
+
+enum AttendanceMethod {
+  MANUAL
+  RFID
+  BIOMETRIC
+}
+
+enum AttendanceSmsType {
+  ENTRY
+  EXIT
+  ABSENT
+}
+
+enum PublicationType {
+  SCHOOL_MAGAZINE
+  WALL_MAGAZINE
+  JOURNAL
+  OTHER
+}
+
+enum AdmissionApplicationStatus {
+  PENDING
+  REVIEWING
+  APPROVED
+  REJECTED
+}
+
+enum AchievementType {
+  INSTITUTION_ACHIEVEMENT
+  STUDENT_STAR
+  NOTABLE_ALUMNI
+}

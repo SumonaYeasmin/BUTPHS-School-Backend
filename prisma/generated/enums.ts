@@ -9,29 +9,263 @@
 * 🟢 You can import this file directly.
 */
 
-export const UserRole = {
-  ADMIN: 'ADMIN',
-  USER: 'USER',
-  ORGANIZER: 'ORGANIZER'
+export const StaffType = {
+  TEACHER: 'TEACHER',
+  OFFICER: 'OFFICER',
+  EMPLOYEE: 'EMPLOYEE'
 } as const
 
-export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+export type StaffType = (typeof StaffType)[keyof typeof StaffType]
 
 
-export const UserStatus = {
-  PENDING_VERIFICATION: 'PENDING_VERIFICATION',
+export const StaffStatus = {
+  ACTIVE: 'ACTIVE',
+  FORMER: 'FORMER'
+} as const
+
+export type StaffStatus = (typeof StaffStatus)[keyof typeof StaffStatus]
+
+
+export const Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+} as const
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
+export const StudentStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
-  BLOCK: 'BLOCK',
-  SUSPEND: 'SUSPEND'
+  GRADUATED: 'GRADUATED',
+  TRANSFERRED: 'TRANSFERRED'
 } as const
 
-export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+export type StudentStatus = (typeof StudentStatus)[keyof typeof StudentStatus]
 
 
-export const OtpType = {
-  ACCOUNT_VERIFY: 'ACCOUNT_VERIFY',
-  PASSWORD_RESET: 'PASSWORD_RESET'
+export const EnrollmentStatus = {
+  ACTIVE: 'ACTIVE',
+  PROMOTED: 'PROMOTED',
+  TRANSFERRED: 'TRANSFERRED',
+  COMPLETED: 'COMPLETED'
 } as const
 
-export type OtpType = (typeof OtpType)[keyof typeof OtpType]
+export type EnrollmentStatus = (typeof EnrollmentStatus)[keyof typeof EnrollmentStatus]
+
+
+export const RelationshipType = {
+  FATHER: 'FATHER',
+  MOTHER: 'MOTHER',
+  GUARDIAN: 'GUARDIAN',
+  OTHER: 'OTHER'
+} as const
+
+export type RelationshipType = (typeof RelationshipType)[keyof typeof RelationshipType]
+
+
+export const AcademicDocumentType = {
+  CURRICULUM: 'CURRICULUM',
+  STUDENT_RULES: 'STUDENT_RULES',
+  PARENT_GUIDELINES: 'PARENT_GUIDELINES',
+  DRESS_CODE: 'DRESS_CODE'
+} as const
+
+export type AcademicDocumentType = (typeof AcademicDocumentType)[keyof typeof AcademicDocumentType]
+
+
+export const AcademicEventType = {
+  HOLIDAY: 'HOLIDAY',
+  EVENT: 'EVENT',
+  ADMISSION: 'ADMISSION',
+  OTHER: 'OTHER'
+} as const
+
+export type AcademicEventType = (typeof AcademicEventType)[keyof typeof AcademicEventType]
+
+
+export const WeekDay = {
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY',
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY'
+} as const
+
+export type WeekDay = (typeof WeekDay)[keyof typeof WeekDay]
+
+
+export const AttendanceStatus = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE',
+  LEAVE: 'LEAVE'
+} as const
+
+export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
+
+
+export const SmsStatus = {
+  PENDING: 'PENDING',
+  SENT: 'SENT',
+  FAILED: 'FAILED'
+} as const
+
+export type SmsStatus = (typeof SmsStatus)[keyof typeof SmsStatus]
+
+
+export const ExamType = {
+  HALF_YEARLY: 'HALF_YEARLY',
+  ANNUAL: 'ANNUAL',
+  SELECTION: 'SELECTION',
+  OTHER: 'OTHER'
+} as const
+
+export type ExamType = (typeof ExamType)[keyof typeof ExamType]
+
+
+export const ResultPublicationStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED'
+} as const
+
+export type ResultPublicationStatus = (typeof ResultPublicationStatus)[keyof typeof ResultPublicationStatus]
+
+
+export const ResultStatus = {
+  PASS: 'PASS',
+  FAIL: 'FAIL',
+  INCOMPLETE: 'INCOMPLETE'
+} as const
+
+export type ResultStatus = (typeof ResultStatus)[keyof typeof ResultStatus]
+
+
+export const NoticeStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type NoticeStatus = (typeof NoticeStatus)[keyof typeof NoticeStatus]
+
+
+export const InstitutionContentType = {
+  HISTORY: 'HISTORY',
+  TRADITION: 'TRADITION',
+  INFRASTRUCTURE: 'INFRASTRUCTURE',
+  INTRODUCTION: 'INTRODUCTION'
+} as const
+
+export type InstitutionContentType = (typeof InstitutionContentType)[keyof typeof InstitutionContentType]
+
+
+export const FacilityType = {
+  LAB: 'LAB',
+  LIBRARY: 'LIBRARY',
+  PLAYGROUND: 'PLAYGROUND',
+  MULTIMEDIA: 'MULTIMEDIA',
+  OTHER: 'OTHER'
+} as const
+
+export type FacilityType = (typeof FacilityType)[keyof typeof FacilityType]
+
+
+export const ResourceType = {
+  SMART_CLASS_VIDEO: 'SMART_CLASS_VIDEO',
+  ONLINE_CLASS_LINK: 'ONLINE_CLASS_LINK',
+  EDUCATIONAL_VIDEO: 'EDUCATIONAL_VIDEO',
+  MULTIMEDIA_CONTENT: 'MULTIMEDIA_CONTENT'
+} as const
+
+export type ResourceType = (typeof ResourceType)[keyof typeof ResourceType]
+
+
+export const MediaType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO'
+} as const
+
+export type MediaType = (typeof MediaType)[keyof typeof MediaType]
+
+
+export const LeadershipType = {
+  PRINCIPAL: 'PRINCIPAL',
+  CHAIRMAN: 'CHAIRMAN'
+} as const
+
+export type LeadershipType = (typeof LeadershipType)[keyof typeof LeadershipType]
+
+
+export const EventCategoryType = {
+  SPORTS: 'SPORTS',
+  DEBATE: 'DEBATE',
+  SCIENCE_FAIR: 'SCIENCE_FAIR',
+  CULTURAL: 'CULTURAL',
+  SCOUTS: 'SCOUTS',
+  GIRL_GUIDES: 'GIRL_GUIDES',
+  TREE_PLANTATION: 'TREE_PLANTATION',
+  NATIONAL_DAY: 'NATIONAL_DAY',
+  OTHER: 'OTHER'
+} as const
+
+export type EventCategoryType = (typeof EventCategoryType)[keyof typeof EventCategoryType]
+
+
+export const LibraryDistributionType = {
+  BOOK_DISTRIBUTION: 'BOOK_DISTRIBUTION',
+  TEXTBOOK_DISTRIBUTION: 'TEXTBOOK_DISTRIBUTION',
+  OTHER: 'OTHER'
+} as const
+
+export type LibraryDistributionType = (typeof LibraryDistributionType)[keyof typeof LibraryDistributionType]
+
+
+export const AttendanceMethod = {
+  MANUAL: 'MANUAL',
+  RFID: 'RFID',
+  BIOMETRIC: 'BIOMETRIC'
+} as const
+
+export type AttendanceMethod = (typeof AttendanceMethod)[keyof typeof AttendanceMethod]
+
+
+export const AttendanceSmsType = {
+  ENTRY: 'ENTRY',
+  EXIT: 'EXIT',
+  ABSENT: 'ABSENT'
+} as const
+
+export type AttendanceSmsType = (typeof AttendanceSmsType)[keyof typeof AttendanceSmsType]
+
+
+export const PublicationType = {
+  SCHOOL_MAGAZINE: 'SCHOOL_MAGAZINE',
+  WALL_MAGAZINE: 'WALL_MAGAZINE',
+  JOURNAL: 'JOURNAL',
+  OTHER: 'OTHER'
+} as const
+
+export type PublicationType = (typeof PublicationType)[keyof typeof PublicationType]
+
+
+export const AdmissionApplicationStatus = {
+  PENDING: 'PENDING',
+  REVIEWING: 'REVIEWING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type AdmissionApplicationStatus = (typeof AdmissionApplicationStatus)[keyof typeof AdmissionApplicationStatus]
+
+
+export const AchievementType = {
+  INSTITUTION_ACHIEVEMENT: 'INSTITUTION_ACHIEVEMENT',
+  STUDENT_STAR: 'STUDENT_STAR',
+  NOTABLE_ALUMNI: 'NOTABLE_ALUMNI'
+} as const
+
+export type AchievementType = (typeof AchievementType)[keyof typeof AchievementType]
