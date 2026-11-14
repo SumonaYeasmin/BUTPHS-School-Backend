@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class QuerySubjectDto {
   @ApiPropertyOptional({
@@ -9,5 +9,12 @@ export class QuerySubjectDto {
   @IsOptional()
   @IsString()
   search?: string;
-}
 
+  @ApiPropertyOptional({
+    description: 'Filter subjects assigned to a specific class UUID',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  @IsOptional()
+  @IsUUID()
+  classId?: string;
+}

@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Prisma } from '../../../../prisma/generated/client';
 import { CreateSubjectDto } from './dto/create-subject.dto';
+import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { QuerySubjectDto } from './dto/query-subject.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
@@ -67,6 +68,12 @@ export class SubjectService {
       ];
     }
 
+    if (query?.classId) {
+      where.classSubjects = {
+        some: { classId: query.classId },
+      };
+    }
+
     const subjects = await this.prisma.subject.findMany({
       where,
       orderBy: { name: 'asc' },
@@ -115,5 +122,119 @@ export class SubjectService {
       subject,
       'Subject details retrieved successfully',
     );
+  }
+
+  async update(id: string, dto: UpdateSubjectDto) {
+    const existing = await this.prisma.subject.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Subject');
+    }
+
+    const data: Prisma.SubjectUpdateInput = {};
+
+    if (dto.name !== undefined) {
+      const trimmedName = dto.name.trim();
+      if (!trimmedName) {
+        throw new BadRequestException('Subject name cannot be empty');
+      }
+
+      if (trimmedName !== existing.name) {
+        const duplicateName = await this.prisma.subject.findUnique({
+          where: { name: trimmedName },
+        });
+
+        if (duplicateName) {
+          throw new ConflictException(
+            `Subject with name '${trimmedName}' already exists`,
+          );
+        }
+
+        data.name = trimmedName;
+      }
+    }
+
+    if (dto.code !== undefined) {
+      const trimmedCode = dto.code.trim() || null;
+      if (trimmedCode !== existing.code) {
+        if (trimmedCode) {
+          const duplicateCode = await this.prisma.subject.findUnique({
+            where: { code: trimmedCode },
+          });
+
+          if (duplicateCode) {
+            throw new ConflictException(
+              `Subject with board code '${trimmedCode}' already exists`,
+            );
+          }
+        }
+        data.code = trimmedCode;
+      }
+    }
+
+    if (dto.description !== undefined) {
+      data.description = dto.description.trim() || null;
+    }
+
+    const updated = await this.prisma.subject.update({
+      where: { id },
+      data,
+      include: {
+        _count: {
+          select: {
+            classSubjects: true,
+            examSubjects: true,
+          },
+        },
+      },
+    });
+
+    return ResponseHelper.success(updated, 'Subject updated successfully');
+  }
+
+  async remove(id: string) {
+    const subject = await this.prisma.subject.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            classSubjects: true,
+            examSubjects: true,
+            digitalResources: true,
+          },
+        },
+      },
+    });
+
+    if (!subject) {
+      throw new NotFoundException('Subject');
+    }
+
+    const issues: string[] = [];
+    if (subject._count.classSubjects > 0) {
+      issues.push(
+        `${subject._count.classSubjects} class syllabus assignment(s)`,
+      );
+    }
+    if (subject._count.examSubjects > 0) {
+      issues.push(`${subject._count.examSubjects} exam(s)`);
+    }
+    if (subject._count.digitalResources > 0) {
+      issues.push(`${subject._count.digitalResources} digital resource(s)`);
+    }
+
+    if (issues.length > 0) {
+      throw new BadRequestException(
+        `Cannot delete subject actively in use: ${issues.join(', ')}. Please remove it from classes/exams first.`,
+      );
+    }
+
+    await this.prisma.subject.delete({
+      where: { id },
+    });
+
+    return ResponseHelper.success(null, 'Subject deleted successfully');
   }
 }
