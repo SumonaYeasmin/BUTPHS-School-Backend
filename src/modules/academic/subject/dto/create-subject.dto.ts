@@ -31,4 +31,3 @@ export class CreateSubjectDto {
   @MaxLength(500)
   description?: string;
 }
-

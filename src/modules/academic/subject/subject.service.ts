@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { Prisma } from '../../../../prisma/generated/client';
 import { CreateSubjectDto } from './dto/create-subject.dto';
+import { QuerySubjectDto } from './dto/query-subject.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
-import { ConflictException } from '../../../common/exceptions/business.exception';
+import {
+  ConflictException,
+  NotFoundException,
+} from '../../../common/exceptions/business.exception';
 
 @Injectable()
 export class SubjectService {
@@ -50,5 +55,65 @@ export class SubjectService {
       `Subject '${subject.name}' created successfully`,
     );
   }
-}
 
+  async findAll(query?: QuerySubjectDto) {
+    const where: Prisma.SubjectWhereInput = {};
+
+    if (query?.search?.trim()) {
+      const term = query.search.trim();
+      where.OR = [
+        { name: { contains: term, mode: 'insensitive' } },
+        { code: { contains: term, mode: 'insensitive' } },
+      ];
+    }
+
+    const subjects = await this.prisma.subject.findMany({
+      where,
+      orderBy: { name: 'asc' },
+      include: {
+        _count: {
+          select: {
+            classSubjects: true,
+            examSubjects: true,
+          },
+        },
+      },
+    });
+
+    return ResponseHelper.success(subjects, 'Subjects retrieved successfully');
+  }
+
+  async findOne(id: string) {
+    const subject = await this.prisma.subject.findUnique({
+      where: { id },
+      include: {
+        classSubjects: {
+          include: {
+            schoolClass: {
+              select: { id: true, name: true, numericValue: true },
+            },
+            group: { select: { id: true, name: true } },
+            academicYear: {
+              select: { id: true, name: true, isActive: true },
+            },
+          },
+        },
+        _count: {
+          select: {
+            classSubjects: true,
+            examSubjects: true,
+          },
+        },
+      },
+    });
+
+    if (!subject) {
+      throw new NotFoundException('Subject');
+    }
+
+    return ResponseHelper.success(
+      subject,
+      'Subject details retrieved successfully',
+    );
+  }
+}
