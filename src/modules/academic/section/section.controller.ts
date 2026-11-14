@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -17,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { SectionService } from './section.service';
 import { CreateSectionDto } from './dto/create-section.dto';
+import { UpdateSectionDto } from './dto/update-section.dto';
 import { QuerySectionDto } from './dto/query-section.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -72,5 +75,42 @@ export class SectionController {
   @ApiResponse({ status: 404, description: 'Section not found' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.sectionService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update section details by ID (Admin only)' })
+  @ApiParam({ name: 'id', description: 'Section UUID' })
+  @ApiResponse({ status: 200, description: 'Section updated successfully' })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 404, description: 'Section not found' })
+  @ApiResponse({
+    status: 409,
+    description: 'Section already exists in this class',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateSectionDto,
+  ) {
+    return this.sectionService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a section by ID (Admin only)' })
+  @ApiParam({ name: 'id', description: 'Section UUID' })
+  @ApiResponse({ status: 200, description: 'Section deleted successfully' })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot delete section with active enrollments, routines, or teacher assignments',
+  })
+  @ApiResponse({ status: 404, description: 'Section not found' })
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.sectionService.remove(id);
   }
 }

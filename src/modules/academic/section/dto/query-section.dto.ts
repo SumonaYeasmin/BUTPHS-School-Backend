@@ -10,4 +10,3 @@ export class QuerySectionDto {
   @IsUUID()
   classId?: string;
 }
-
