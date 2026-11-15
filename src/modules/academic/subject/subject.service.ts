@@ -17,19 +17,15 @@ export class SubjectService {
   async create(dto: CreateSubjectDto) {
     const trimmedName = dto.name.trim();
     const trimmedCode = dto.code?.trim() || null;
-    const trimmedTargetClass = dto.targetClass?.trim() || null;
 
-    // 1. Check if subject with same name and targetClass already exists
-    const existingByNameAndClass = await this.prisma.subject.findFirst({
-      where: {
-        name: { equals: trimmedName, mode: 'insensitive' },
-        targetClass: trimmedTargetClass,
-      },
+    // 1. Check if subject with same name already exists
+    const existingByName = await this.prisma.subject.findUnique({
+      where: { name: trimmedName },
     });
 
-    if (existingByNameAndClass) {
+    if (existingByName) {
       throw new ConflictException(
-        `Subject '${trimmedName}'${trimmedTargetClass ? ` for ${trimmedTargetClass}` : ''} already exists`,
+        `Subject with name '${trimmedName}' already exists`,
       );
     }
 
@@ -51,7 +47,6 @@ export class SubjectService {
       data: {
         name: trimmedName,
         code: trimmedCode,
-        targetClass: trimmedTargetClass,
         description: dto.description?.trim() || null,
       },
     });
@@ -71,13 +66,6 @@ export class SubjectService {
         { name: { contains: term, mode: 'insensitive' } },
         { code: { contains: term, mode: 'insensitive' } },
       ];
-    }
-
-    if (query?.targetClass?.trim()) {
-      where.targetClass = {
-        contains: query.targetClass.trim(),
-        mode: 'insensitive',
-      };
     }
 
     if (query?.classId) {
@@ -147,33 +135,25 @@ export class SubjectService {
 
     const data: Prisma.SubjectUpdateInput = {};
 
-    const targetName = dto.name !== undefined ? dto.name.trim() : existing.name;
-    if (!targetName) {
-      throw new BadRequestException('Subject name cannot be empty');
-    }
-
-    const targetClass =
-      dto.targetClass !== undefined
-        ? dto.targetClass.trim() || null
-        : existing.targetClass;
-
-    if (targetName !== existing.name || targetClass !== existing.targetClass) {
-      const duplicate = await this.prisma.subject.findFirst({
-        where: {
-          id: { not: id },
-          name: { equals: targetName, mode: 'insensitive' },
-          targetClass,
-        },
-      });
-
-      if (duplicate) {
-        throw new ConflictException(
-          `Subject '${targetName}'${targetClass ? ` for ${targetClass}` : ''} already exists`,
-        );
+    if (dto.name !== undefined) {
+      const trimmedName = dto.name.trim();
+      if (!trimmedName) {
+        throw new BadRequestException('Subject name cannot be empty');
       }
 
-      data.name = targetName;
-      data.targetClass = targetClass;
+      if (trimmedName !== existing.name) {
+        const duplicateName = await this.prisma.subject.findUnique({
+          where: { name: trimmedName },
+        });
+
+        if (duplicateName) {
+          throw new ConflictException(
+            `Subject with name '${trimmedName}' already exists`,
+          );
+        }
+
+        data.name = trimmedName;
+      }
     }
 
     if (dto.code !== undefined) {

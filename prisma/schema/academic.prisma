@@ -58,13 +58,12 @@ model Subject {
   id               String            @id @default(uuid()) @db.Uuid
   name             String            @db.VarChar(150)
   code             String?           @unique @db.VarChar(30)
-  targetClass      String?           @db.VarChar(50)
   description      String?
   classSubjects    ClassSubject[]
   examSubjects     ExamSubject[]
   digitalResources DigitalResource[]
 
-  @@unique([name, targetClass])
+  @@unique([name])
 }
 
 model ClassSubject {

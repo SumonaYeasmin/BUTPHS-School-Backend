@@ -57,7 +57,7 @@ export class SubjectController {
   @ApiBearerAuth()
   @ApiOperation({
     summary:
-      'Get all subjects list (optionally search by name/code, filter by classId or targetClass)',
+      'Get all subjects list (optionally search by name/code or filter by classId)',
   })
   @ApiResponse({
     status: 200,

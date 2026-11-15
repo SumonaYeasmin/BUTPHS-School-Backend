@@ -17,13 +17,4 @@ export class QuerySubjectDto {
   @IsOptional()
   @IsUUID()
   classId?: string;
-
-  @ApiPropertyOptional({
-    description:
-      'Filter subjects by target class or grade (e.g. Class 6, Class 9-10)',
-    example: 'Class 6',
-  })
-  @IsOptional()
-  @IsString()
-  targetClass?: string;
 }
