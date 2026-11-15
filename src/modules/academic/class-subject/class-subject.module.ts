@@ -8,3 +8,4 @@ import { ClassSubjectController } from './class-subject.controller';
   exports: [ClassSubjectService],
 })
 export class ClassSubjectModule {}
+

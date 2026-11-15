@@ -21,6 +21,15 @@ export class UpdateSubjectDto {
   code?: string;
 
   @ApiPropertyOptional({
+    example: 'Class 9-10',
+    description: 'Updated target class or grade for this subject',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  targetClass?: string;
+
+  @ApiPropertyOptional({
     example: 'Advanced math curriculum',
     description: 'Updated description of the subject',
   })

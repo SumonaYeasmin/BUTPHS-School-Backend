@@ -46,3 +46,4 @@ export class CreateClassSubjectDto {
   @IsBoolean({ message: 'isOptional must be a boolean' })
   isOptional?: boolean;
 }
+

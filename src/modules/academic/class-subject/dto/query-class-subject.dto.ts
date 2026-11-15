@@ -49,3 +49,4 @@ export class QueryClassSubjectDto {
   @IsString()
   search?: string;
 }
+

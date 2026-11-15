@@ -23,6 +23,16 @@ export class CreateSubjectDto {
   code?: string;
 
   @ApiPropertyOptional({
+    example: 'Class 6',
+    description:
+      'Target class or grade for this subject (e.g., Class 6, Class 7, Class 9-10)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  targetClass?: string;
+
+  @ApiPropertyOptional({
     example: 'Compulsory first language subject',
     description: 'Optional description of the subject',
   })

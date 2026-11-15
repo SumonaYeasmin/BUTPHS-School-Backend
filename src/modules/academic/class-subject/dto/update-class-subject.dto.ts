@@ -27,3 +27,4 @@ export class UpdateClassSubjectDto {
   @IsUUID('4', { message: 'subjectId must be a valid UUID' })
   subjectId?: string;
 }
+
