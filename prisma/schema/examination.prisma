@@ -116,6 +116,7 @@ model ExamRoutine {
   examSubject ExamSubject @relation(fields: [examSubjectId], references: [id], onDelete: Restrict)
   section     Section?    @relation(fields: [sectionId], references: [id], onDelete: SetNull)
 
+  @@unique([examId, examSubjectId, sectionId])
   @@index([examId, examDate])
   @@index([examDate, roomNo])
 }
@@ -124,12 +125,16 @@ model Mark {
   id                        String   @id @default(uuid()) @db.Uuid
   studentEnrollmentId       String   @db.Uuid
   examSubjectId             String   @db.Uuid
-  writtenMarks              Decimal  @default(0) @db.Decimal(7, 2) /// সৃজনশীল / লিখিত পরীক্ষায় প্রাপ্ত নম্বর
-  mcqMarks                  Decimal  @default(0) @db.Decimal(7, 2) /// বহুনির্বাচনী (MCQ)-তে প্রাপ্ত নম্বর
-  practicalMarks            Decimal  @default(0) @db.Decimal(7, 2) /// ব্যবহারিক পরীক্ষায় প্রাপ্ত নম্বর
-  continuousAssessmentMarks Decimal  @default(0) @db.Decimal(7, 2) /// ধারাবাহিক মূল্যায়নে প্রাপ্ত নম্বর
-  totalMarks                Decimal  @db.Decimal(7, 2) /// এই বিষয়ে সর্বমোট অর্জিত নম্বর
+
+  writtenMarks              Decimal  @default(0) @db.Decimal(7, 2) /// লিখিত পরীক্ষার নম্বর
+  mcqMarks                  Decimal  @default(0) @db.Decimal(7, 2) /// MCQ পরীক্ষার নম্বর
+  practicalMarks            Decimal  @default(0) @db.Decimal(7, 2) /// ব্যবহারিক নম্বর (যদি থাকে)
+  continuousAssessmentMarks Decimal  @default(0) @db.Decimal(7, 2) /// ধারাবাহিক মূল্যায়ন (যদি থাকে)
+  totalMarks                Decimal  @db.Decimal(7, 2) /// মোট নম্বর
+
   isAbsent                  Boolean  @default(false) /// পরীক্ষায় অনুপস্থিত ছিল কিনা
+  isLocked                  Boolean  @default(false) /// রেজাল্ট ফাইনাল হলে লক (এডিট বন্ধ)
+
   enteredBy                 String   @db.Uuid /// যে শিক্ষক নম্বর ইনপুট দিয়েছেন
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
@@ -141,7 +146,6 @@ model Mark {
   @@unique([studentEnrollmentId, examSubjectId])
   @@index([examSubjectId])
 }
-
 model StudentSubjectResult {
   id                  String   @id @default(uuid()) @db.Uuid
   studentEnrollmentId String   @db.Uuid
