@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -19,6 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { ClassSubjectService } from './class-subject.service';
 import { AssignClassSubjectDto } from './dto/assign-class-subject.dto';
+import { UpdateClassSubjectDto } from './dto/update-class-subject.dto';
 import { RolloverClassSubjectDto } from './dto/rollover-class-subject.dto';
 import { QueryClassSubjectDto } from './dto/query-class-subject.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
@@ -61,6 +63,67 @@ export class ClassSubjectController {
   })
   async findAll(@Query() query: QueryClassSubjectDto) {
     return this.classSubjectService.findAll(query);
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get class subject details by ID' })
+  @ApiParam({ name: 'id', description: 'ClassSubject UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Class subject details retrieved successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Class subject not found' })
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.classSubjectService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update class subject configuration (Admin only)',
+    description:
+      'Update academic group, optional status, or display order for a class subject.',
+  })
+  @ApiParam({ name: 'id', description: 'ClassSubject UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Class subject updated successfully',
+  })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 404, description: 'Class subject not found' })
+  @ApiResponse({ status: 409, description: 'Subject already assigned to group' })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateClassSubjectDto,
+  ) {
+    return this.classSubjectService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Safe delete a subject from class curriculum (Admin only)',
+    description:
+      'Removes a subject from class only if not actively assigned to any teachers.',
+  })
+  @ApiParam({ name: 'id', description: 'ClassSubject UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Class subject removed successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot delete subject actively assigned to teachers',
+  })
+  @ApiResponse({ status: 404, description: 'Class subject not found' })
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.classSubjectService.remove(id);
   }
 
   @Patch(':id/toggle-status')
