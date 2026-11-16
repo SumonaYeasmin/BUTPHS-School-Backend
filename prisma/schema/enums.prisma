@@ -78,13 +78,28 @@ enum SmsStatus {
 enum ExamType {
   HALF_YEARLY
   ANNUAL
+  MODEL_TEST
   SELECTION
-  OTHER
+}
+
+enum ExamStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum ExamRoutineStatus {
+  SCHEDULED
+  POSTPONED
+  CANCELLED
+  COMPLETED
 }
 
 enum ResultPublicationStatus {
   DRAFT
   PUBLISHED
+  WITHHELD
 }
 
 enum ResultStatus {
@@ -179,4 +194,48 @@ enum AchievementType {
   INSTITUTION_ACHIEVEMENT
   STUDENT_STAR
   NOTABLE_ALUMNI
+}
+
+enum BookType {
+  TEXTBOOK
+  SUPPLEMENTARY
+  GRAMMAR
+  REFERENCE
+}
+
+enum SubjectCategory {
+  GENERAL
+  LANGUAGE
+  MATHEMATICS
+  SCIENCE
+  SOCIAL_SCIENCE
+  RELIGION
+  COMMERCE
+  TECHNICAL
+}
+
+enum Religion {
+  ISLAM
+  HINDUISM
+  BUDDHISM
+  CHRISTIANITY
+  OTHER
+}
+
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+}
+
+enum CardStatus {
+  ACTIVE
+  LOST
+  DAMAGED
+  BLOCKED
 }

@@ -4,6 +4,7 @@ import { PrismaClient } from '../generated/client';
 import { seedRolesAndPermissions } from './roles-permissions.seed';
 import { seedAdmin } from './admin.seed';
 import { seedDemoUsers } from './demo-users.seed';
+import { seedCurriculum } from './curriculum.seed';
 
 const connectionString =
   process.env.DATABASE_URL || process.env['DATABASE_URL'];
@@ -25,6 +26,9 @@ async function main() {
 
   // 3. Seed Demo Users (Teacher & Parent)
   await seedDemoUsers(prisma);
+
+  // 4. Seed NCTB Curriculum (Classes, Groups, Subjects, Books)
+  await seedCurriculum(prisma);
 
   console.log('--- Database Seeding Completed Successfully! ---');
 }

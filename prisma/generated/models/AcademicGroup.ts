@@ -168,6 +168,7 @@ export type AcademicGroupWhereInput = {
   description?: Prisma.StringNullableFilter<"AcademicGroup"> | string | null
   enrollments?: Prisma.StudentEnrollmentListRelationFilter
   classSubjects?: Prisma.ClassSubjectListRelationFilter
+  examSubjects?: Prisma.ExamSubjectListRelationFilter
 }
 
 export type AcademicGroupOrderByWithRelationInput = {
@@ -176,6 +177,7 @@ export type AcademicGroupOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   enrollments?: Prisma.StudentEnrollmentOrderByRelationAggregateInput
   classSubjects?: Prisma.ClassSubjectOrderByRelationAggregateInput
+  examSubjects?: Prisma.ExamSubjectOrderByRelationAggregateInput
 }
 
 export type AcademicGroupWhereUniqueInput = Prisma.AtLeast<{
@@ -187,6 +189,7 @@ export type AcademicGroupWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"AcademicGroup"> | string | null
   enrollments?: Prisma.StudentEnrollmentListRelationFilter
   classSubjects?: Prisma.ClassSubjectListRelationFilter
+  examSubjects?: Prisma.ExamSubjectListRelationFilter
 }, "id" | "name">
 
 export type AcademicGroupOrderByWithAggregationInput = {
@@ -213,6 +216,7 @@ export type AcademicGroupCreateInput = {
   description?: string | null
   enrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutGroupInput
   classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutGroupInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutGroupInput
 }
 
 export type AcademicGroupUncheckedCreateInput = {
@@ -221,6 +225,7 @@ export type AcademicGroupUncheckedCreateInput = {
   description?: string | null
   enrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutGroupInput
   classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutGroupInput
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type AcademicGroupUpdateInput = {
@@ -229,6 +234,7 @@ export type AcademicGroupUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   enrollments?: Prisma.StudentEnrollmentUpdateManyWithoutGroupNestedInput
   classSubjects?: Prisma.ClassSubjectUpdateManyWithoutGroupNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutGroupNestedInput
 }
 
 export type AcademicGroupUncheckedUpdateInput = {
@@ -237,6 +243,7 @@ export type AcademicGroupUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   enrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutGroupNestedInput
   classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutGroupNestedInput
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutGroupNestedInput
 }
 
 export type AcademicGroupCreateManyInput = {
@@ -316,11 +323,28 @@ export type AcademicGroupUpdateOneWithoutEnrollmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AcademicGroupUpdateToOneWithWhereWithoutEnrollmentsInput, Prisma.AcademicGroupUpdateWithoutEnrollmentsInput>, Prisma.AcademicGroupUncheckedUpdateWithoutEnrollmentsInput>
 }
 
+export type AcademicGroupCreateNestedOneWithoutExamSubjectsInput = {
+  create?: Prisma.XOR<Prisma.AcademicGroupCreateWithoutExamSubjectsInput, Prisma.AcademicGroupUncheckedCreateWithoutExamSubjectsInput>
+  connectOrCreate?: Prisma.AcademicGroupCreateOrConnectWithoutExamSubjectsInput
+  connect?: Prisma.AcademicGroupWhereUniqueInput
+}
+
+export type AcademicGroupUpdateOneWithoutExamSubjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.AcademicGroupCreateWithoutExamSubjectsInput, Prisma.AcademicGroupUncheckedCreateWithoutExamSubjectsInput>
+  connectOrCreate?: Prisma.AcademicGroupCreateOrConnectWithoutExamSubjectsInput
+  upsert?: Prisma.AcademicGroupUpsertWithoutExamSubjectsInput
+  disconnect?: Prisma.AcademicGroupWhereInput | boolean
+  delete?: Prisma.AcademicGroupWhereInput | boolean
+  connect?: Prisma.AcademicGroupWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AcademicGroupUpdateToOneWithWhereWithoutExamSubjectsInput, Prisma.AcademicGroupUpdateWithoutExamSubjectsInput>, Prisma.AcademicGroupUncheckedUpdateWithoutExamSubjectsInput>
+}
+
 export type AcademicGroupCreateWithoutClassSubjectsInput = {
   id?: string
   name: string
   description?: string | null
   enrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutGroupInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutGroupInput
 }
 
 export type AcademicGroupUncheckedCreateWithoutClassSubjectsInput = {
@@ -328,6 +352,7 @@ export type AcademicGroupUncheckedCreateWithoutClassSubjectsInput = {
   name: string
   description?: string | null
   enrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutGroupInput
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type AcademicGroupCreateOrConnectWithoutClassSubjectsInput = {
@@ -351,6 +376,7 @@ export type AcademicGroupUpdateWithoutClassSubjectsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   enrollments?: Prisma.StudentEnrollmentUpdateManyWithoutGroupNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutGroupNestedInput
 }
 
 export type AcademicGroupUncheckedUpdateWithoutClassSubjectsInput = {
@@ -358,6 +384,7 @@ export type AcademicGroupUncheckedUpdateWithoutClassSubjectsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   enrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutGroupNestedInput
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutGroupNestedInput
 }
 
 export type AcademicGroupCreateWithoutEnrollmentsInput = {
@@ -365,6 +392,7 @@ export type AcademicGroupCreateWithoutEnrollmentsInput = {
   name: string
   description?: string | null
   classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutGroupInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutGroupInput
 }
 
 export type AcademicGroupUncheckedCreateWithoutEnrollmentsInput = {
@@ -372,6 +400,7 @@ export type AcademicGroupUncheckedCreateWithoutEnrollmentsInput = {
   name: string
   description?: string | null
   classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutGroupInput
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type AcademicGroupCreateOrConnectWithoutEnrollmentsInput = {
@@ -395,12 +424,62 @@ export type AcademicGroupUpdateWithoutEnrollmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classSubjects?: Prisma.ClassSubjectUpdateManyWithoutGroupNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutGroupNestedInput
 }
 
 export type AcademicGroupUncheckedUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutGroupNestedInput
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutGroupNestedInput
+}
+
+export type AcademicGroupCreateWithoutExamSubjectsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  enrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutGroupInput
+  classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutGroupInput
+}
+
+export type AcademicGroupUncheckedCreateWithoutExamSubjectsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  enrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutGroupInput
+  classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutGroupInput
+}
+
+export type AcademicGroupCreateOrConnectWithoutExamSubjectsInput = {
+  where: Prisma.AcademicGroupWhereUniqueInput
+  create: Prisma.XOR<Prisma.AcademicGroupCreateWithoutExamSubjectsInput, Prisma.AcademicGroupUncheckedCreateWithoutExamSubjectsInput>
+}
+
+export type AcademicGroupUpsertWithoutExamSubjectsInput = {
+  update: Prisma.XOR<Prisma.AcademicGroupUpdateWithoutExamSubjectsInput, Prisma.AcademicGroupUncheckedUpdateWithoutExamSubjectsInput>
+  create: Prisma.XOR<Prisma.AcademicGroupCreateWithoutExamSubjectsInput, Prisma.AcademicGroupUncheckedCreateWithoutExamSubjectsInput>
+  where?: Prisma.AcademicGroupWhereInput
+}
+
+export type AcademicGroupUpdateToOneWithWhereWithoutExamSubjectsInput = {
+  where?: Prisma.AcademicGroupWhereInput
+  data: Prisma.XOR<Prisma.AcademicGroupUpdateWithoutExamSubjectsInput, Prisma.AcademicGroupUncheckedUpdateWithoutExamSubjectsInput>
+}
+
+export type AcademicGroupUpdateWithoutExamSubjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enrollments?: Prisma.StudentEnrollmentUpdateManyWithoutGroupNestedInput
+  classSubjects?: Prisma.ClassSubjectUpdateManyWithoutGroupNestedInput
+}
+
+export type AcademicGroupUncheckedUpdateWithoutExamSubjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutGroupNestedInput
   classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutGroupNestedInput
 }
 
@@ -412,11 +491,13 @@ export type AcademicGroupUncheckedUpdateWithoutEnrollmentsInput = {
 export type AcademicGroupCountOutputType = {
   enrollments: number
   classSubjects: number
+  examSubjects: number
 }
 
 export type AcademicGroupCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollments?: boolean | AcademicGroupCountOutputTypeCountEnrollmentsArgs
   classSubjects?: boolean | AcademicGroupCountOutputTypeCountClassSubjectsArgs
+  examSubjects?: boolean | AcademicGroupCountOutputTypeCountExamSubjectsArgs
 }
 
 /**
@@ -443,6 +524,13 @@ export type AcademicGroupCountOutputTypeCountClassSubjectsArgs<ExtArgs extends r
   where?: Prisma.ClassSubjectWhereInput
 }
 
+/**
+ * AcademicGroupCountOutputType without action
+ */
+export type AcademicGroupCountOutputTypeCountExamSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExamSubjectWhereInput
+}
+
 
 export type AcademicGroupSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -450,6 +538,7 @@ export type AcademicGroupSelect<ExtArgs extends runtime.Types.Extensions.Interna
   description?: boolean
   enrollments?: boolean | Prisma.AcademicGroup$enrollmentsArgs<ExtArgs>
   classSubjects?: boolean | Prisma.AcademicGroup$classSubjectsArgs<ExtArgs>
+  examSubjects?: boolean | Prisma.AcademicGroup$examSubjectsArgs<ExtArgs>
   _count?: boolean | Prisma.AcademicGroupCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["academicGroup"]>
 
@@ -475,6 +564,7 @@ export type AcademicGroupOmit<ExtArgs extends runtime.Types.Extensions.InternalA
 export type AcademicGroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollments?: boolean | Prisma.AcademicGroup$enrollmentsArgs<ExtArgs>
   classSubjects?: boolean | Prisma.AcademicGroup$classSubjectsArgs<ExtArgs>
+  examSubjects?: boolean | Prisma.AcademicGroup$examSubjectsArgs<ExtArgs>
   _count?: boolean | Prisma.AcademicGroupCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AcademicGroupIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -485,6 +575,7 @@ export type $AcademicGroupPayload<ExtArgs extends runtime.Types.Extensions.Inter
   objects: {
     enrollments: Prisma.$StudentEnrollmentPayload<ExtArgs>[]
     classSubjects: Prisma.$ClassSubjectPayload<ExtArgs>[]
+    examSubjects: Prisma.$ExamSubjectPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -886,6 +977,7 @@ export interface Prisma__AcademicGroupClient<T, Null = never, ExtArgs extends ru
   readonly [Symbol.toStringTag]: "PrismaPromise"
   enrollments<T extends Prisma.AcademicGroup$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AcademicGroup$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classSubjects<T extends Prisma.AcademicGroup$classSubjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AcademicGroup$classSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  examSubjects<T extends Prisma.AcademicGroup$examSubjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AcademicGroup$examSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1351,6 +1443,30 @@ export type AcademicGroup$classSubjectsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.ClassSubjectScalarFieldEnum | Prisma.ClassSubjectScalarFieldEnum[]
+}
+
+/**
+ * AcademicGroup.examSubjects
+ */
+export type AcademicGroup$examSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExamSubject
+   */
+  select?: Prisma.ExamSubjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExamSubject
+   */
+  omit?: Prisma.ExamSubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExamSubjectInclude<ExtArgs> | null
+  where?: Prisma.ExamSubjectWhereInput
+  orderBy?: Prisma.ExamSubjectOrderByWithRelationInput | Prisma.ExamSubjectOrderByWithRelationInput[]
+  cursor?: Prisma.ExamSubjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExamSubjectScalarFieldEnum | Prisma.ExamSubjectScalarFieldEnum[]
 }
 
 /**

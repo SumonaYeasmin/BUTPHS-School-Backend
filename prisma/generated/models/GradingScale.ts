@@ -20,52 +20,100 @@ export type GradingScaleModel = runtime.Types.Result.DefaultSelection<Prisma.$Gr
 
 export type AggregateGradingScale = {
   _count: GradingScaleCountAggregateOutputType | null
+  _avg: GradingScaleAvgAggregateOutputType | null
+  _sum: GradingScaleSumAggregateOutputType | null
   _min: GradingScaleMinAggregateOutputType | null
   _max: GradingScaleMaxAggregateOutputType | null
+}
+
+export type GradingScaleAvgAggregateOutputType = {
+  maxGpa: runtime.Decimal | null
+}
+
+export type GradingScaleSumAggregateOutputType = {
+  maxGpa: runtime.Decimal | null
 }
 
 export type GradingScaleMinAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  maxGpa: runtime.Decimal | null
+  isDefault: boolean | null
+  isSystemDefault: boolean | null
   isActive: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type GradingScaleMaxAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  maxGpa: runtime.Decimal | null
+  isDefault: boolean | null
+  isSystemDefault: boolean | null
   isActive: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type GradingScaleCountAggregateOutputType = {
   id: number
   name: number
   description: number
+  maxGpa: number
+  isDefault: number
+  isSystemDefault: number
   isActive: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
+
+export type GradingScaleAvgAggregateInputType = {
+  maxGpa?: true
+}
+
+export type GradingScaleSumAggregateInputType = {
+  maxGpa?: true
+}
 
 export type GradingScaleMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  maxGpa?: true
+  isDefault?: true
+  isSystemDefault?: true
   isActive?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type GradingScaleMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  maxGpa?: true
+  isDefault?: true
+  isSystemDefault?: true
   isActive?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type GradingScaleCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  maxGpa?: true
+  isDefault?: true
+  isSystemDefault?: true
   isActive?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -107,6 +155,18 @@ export type GradingScaleAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: GradingScaleAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: GradingScaleSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: GradingScaleMinAggregateInputType
@@ -137,6 +197,8 @@ export type GradingScaleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   _count?: GradingScaleCountAggregateInputType | true
+  _avg?: GradingScaleAvgAggregateInputType
+  _sum?: GradingScaleSumAggregateInputType
   _min?: GradingScaleMinAggregateInputType
   _max?: GradingScaleMaxAggregateInputType
 }
@@ -145,8 +207,15 @@ export type GradingScaleGroupByOutputType = {
   id: string
   name: string
   description: string | null
+  maxGpa: runtime.Decimal
+  isDefault: boolean
+  isSystemDefault: boolean
   isActive: boolean
+  createdAt: Date
+  updatedAt: Date
   _count: GradingScaleCountAggregateOutputType | null
+  _avg: GradingScaleAvgAggregateOutputType | null
+  _sum: GradingScaleSumAggregateOutputType | null
   _min: GradingScaleMinAggregateOutputType | null
   _max: GradingScaleMaxAggregateOutputType | null
 }
@@ -173,7 +242,12 @@ export type GradingScaleWhereInput = {
   id?: Prisma.UuidFilter<"GradingScale"> | string
   name?: Prisma.StringFilter<"GradingScale"> | string
   description?: Prisma.StringNullableFilter<"GradingScale"> | string | null
+  maxGpa?: Prisma.DecimalFilter<"GradingScale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFilter<"GradingScale"> | boolean
+  isSystemDefault?: Prisma.BoolFilter<"GradingScale"> | boolean
   isActive?: Prisma.BoolFilter<"GradingScale"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"GradingScale"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"GradingScale"> | Date | string
   gradeRanges?: Prisma.GradeRangeListRelationFilter
   exams?: Prisma.ExamListRelationFilter
 }
@@ -182,7 +256,12 @@ export type GradingScaleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  maxGpa?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   gradeRanges?: Prisma.GradeRangeOrderByRelationAggregateInput
   exams?: Prisma.ExamOrderByRelationAggregateInput
 }
@@ -194,7 +273,12 @@ export type GradingScaleWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.GradingScaleWhereInput[]
   NOT?: Prisma.GradingScaleWhereInput | Prisma.GradingScaleWhereInput[]
   description?: Prisma.StringNullableFilter<"GradingScale"> | string | null
+  maxGpa?: Prisma.DecimalFilter<"GradingScale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFilter<"GradingScale"> | boolean
+  isSystemDefault?: Prisma.BoolFilter<"GradingScale"> | boolean
   isActive?: Prisma.BoolFilter<"GradingScale"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"GradingScale"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"GradingScale"> | Date | string
   gradeRanges?: Prisma.GradeRangeListRelationFilter
   exams?: Prisma.ExamListRelationFilter
 }, "id" | "name">
@@ -203,10 +287,17 @@ export type GradingScaleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  maxGpa?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.GradingScaleCountOrderByAggregateInput
+  _avg?: Prisma.GradingScaleAvgOrderByAggregateInput
   _max?: Prisma.GradingScaleMaxOrderByAggregateInput
   _min?: Prisma.GradingScaleMinOrderByAggregateInput
+  _sum?: Prisma.GradingScaleSumOrderByAggregateInput
 }
 
 export type GradingScaleScalarWhereWithAggregatesInput = {
@@ -216,14 +307,24 @@ export type GradingScaleScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"GradingScale"> | string
   name?: Prisma.StringWithAggregatesFilter<"GradingScale"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"GradingScale"> | string | null
+  maxGpa?: Prisma.DecimalWithAggregatesFilter<"GradingScale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolWithAggregatesFilter<"GradingScale"> | boolean
+  isSystemDefault?: Prisma.BoolWithAggregatesFilter<"GradingScale"> | boolean
   isActive?: Prisma.BoolWithAggregatesFilter<"GradingScale"> | boolean
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"GradingScale"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GradingScale"> | Date | string
 }
 
 export type GradingScaleCreateInput = {
   id?: string
   name: string
   description?: string | null
+  maxGpa?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
   gradeRanges?: Prisma.GradeRangeCreateNestedManyWithoutGradingScaleInput
   exams?: Prisma.ExamCreateNestedManyWithoutGradingScaleInput
 }
@@ -232,7 +333,12 @@ export type GradingScaleUncheckedCreateInput = {
   id?: string
   name: string
   description?: string | null
+  maxGpa?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
   gradeRanges?: Prisma.GradeRangeUncheckedCreateNestedManyWithoutGradingScaleInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutGradingScaleInput
 }
@@ -241,7 +347,12 @@ export type GradingScaleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxGpa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gradeRanges?: Prisma.GradeRangeUpdateManyWithoutGradingScaleNestedInput
   exams?: Prisma.ExamUpdateManyWithoutGradingScaleNestedInput
 }
@@ -250,7 +361,12 @@ export type GradingScaleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxGpa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gradeRanges?: Prisma.GradeRangeUncheckedUpdateManyWithoutGradingScaleNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutGradingScaleNestedInput
 }
@@ -259,47 +375,93 @@ export type GradingScaleCreateManyInput = {
   id?: string
   name: string
   description?: string | null
+  maxGpa?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GradingScaleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxGpa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GradingScaleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxGpa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GradingScaleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  maxGpa?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type GradingScaleAvgOrderByAggregateInput = {
+  maxGpa?: Prisma.SortOrder
 }
 
 export type GradingScaleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  maxGpa?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type GradingScaleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  maxGpa?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type GradingScaleSumOrderByAggregateInput = {
+  maxGpa?: Prisma.SortOrder
 }
 
 export type GradingScaleScalarRelationFilter = {
   is?: Prisma.GradingScaleWhereInput
   isNot?: Prisma.GradingScaleWhereInput
+}
+
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type GradingScaleCreateNestedOneWithoutGradeRangesInput = {
@@ -334,7 +496,12 @@ export type GradingScaleCreateWithoutGradeRangesInput = {
   id?: string
   name: string
   description?: string | null
+  maxGpa?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
   exams?: Prisma.ExamCreateNestedManyWithoutGradingScaleInput
 }
 
@@ -342,7 +509,12 @@ export type GradingScaleUncheckedCreateWithoutGradeRangesInput = {
   id?: string
   name: string
   description?: string | null
+  maxGpa?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutGradingScaleInput
 }
 
@@ -366,7 +538,12 @@ export type GradingScaleUpdateWithoutGradeRangesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxGpa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exams?: Prisma.ExamUpdateManyWithoutGradingScaleNestedInput
 }
 
@@ -374,7 +551,12 @@ export type GradingScaleUncheckedUpdateWithoutGradeRangesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxGpa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exams?: Prisma.ExamUncheckedUpdateManyWithoutGradingScaleNestedInput
 }
 
@@ -382,7 +564,12 @@ export type GradingScaleCreateWithoutExamsInput = {
   id?: string
   name: string
   description?: string | null
+  maxGpa?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
   gradeRanges?: Prisma.GradeRangeCreateNestedManyWithoutGradingScaleInput
 }
 
@@ -390,7 +577,12 @@ export type GradingScaleUncheckedCreateWithoutExamsInput = {
   id?: string
   name: string
   description?: string | null
+  maxGpa?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
   gradeRanges?: Prisma.GradeRangeUncheckedCreateNestedManyWithoutGradingScaleInput
 }
 
@@ -414,7 +606,12 @@ export type GradingScaleUpdateWithoutExamsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxGpa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gradeRanges?: Prisma.GradeRangeUpdateManyWithoutGradingScaleNestedInput
 }
 
@@ -422,7 +619,12 @@ export type GradingScaleUncheckedUpdateWithoutExamsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxGpa?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gradeRanges?: Prisma.GradeRangeUncheckedUpdateManyWithoutGradingScaleNestedInput
 }
 
@@ -470,7 +672,12 @@ export type GradingScaleSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   name?: boolean
   description?: boolean
+  maxGpa?: boolean
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   gradeRanges?: boolean | Prisma.GradingScale$gradeRangesArgs<ExtArgs>
   exams?: boolean | Prisma.GradingScale$examsArgs<ExtArgs>
   _count?: boolean | Prisma.GradingScaleCountOutputTypeDefaultArgs<ExtArgs>
@@ -480,24 +687,39 @@ export type GradingScaleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   name?: boolean
   description?: boolean
+  maxGpa?: boolean
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["gradingScale"]>
 
 export type GradingScaleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   description?: boolean
+  maxGpa?: boolean
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["gradingScale"]>
 
 export type GradingScaleSelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
+  maxGpa?: boolean
+  isDefault?: boolean
+  isSystemDefault?: boolean
   isActive?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type GradingScaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "isActive", ExtArgs["result"]["gradingScale"]>
+export type GradingScaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "maxGpa" | "isDefault" | "isSystemDefault" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["gradingScale"]>
 export type GradingScaleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gradeRanges?: boolean | Prisma.GradingScale$gradeRangesArgs<ExtArgs>
   exams?: boolean | Prisma.GradingScale$examsArgs<ExtArgs>
@@ -516,7 +738,12 @@ export type $GradingScalePayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     name: string
     description: string | null
+    maxGpa: runtime.Decimal
+    isDefault: boolean
+    isSystemDefault: boolean
     isActive: boolean
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["gradingScale"]>
   composites: {}
 }
@@ -945,7 +1172,12 @@ export interface GradingScaleFieldRefs {
   readonly id: Prisma.FieldRef<"GradingScale", 'String'>
   readonly name: Prisma.FieldRef<"GradingScale", 'String'>
   readonly description: Prisma.FieldRef<"GradingScale", 'String'>
+  readonly maxGpa: Prisma.FieldRef<"GradingScale", 'Decimal'>
+  readonly isDefault: Prisma.FieldRef<"GradingScale", 'Boolean'>
+  readonly isSystemDefault: Prisma.FieldRef<"GradingScale", 'Boolean'>
   readonly isActive: Prisma.FieldRef<"GradingScale", 'Boolean'>
+  readonly createdAt: Prisma.FieldRef<"GradingScale", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"GradingScale", 'DateTime'>
 }
     
 

@@ -30,58 +30,89 @@ export type ExamSubjectAvgAggregateOutputType = {
   fullMarks: runtime.Decimal | null
   passMarks: runtime.Decimal | null
   writtenFullMarks: runtime.Decimal | null
+  writtenPassMarks: runtime.Decimal | null
   mcqFullMarks: runtime.Decimal | null
+  mcqPassMarks: runtime.Decimal | null
   practicalFullMarks: runtime.Decimal | null
+  practicalPassMarks: runtime.Decimal | null
+  continuousAssessmentFullMarks: runtime.Decimal | null
+  continuousAssessmentPassMarks: runtime.Decimal | null
 }
 
 export type ExamSubjectSumAggregateOutputType = {
   fullMarks: runtime.Decimal | null
   passMarks: runtime.Decimal | null
   writtenFullMarks: runtime.Decimal | null
+  writtenPassMarks: runtime.Decimal | null
   mcqFullMarks: runtime.Decimal | null
+  mcqPassMarks: runtime.Decimal | null
   practicalFullMarks: runtime.Decimal | null
+  practicalPassMarks: runtime.Decimal | null
+  continuousAssessmentFullMarks: runtime.Decimal | null
+  continuousAssessmentPassMarks: runtime.Decimal | null
 }
 
 export type ExamSubjectMinAggregateOutputType = {
   id: string | null
   examId: string | null
   subjectId: string | null
+  groupId: string | null
   fullMarks: runtime.Decimal | null
   passMarks: runtime.Decimal | null
   hasWritten: boolean | null
-  hasMcq: boolean | null
-  hasPractical: boolean | null
   writtenFullMarks: runtime.Decimal | null
+  writtenPassMarks: runtime.Decimal | null
+  hasMcq: boolean | null
   mcqFullMarks: runtime.Decimal | null
+  mcqPassMarks: runtime.Decimal | null
+  hasPractical: boolean | null
   practicalFullMarks: runtime.Decimal | null
+  practicalPassMarks: runtime.Decimal | null
+  hasContinuousAssessment: boolean | null
+  continuousAssessmentFullMarks: runtime.Decimal | null
+  continuousAssessmentPassMarks: runtime.Decimal | null
 }
 
 export type ExamSubjectMaxAggregateOutputType = {
   id: string | null
   examId: string | null
   subjectId: string | null
+  groupId: string | null
   fullMarks: runtime.Decimal | null
   passMarks: runtime.Decimal | null
   hasWritten: boolean | null
-  hasMcq: boolean | null
-  hasPractical: boolean | null
   writtenFullMarks: runtime.Decimal | null
+  writtenPassMarks: runtime.Decimal | null
+  hasMcq: boolean | null
   mcqFullMarks: runtime.Decimal | null
+  mcqPassMarks: runtime.Decimal | null
+  hasPractical: boolean | null
   practicalFullMarks: runtime.Decimal | null
+  practicalPassMarks: runtime.Decimal | null
+  hasContinuousAssessment: boolean | null
+  continuousAssessmentFullMarks: runtime.Decimal | null
+  continuousAssessmentPassMarks: runtime.Decimal | null
 }
 
 export type ExamSubjectCountAggregateOutputType = {
   id: number
   examId: number
   subjectId: number
+  groupId: number
   fullMarks: number
   passMarks: number
   hasWritten: number
-  hasMcq: number
-  hasPractical: number
   writtenFullMarks: number
+  writtenPassMarks: number
+  hasMcq: number
   mcqFullMarks: number
+  mcqPassMarks: number
+  hasPractical: number
   practicalFullMarks: number
+  practicalPassMarks: number
+  hasContinuousAssessment: number
+  continuousAssessmentFullMarks: number
+  continuousAssessmentPassMarks: number
   _all: number
 }
 
@@ -90,58 +121,89 @@ export type ExamSubjectAvgAggregateInputType = {
   fullMarks?: true
   passMarks?: true
   writtenFullMarks?: true
+  writtenPassMarks?: true
   mcqFullMarks?: true
+  mcqPassMarks?: true
   practicalFullMarks?: true
+  practicalPassMarks?: true
+  continuousAssessmentFullMarks?: true
+  continuousAssessmentPassMarks?: true
 }
 
 export type ExamSubjectSumAggregateInputType = {
   fullMarks?: true
   passMarks?: true
   writtenFullMarks?: true
+  writtenPassMarks?: true
   mcqFullMarks?: true
+  mcqPassMarks?: true
   practicalFullMarks?: true
+  practicalPassMarks?: true
+  continuousAssessmentFullMarks?: true
+  continuousAssessmentPassMarks?: true
 }
 
 export type ExamSubjectMinAggregateInputType = {
   id?: true
   examId?: true
   subjectId?: true
+  groupId?: true
   fullMarks?: true
   passMarks?: true
   hasWritten?: true
-  hasMcq?: true
-  hasPractical?: true
   writtenFullMarks?: true
+  writtenPassMarks?: true
+  hasMcq?: true
   mcqFullMarks?: true
+  mcqPassMarks?: true
+  hasPractical?: true
   practicalFullMarks?: true
+  practicalPassMarks?: true
+  hasContinuousAssessment?: true
+  continuousAssessmentFullMarks?: true
+  continuousAssessmentPassMarks?: true
 }
 
 export type ExamSubjectMaxAggregateInputType = {
   id?: true
   examId?: true
   subjectId?: true
+  groupId?: true
   fullMarks?: true
   passMarks?: true
   hasWritten?: true
-  hasMcq?: true
-  hasPractical?: true
   writtenFullMarks?: true
+  writtenPassMarks?: true
+  hasMcq?: true
   mcqFullMarks?: true
+  mcqPassMarks?: true
+  hasPractical?: true
   practicalFullMarks?: true
+  practicalPassMarks?: true
+  hasContinuousAssessment?: true
+  continuousAssessmentFullMarks?: true
+  continuousAssessmentPassMarks?: true
 }
 
 export type ExamSubjectCountAggregateInputType = {
   id?: true
   examId?: true
   subjectId?: true
+  groupId?: true
   fullMarks?: true
   passMarks?: true
   hasWritten?: true
-  hasMcq?: true
-  hasPractical?: true
   writtenFullMarks?: true
+  writtenPassMarks?: true
+  hasMcq?: true
   mcqFullMarks?: true
+  mcqPassMarks?: true
+  hasPractical?: true
   practicalFullMarks?: true
+  practicalPassMarks?: true
+  hasContinuousAssessment?: true
+  continuousAssessmentFullMarks?: true
+  continuousAssessmentPassMarks?: true
   _all?: true
 }
 
@@ -235,14 +297,21 @@ export type ExamSubjectGroupByOutputType = {
   id: string
   examId: string
   subjectId: string
+  groupId: string | null
   fullMarks: runtime.Decimal
   passMarks: runtime.Decimal
   hasWritten: boolean
-  hasMcq: boolean
-  hasPractical: boolean
   writtenFullMarks: runtime.Decimal | null
+  writtenPassMarks: runtime.Decimal | null
+  hasMcq: boolean
   mcqFullMarks: runtime.Decimal | null
+  mcqPassMarks: runtime.Decimal | null
+  hasPractical: boolean
   practicalFullMarks: runtime.Decimal | null
+  practicalPassMarks: runtime.Decimal | null
+  hasContinuousAssessment: boolean
+  continuousAssessmentFullMarks: runtime.Decimal | null
+  continuousAssessmentPassMarks: runtime.Decimal | null
   _count: ExamSubjectCountAggregateOutputType | null
   _avg: ExamSubjectAvgAggregateOutputType | null
   _sum: ExamSubjectSumAggregateOutputType | null
@@ -272,16 +341,24 @@ export type ExamSubjectWhereInput = {
   id?: Prisma.UuidFilter<"ExamSubject"> | string
   examId?: Prisma.UuidFilter<"ExamSubject"> | string
   subjectId?: Prisma.UuidFilter<"ExamSubject"> | string
+  groupId?: Prisma.UuidNullableFilter<"ExamSubject"> | string | null
   fullMarks?: Prisma.DecimalFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFilter<"ExamSubject"> | boolean
-  hasMcq?: Prisma.BoolFilter<"ExamSubject"> | boolean
-  hasPractical?: Prisma.BoolFilter<"ExamSubject"> | boolean
   writtenFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFilter<"ExamSubject"> | boolean
   mcqFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFilter<"ExamSubject"> | boolean
   practicalFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFilter<"ExamSubject"> | boolean
+  continuousAssessmentFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
+  group?: Prisma.XOR<Prisma.AcademicGroupNullableScalarRelationFilter, Prisma.AcademicGroupWhereInput> | null
   marks?: Prisma.MarkListRelationFilter
   subjectResults?: Prisma.StudentSubjectResultListRelationFilter
   examRoutines?: Prisma.ExamRoutineListRelationFilter
@@ -291,16 +368,24 @@ export type ExamSubjectOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
   fullMarks?: Prisma.SortOrder
   passMarks?: Prisma.SortOrder
   hasWritten?: Prisma.SortOrder
-  hasMcq?: Prisma.SortOrder
-  hasPractical?: Prisma.SortOrder
   writtenFullMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  writtenPassMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasMcq?: Prisma.SortOrder
   mcqFullMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  mcqPassMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasPractical?: Prisma.SortOrder
   practicalFullMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  practicalPassMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasContinuousAssessment?: Prisma.SortOrder
+  continuousAssessmentFullMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  continuousAssessmentPassMarks?: Prisma.SortOrderInput | Prisma.SortOrder
   exam?: Prisma.ExamOrderByWithRelationInput
   subject?: Prisma.SubjectOrderByWithRelationInput
+  group?: Prisma.AcademicGroupOrderByWithRelationInput
   marks?: Prisma.MarkOrderByRelationAggregateInput
   subjectResults?: Prisma.StudentSubjectResultOrderByRelationAggregateInput
   examRoutines?: Prisma.ExamRoutineOrderByRelationAggregateInput
@@ -314,16 +399,24 @@ export type ExamSubjectWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ExamSubjectWhereInput | Prisma.ExamSubjectWhereInput[]
   examId?: Prisma.UuidFilter<"ExamSubject"> | string
   subjectId?: Prisma.UuidFilter<"ExamSubject"> | string
+  groupId?: Prisma.UuidNullableFilter<"ExamSubject"> | string | null
   fullMarks?: Prisma.DecimalFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFilter<"ExamSubject"> | boolean
-  hasMcq?: Prisma.BoolFilter<"ExamSubject"> | boolean
-  hasPractical?: Prisma.BoolFilter<"ExamSubject"> | boolean
   writtenFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFilter<"ExamSubject"> | boolean
   mcqFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFilter<"ExamSubject"> | boolean
   practicalFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFilter<"ExamSubject"> | boolean
+  continuousAssessmentFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
+  group?: Prisma.XOR<Prisma.AcademicGroupNullableScalarRelationFilter, Prisma.AcademicGroupWhereInput> | null
   marks?: Prisma.MarkListRelationFilter
   subjectResults?: Prisma.StudentSubjectResultListRelationFilter
   examRoutines?: Prisma.ExamRoutineListRelationFilter
@@ -333,14 +426,21 @@ export type ExamSubjectOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
   fullMarks?: Prisma.SortOrder
   passMarks?: Prisma.SortOrder
   hasWritten?: Prisma.SortOrder
-  hasMcq?: Prisma.SortOrder
-  hasPractical?: Prisma.SortOrder
   writtenFullMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  writtenPassMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasMcq?: Prisma.SortOrder
   mcqFullMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  mcqPassMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasPractical?: Prisma.SortOrder
   practicalFullMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  practicalPassMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasContinuousAssessment?: Prisma.SortOrder
+  continuousAssessmentFullMarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  continuousAssessmentPassMarks?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ExamSubjectCountOrderByAggregateInput
   _avg?: Prisma.ExamSubjectAvgOrderByAggregateInput
   _max?: Prisma.ExamSubjectMaxOrderByAggregateInput
@@ -355,14 +455,21 @@ export type ExamSubjectScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"ExamSubject"> | string
   examId?: Prisma.UuidWithAggregatesFilter<"ExamSubject"> | string
   subjectId?: Prisma.UuidWithAggregatesFilter<"ExamSubject"> | string
+  groupId?: Prisma.UuidNullableWithAggregatesFilter<"ExamSubject"> | string | null
   fullMarks?: Prisma.DecimalWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolWithAggregatesFilter<"ExamSubject"> | boolean
-  hasMcq?: Prisma.BoolWithAggregatesFilter<"ExamSubject"> | boolean
-  hasPractical?: Prisma.BoolWithAggregatesFilter<"ExamSubject"> | boolean
   writtenFullMarks?: Prisma.DecimalNullableWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.DecimalNullableWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolWithAggregatesFilter<"ExamSubject"> | boolean
   mcqFullMarks?: Prisma.DecimalNullableWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.DecimalNullableWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolWithAggregatesFilter<"ExamSubject"> | boolean
   practicalFullMarks?: Prisma.DecimalNullableWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.DecimalNullableWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolWithAggregatesFilter<"ExamSubject"> | boolean
+  continuousAssessmentFullMarks?: Prisma.DecimalNullableWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.DecimalNullableWithAggregatesFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type ExamSubjectCreateInput = {
@@ -370,13 +477,20 @@ export type ExamSubjectCreateInput = {
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam: Prisma.ExamCreateNestedOneWithoutExamSubjectsInput
   subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
+  group?: Prisma.AcademicGroupCreateNestedOneWithoutExamSubjectsInput
   marks?: Prisma.MarkCreateNestedManyWithoutExamSubjectInput
   subjectResults?: Prisma.StudentSubjectResultCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutExamSubjectInput
@@ -386,14 +500,21 @@ export type ExamSubjectUncheckedCreateInput = {
   id?: string
   examId: string
   subjectId: string
+  groupId?: string | null
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutExamSubjectInput
   subjectResults?: Prisma.StudentSubjectResultUncheckedCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutExamSubjectInput
@@ -404,13 +525,20 @@ export type ExamSubjectUpdateInput = {
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam?: Prisma.ExamUpdateOneRequiredWithoutExamSubjectsNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
+  group?: Prisma.AcademicGroupUpdateOneWithoutExamSubjectsNestedInput
   marks?: Prisma.MarkUpdateManyWithoutExamSubjectNestedInput
   subjectResults?: Prisma.StudentSubjectResultUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUpdateManyWithoutExamSubjectNestedInput
@@ -420,14 +548,21 @@ export type ExamSubjectUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedUpdateManyWithoutExamSubjectNestedInput
   subjectResults?: Prisma.StudentSubjectResultUncheckedUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutExamSubjectNestedInput
@@ -437,14 +572,21 @@ export type ExamSubjectCreateManyInput = {
   id?: string
   examId: string
   subjectId: string
+  groupId?: string | null
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type ExamSubjectUpdateManyMutationInput = {
@@ -452,25 +594,38 @@ export type ExamSubjectUpdateManyMutationInput = {
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type ExamSubjectUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type ExamSubjectListRelationFilter = {
@@ -492,63 +647,136 @@ export type ExamSubjectCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   fullMarks?: Prisma.SortOrder
   passMarks?: Prisma.SortOrder
   hasWritten?: Prisma.SortOrder
-  hasMcq?: Prisma.SortOrder
-  hasPractical?: Prisma.SortOrder
   writtenFullMarks?: Prisma.SortOrder
+  writtenPassMarks?: Prisma.SortOrder
+  hasMcq?: Prisma.SortOrder
   mcqFullMarks?: Prisma.SortOrder
+  mcqPassMarks?: Prisma.SortOrder
+  hasPractical?: Prisma.SortOrder
   practicalFullMarks?: Prisma.SortOrder
+  practicalPassMarks?: Prisma.SortOrder
+  hasContinuousAssessment?: Prisma.SortOrder
+  continuousAssessmentFullMarks?: Prisma.SortOrder
+  continuousAssessmentPassMarks?: Prisma.SortOrder
 }
 
 export type ExamSubjectAvgOrderByAggregateInput = {
   fullMarks?: Prisma.SortOrder
   passMarks?: Prisma.SortOrder
   writtenFullMarks?: Prisma.SortOrder
+  writtenPassMarks?: Prisma.SortOrder
   mcqFullMarks?: Prisma.SortOrder
+  mcqPassMarks?: Prisma.SortOrder
   practicalFullMarks?: Prisma.SortOrder
+  practicalPassMarks?: Prisma.SortOrder
+  continuousAssessmentFullMarks?: Prisma.SortOrder
+  continuousAssessmentPassMarks?: Prisma.SortOrder
 }
 
 export type ExamSubjectMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   fullMarks?: Prisma.SortOrder
   passMarks?: Prisma.SortOrder
   hasWritten?: Prisma.SortOrder
-  hasMcq?: Prisma.SortOrder
-  hasPractical?: Prisma.SortOrder
   writtenFullMarks?: Prisma.SortOrder
+  writtenPassMarks?: Prisma.SortOrder
+  hasMcq?: Prisma.SortOrder
   mcqFullMarks?: Prisma.SortOrder
+  mcqPassMarks?: Prisma.SortOrder
+  hasPractical?: Prisma.SortOrder
   practicalFullMarks?: Prisma.SortOrder
+  practicalPassMarks?: Prisma.SortOrder
+  hasContinuousAssessment?: Prisma.SortOrder
+  continuousAssessmentFullMarks?: Prisma.SortOrder
+  continuousAssessmentPassMarks?: Prisma.SortOrder
 }
 
 export type ExamSubjectMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
   subjectId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   fullMarks?: Prisma.SortOrder
   passMarks?: Prisma.SortOrder
   hasWritten?: Prisma.SortOrder
-  hasMcq?: Prisma.SortOrder
-  hasPractical?: Prisma.SortOrder
   writtenFullMarks?: Prisma.SortOrder
+  writtenPassMarks?: Prisma.SortOrder
+  hasMcq?: Prisma.SortOrder
   mcqFullMarks?: Prisma.SortOrder
+  mcqPassMarks?: Prisma.SortOrder
+  hasPractical?: Prisma.SortOrder
   practicalFullMarks?: Prisma.SortOrder
+  practicalPassMarks?: Prisma.SortOrder
+  hasContinuousAssessment?: Prisma.SortOrder
+  continuousAssessmentFullMarks?: Prisma.SortOrder
+  continuousAssessmentPassMarks?: Prisma.SortOrder
 }
 
 export type ExamSubjectSumOrderByAggregateInput = {
   fullMarks?: Prisma.SortOrder
   passMarks?: Prisma.SortOrder
   writtenFullMarks?: Prisma.SortOrder
+  writtenPassMarks?: Prisma.SortOrder
   mcqFullMarks?: Prisma.SortOrder
+  mcqPassMarks?: Prisma.SortOrder
   practicalFullMarks?: Prisma.SortOrder
+  practicalPassMarks?: Prisma.SortOrder
+  continuousAssessmentFullMarks?: Prisma.SortOrder
+  continuousAssessmentPassMarks?: Prisma.SortOrder
 }
 
 export type ExamSubjectScalarRelationFilter = {
   is?: Prisma.ExamSubjectWhereInput
   isNot?: Prisma.ExamSubjectWhereInput
+}
+
+export type ExamSubjectCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.ExamSubjectCreateWithoutGroupInput, Prisma.ExamSubjectUncheckedCreateWithoutGroupInput> | Prisma.ExamSubjectCreateWithoutGroupInput[] | Prisma.ExamSubjectUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.ExamSubjectCreateOrConnectWithoutGroupInput | Prisma.ExamSubjectCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.ExamSubjectCreateManyGroupInputEnvelope
+  connect?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+}
+
+export type ExamSubjectUncheckedCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.ExamSubjectCreateWithoutGroupInput, Prisma.ExamSubjectUncheckedCreateWithoutGroupInput> | Prisma.ExamSubjectCreateWithoutGroupInput[] | Prisma.ExamSubjectUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.ExamSubjectCreateOrConnectWithoutGroupInput | Prisma.ExamSubjectCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.ExamSubjectCreateManyGroupInputEnvelope
+  connect?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+}
+
+export type ExamSubjectUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamSubjectCreateWithoutGroupInput, Prisma.ExamSubjectUncheckedCreateWithoutGroupInput> | Prisma.ExamSubjectCreateWithoutGroupInput[] | Prisma.ExamSubjectUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.ExamSubjectCreateOrConnectWithoutGroupInput | Prisma.ExamSubjectCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.ExamSubjectUpsertWithWhereUniqueWithoutGroupInput | Prisma.ExamSubjectUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.ExamSubjectCreateManyGroupInputEnvelope
+  set?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+  disconnect?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+  delete?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+  connect?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+  update?: Prisma.ExamSubjectUpdateWithWhereUniqueWithoutGroupInput | Prisma.ExamSubjectUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.ExamSubjectUpdateManyWithWhereWithoutGroupInput | Prisma.ExamSubjectUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.ExamSubjectScalarWhereInput | Prisma.ExamSubjectScalarWhereInput[]
+}
+
+export type ExamSubjectUncheckedUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamSubjectCreateWithoutGroupInput, Prisma.ExamSubjectUncheckedCreateWithoutGroupInput> | Prisma.ExamSubjectCreateWithoutGroupInput[] | Prisma.ExamSubjectUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.ExamSubjectCreateOrConnectWithoutGroupInput | Prisma.ExamSubjectCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.ExamSubjectUpsertWithWhereUniqueWithoutGroupInput | Prisma.ExamSubjectUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.ExamSubjectCreateManyGroupInputEnvelope
+  set?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+  disconnect?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+  delete?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+  connect?: Prisma.ExamSubjectWhereUniqueInput | Prisma.ExamSubjectWhereUniqueInput[]
+  update?: Prisma.ExamSubjectUpdateWithWhereUniqueWithoutGroupInput | Prisma.ExamSubjectUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.ExamSubjectUpdateManyWithWhereWithoutGroupInput | Prisma.ExamSubjectUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.ExamSubjectScalarWhereInput | Prisma.ExamSubjectScalarWhereInput[]
 }
 
 export type ExamSubjectCreateNestedManyWithoutSubjectInput = {
@@ -635,14 +863,6 @@ export type ExamSubjectUncheckedUpdateManyWithoutExamNestedInput = {
   deleteMany?: Prisma.ExamSubjectScalarWhereInput | Prisma.ExamSubjectScalarWhereInput[]
 }
 
-export type NullableDecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type ExamSubjectCreateNestedOneWithoutExamRoutinesInput = {
   create?: Prisma.XOR<Prisma.ExamSubjectCreateWithoutExamRoutinesInput, Prisma.ExamSubjectUncheckedCreateWithoutExamRoutinesInput>
   connectOrCreate?: Prisma.ExamSubjectCreateOrConnectWithoutExamRoutinesInput
@@ -685,17 +905,120 @@ export type ExamSubjectUpdateOneRequiredWithoutSubjectResultsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExamSubjectUpdateToOneWithWhereWithoutSubjectResultsInput, Prisma.ExamSubjectUpdateWithoutSubjectResultsInput>, Prisma.ExamSubjectUncheckedUpdateWithoutSubjectResultsInput>
 }
 
+export type ExamSubjectCreateWithoutGroupInput = {
+  id?: string
+  fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  hasWritten?: boolean
+  writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
+  mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
+  practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  exam: Prisma.ExamCreateNestedOneWithoutExamSubjectsInput
+  subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
+  marks?: Prisma.MarkCreateNestedManyWithoutExamSubjectInput
+  subjectResults?: Prisma.StudentSubjectResultCreateNestedManyWithoutExamSubjectInput
+  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutExamSubjectInput
+}
+
+export type ExamSubjectUncheckedCreateWithoutGroupInput = {
+  id?: string
+  examId: string
+  subjectId: string
+  fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  hasWritten?: boolean
+  writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
+  mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
+  practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marks?: Prisma.MarkUncheckedCreateNestedManyWithoutExamSubjectInput
+  subjectResults?: Prisma.StudentSubjectResultUncheckedCreateNestedManyWithoutExamSubjectInput
+  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutExamSubjectInput
+}
+
+export type ExamSubjectCreateOrConnectWithoutGroupInput = {
+  where: Prisma.ExamSubjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExamSubjectCreateWithoutGroupInput, Prisma.ExamSubjectUncheckedCreateWithoutGroupInput>
+}
+
+export type ExamSubjectCreateManyGroupInputEnvelope = {
+  data: Prisma.ExamSubjectCreateManyGroupInput | Prisma.ExamSubjectCreateManyGroupInput[]
+  skipDuplicates?: boolean
+}
+
+export type ExamSubjectUpsertWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.ExamSubjectWhereUniqueInput
+  update: Prisma.XOR<Prisma.ExamSubjectUpdateWithoutGroupInput, Prisma.ExamSubjectUncheckedUpdateWithoutGroupInput>
+  create: Prisma.XOR<Prisma.ExamSubjectCreateWithoutGroupInput, Prisma.ExamSubjectUncheckedCreateWithoutGroupInput>
+}
+
+export type ExamSubjectUpdateWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.ExamSubjectWhereUniqueInput
+  data: Prisma.XOR<Prisma.ExamSubjectUpdateWithoutGroupInput, Prisma.ExamSubjectUncheckedUpdateWithoutGroupInput>
+}
+
+export type ExamSubjectUpdateManyWithWhereWithoutGroupInput = {
+  where: Prisma.ExamSubjectScalarWhereInput
+  data: Prisma.XOR<Prisma.ExamSubjectUpdateManyMutationInput, Prisma.ExamSubjectUncheckedUpdateManyWithoutGroupInput>
+}
+
+export type ExamSubjectScalarWhereInput = {
+  AND?: Prisma.ExamSubjectScalarWhereInput | Prisma.ExamSubjectScalarWhereInput[]
+  OR?: Prisma.ExamSubjectScalarWhereInput[]
+  NOT?: Prisma.ExamSubjectScalarWhereInput | Prisma.ExamSubjectScalarWhereInput[]
+  id?: Prisma.UuidFilter<"ExamSubject"> | string
+  examId?: Prisma.UuidFilter<"ExamSubject"> | string
+  subjectId?: Prisma.UuidFilter<"ExamSubject"> | string
+  groupId?: Prisma.UuidNullableFilter<"ExamSubject"> | string | null
+  fullMarks?: Prisma.DecimalFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  passMarks?: Prisma.DecimalFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  hasWritten?: Prisma.BoolFilter<"ExamSubject"> | boolean
+  writtenFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFilter<"ExamSubject"> | boolean
+  mcqFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFilter<"ExamSubject"> | boolean
+  practicalFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFilter<"ExamSubject"> | boolean
+  continuousAssessmentFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
 export type ExamSubjectCreateWithoutSubjectInput = {
   id?: string
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam: Prisma.ExamCreateNestedOneWithoutExamSubjectsInput
+  group?: Prisma.AcademicGroupCreateNestedOneWithoutExamSubjectsInput
   marks?: Prisma.MarkCreateNestedManyWithoutExamSubjectInput
   subjectResults?: Prisma.StudentSubjectResultCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutExamSubjectInput
@@ -704,14 +1027,21 @@ export type ExamSubjectCreateWithoutSubjectInput = {
 export type ExamSubjectUncheckedCreateWithoutSubjectInput = {
   id?: string
   examId: string
+  groupId?: string | null
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutExamSubjectInput
   subjectResults?: Prisma.StudentSubjectResultUncheckedCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutExamSubjectInput
@@ -743,34 +1073,24 @@ export type ExamSubjectUpdateManyWithWhereWithoutSubjectInput = {
   data: Prisma.XOR<Prisma.ExamSubjectUpdateManyMutationInput, Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectInput>
 }
 
-export type ExamSubjectScalarWhereInput = {
-  AND?: Prisma.ExamSubjectScalarWhereInput | Prisma.ExamSubjectScalarWhereInput[]
-  OR?: Prisma.ExamSubjectScalarWhereInput[]
-  NOT?: Prisma.ExamSubjectScalarWhereInput | Prisma.ExamSubjectScalarWhereInput[]
-  id?: Prisma.UuidFilter<"ExamSubject"> | string
-  examId?: Prisma.UuidFilter<"ExamSubject"> | string
-  subjectId?: Prisma.UuidFilter<"ExamSubject"> | string
-  fullMarks?: Prisma.DecimalFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  passMarks?: Prisma.DecimalFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hasWritten?: Prisma.BoolFilter<"ExamSubject"> | boolean
-  hasMcq?: Prisma.BoolFilter<"ExamSubject"> | boolean
-  hasPractical?: Prisma.BoolFilter<"ExamSubject"> | boolean
-  writtenFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  mcqFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  practicalFullMarks?: Prisma.DecimalNullableFilter<"ExamSubject"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
 export type ExamSubjectCreateWithoutExamInput = {
   id?: string
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
+  group?: Prisma.AcademicGroupCreateNestedOneWithoutExamSubjectsInput
   marks?: Prisma.MarkCreateNestedManyWithoutExamSubjectInput
   subjectResults?: Prisma.StudentSubjectResultCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutExamSubjectInput
@@ -779,14 +1099,21 @@ export type ExamSubjectCreateWithoutExamInput = {
 export type ExamSubjectUncheckedCreateWithoutExamInput = {
   id?: string
   subjectId: string
+  groupId?: string | null
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutExamSubjectInput
   subjectResults?: Prisma.StudentSubjectResultUncheckedCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutExamSubjectInput
@@ -823,13 +1150,20 @@ export type ExamSubjectCreateWithoutExamRoutinesInput = {
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam: Prisma.ExamCreateNestedOneWithoutExamSubjectsInput
   subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
+  group?: Prisma.AcademicGroupCreateNestedOneWithoutExamSubjectsInput
   marks?: Prisma.MarkCreateNestedManyWithoutExamSubjectInput
   subjectResults?: Prisma.StudentSubjectResultCreateNestedManyWithoutExamSubjectInput
 }
@@ -838,14 +1172,21 @@ export type ExamSubjectUncheckedCreateWithoutExamRoutinesInput = {
   id?: string
   examId: string
   subjectId: string
+  groupId?: string | null
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutExamSubjectInput
   subjectResults?: Prisma.StudentSubjectResultUncheckedCreateNestedManyWithoutExamSubjectInput
 }
@@ -871,13 +1212,20 @@ export type ExamSubjectUpdateWithoutExamRoutinesInput = {
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam?: Prisma.ExamUpdateOneRequiredWithoutExamSubjectsNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
+  group?: Prisma.AcademicGroupUpdateOneWithoutExamSubjectsNestedInput
   marks?: Prisma.MarkUpdateManyWithoutExamSubjectNestedInput
   subjectResults?: Prisma.StudentSubjectResultUpdateManyWithoutExamSubjectNestedInput
 }
@@ -886,14 +1234,21 @@ export type ExamSubjectUncheckedUpdateWithoutExamRoutinesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedUpdateManyWithoutExamSubjectNestedInput
   subjectResults?: Prisma.StudentSubjectResultUncheckedUpdateManyWithoutExamSubjectNestedInput
 }
@@ -903,13 +1258,20 @@ export type ExamSubjectCreateWithoutMarksInput = {
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam: Prisma.ExamCreateNestedOneWithoutExamSubjectsInput
   subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
+  group?: Prisma.AcademicGroupCreateNestedOneWithoutExamSubjectsInput
   subjectResults?: Prisma.StudentSubjectResultCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutExamSubjectInput
 }
@@ -918,14 +1280,21 @@ export type ExamSubjectUncheckedCreateWithoutMarksInput = {
   id?: string
   examId: string
   subjectId: string
+  groupId?: string | null
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   subjectResults?: Prisma.StudentSubjectResultUncheckedCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutExamSubjectInput
 }
@@ -951,13 +1320,20 @@ export type ExamSubjectUpdateWithoutMarksInput = {
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam?: Prisma.ExamUpdateOneRequiredWithoutExamSubjectsNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
+  group?: Prisma.AcademicGroupUpdateOneWithoutExamSubjectsNestedInput
   subjectResults?: Prisma.StudentSubjectResultUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUpdateManyWithoutExamSubjectNestedInput
 }
@@ -966,14 +1342,21 @@ export type ExamSubjectUncheckedUpdateWithoutMarksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   subjectResults?: Prisma.StudentSubjectResultUncheckedUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutExamSubjectNestedInput
 }
@@ -983,13 +1366,20 @@ export type ExamSubjectCreateWithoutSubjectResultsInput = {
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam: Prisma.ExamCreateNestedOneWithoutExamSubjectsInput
   subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
+  group?: Prisma.AcademicGroupCreateNestedOneWithoutExamSubjectsInput
   marks?: Prisma.MarkCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutExamSubjectInput
 }
@@ -998,14 +1388,21 @@ export type ExamSubjectUncheckedCreateWithoutSubjectResultsInput = {
   id?: string
   examId: string
   subjectId: string
+  groupId?: string | null
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutExamSubjectInput
   examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutExamSubjectInput
 }
@@ -1031,13 +1428,20 @@ export type ExamSubjectUpdateWithoutSubjectResultsInput = {
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam?: Prisma.ExamUpdateOneRequiredWithoutExamSubjectsNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
+  group?: Prisma.AcademicGroupUpdateOneWithoutExamSubjectsNestedInput
   marks?: Prisma.MarkUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUpdateManyWithoutExamSubjectNestedInput
 }
@@ -1046,29 +1450,129 @@ export type ExamSubjectUncheckedUpdateWithoutSubjectResultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutExamSubjectNestedInput
+}
+
+export type ExamSubjectCreateManyGroupInput = {
+  id?: string
+  examId: string
+  subjectId: string
+  fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  hasWritten?: boolean
+  writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
+  mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
+  practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type ExamSubjectUpdateWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  exam?: Prisma.ExamUpdateOneRequiredWithoutExamSubjectsNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
+  marks?: Prisma.MarkUpdateManyWithoutExamSubjectNestedInput
+  subjectResults?: Prisma.StudentSubjectResultUpdateManyWithoutExamSubjectNestedInput
+  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutExamSubjectNestedInput
+}
+
+export type ExamSubjectUncheckedUpdateWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marks?: Prisma.MarkUncheckedUpdateManyWithoutExamSubjectNestedInput
+  subjectResults?: Prisma.StudentSubjectResultUncheckedUpdateManyWithoutExamSubjectNestedInput
+  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutExamSubjectNestedInput
+}
+
+export type ExamSubjectUncheckedUpdateManyWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type ExamSubjectCreateManySubjectInput = {
   id?: string
   examId: string
+  groupId?: string | null
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type ExamSubjectUpdateWithoutSubjectInput = {
@@ -1076,12 +1580,19 @@ export type ExamSubjectUpdateWithoutSubjectInput = {
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   exam?: Prisma.ExamUpdateOneRequiredWithoutExamSubjectsNestedInput
+  group?: Prisma.AcademicGroupUpdateOneWithoutExamSubjectsNestedInput
   marks?: Prisma.MarkUpdateManyWithoutExamSubjectNestedInput
   subjectResults?: Prisma.StudentSubjectResultUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUpdateManyWithoutExamSubjectNestedInput
@@ -1090,14 +1601,21 @@ export type ExamSubjectUpdateWithoutSubjectInput = {
 export type ExamSubjectUncheckedUpdateWithoutSubjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedUpdateManyWithoutExamSubjectNestedInput
   subjectResults?: Prisma.StudentSubjectResultUncheckedUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutExamSubjectNestedInput
@@ -1106,27 +1624,41 @@ export type ExamSubjectUncheckedUpdateWithoutSubjectInput = {
 export type ExamSubjectUncheckedUpdateManyWithoutSubjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type ExamSubjectCreateManyExamInput = {
   id?: string
   subjectId: string
+  groupId?: string | null
   fullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: boolean
   mcqFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: boolean
   practicalFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type ExamSubjectUpdateWithoutExamInput = {
@@ -1134,12 +1666,19 @@ export type ExamSubjectUpdateWithoutExamInput = {
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
+  group?: Prisma.AcademicGroupUpdateOneWithoutExamSubjectsNestedInput
   marks?: Prisma.MarkUpdateManyWithoutExamSubjectNestedInput
   subjectResults?: Prisma.StudentSubjectResultUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUpdateManyWithoutExamSubjectNestedInput
@@ -1148,14 +1687,21 @@ export type ExamSubjectUpdateWithoutExamInput = {
 export type ExamSubjectUncheckedUpdateWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   marks?: Prisma.MarkUncheckedUpdateManyWithoutExamSubjectNestedInput
   subjectResults?: Prisma.StudentSubjectResultUncheckedUpdateManyWithoutExamSubjectNestedInput
   examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutExamSubjectNestedInput
@@ -1164,14 +1710,21 @@ export type ExamSubjectUncheckedUpdateWithoutExamInput = {
 export type ExamSubjectUncheckedUpdateManyWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   passMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   hasWritten?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   writtenFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  writtenPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasMcq?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mcqFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  mcqPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasPractical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   practicalFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  practicalPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  hasContinuousAssessment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  continuousAssessmentFullMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  continuousAssessmentPassMarks?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 
@@ -1227,16 +1780,24 @@ export type ExamSubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   examId?: boolean
   subjectId?: boolean
+  groupId?: boolean
   fullMarks?: boolean
   passMarks?: boolean
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: boolean
+  writtenPassMarks?: boolean
+  hasMcq?: boolean
   mcqFullMarks?: boolean
+  mcqPassMarks?: boolean
+  hasPractical?: boolean
   practicalFullMarks?: boolean
+  practicalPassMarks?: boolean
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: boolean
+  continuousAssessmentPassMarks?: boolean
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.ExamSubject$groupArgs<ExtArgs>
   marks?: boolean | Prisma.ExamSubject$marksArgs<ExtArgs>
   subjectResults?: boolean | Prisma.ExamSubject$subjectResultsArgs<ExtArgs>
   examRoutines?: boolean | Prisma.ExamSubject$examRoutinesArgs<ExtArgs>
@@ -1247,52 +1808,76 @@ export type ExamSubjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   examId?: boolean
   subjectId?: boolean
+  groupId?: boolean
   fullMarks?: boolean
   passMarks?: boolean
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: boolean
+  writtenPassMarks?: boolean
+  hasMcq?: boolean
   mcqFullMarks?: boolean
+  mcqPassMarks?: boolean
+  hasPractical?: boolean
   practicalFullMarks?: boolean
+  practicalPassMarks?: boolean
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: boolean
+  continuousAssessmentPassMarks?: boolean
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.ExamSubject$groupArgs<ExtArgs>
 }, ExtArgs["result"]["examSubject"]>
 
 export type ExamSubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   examId?: boolean
   subjectId?: boolean
+  groupId?: boolean
   fullMarks?: boolean
   passMarks?: boolean
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: boolean
+  writtenPassMarks?: boolean
+  hasMcq?: boolean
   mcqFullMarks?: boolean
+  mcqPassMarks?: boolean
+  hasPractical?: boolean
   practicalFullMarks?: boolean
+  practicalPassMarks?: boolean
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: boolean
+  continuousAssessmentPassMarks?: boolean
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.ExamSubject$groupArgs<ExtArgs>
 }, ExtArgs["result"]["examSubject"]>
 
 export type ExamSubjectSelectScalar = {
   id?: boolean
   examId?: boolean
   subjectId?: boolean
+  groupId?: boolean
   fullMarks?: boolean
   passMarks?: boolean
   hasWritten?: boolean
-  hasMcq?: boolean
-  hasPractical?: boolean
   writtenFullMarks?: boolean
+  writtenPassMarks?: boolean
+  hasMcq?: boolean
   mcqFullMarks?: boolean
+  mcqPassMarks?: boolean
+  hasPractical?: boolean
   practicalFullMarks?: boolean
+  practicalPassMarks?: boolean
+  hasContinuousAssessment?: boolean
+  continuousAssessmentFullMarks?: boolean
+  continuousAssessmentPassMarks?: boolean
 }
 
-export type ExamSubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "examId" | "subjectId" | "fullMarks" | "passMarks" | "hasWritten" | "hasMcq" | "hasPractical" | "writtenFullMarks" | "mcqFullMarks" | "practicalFullMarks", ExtArgs["result"]["examSubject"]>
+export type ExamSubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "examId" | "subjectId" | "groupId" | "fullMarks" | "passMarks" | "hasWritten" | "writtenFullMarks" | "writtenPassMarks" | "hasMcq" | "mcqFullMarks" | "mcqPassMarks" | "hasPractical" | "practicalFullMarks" | "practicalPassMarks" | "hasContinuousAssessment" | "continuousAssessmentFullMarks" | "continuousAssessmentPassMarks", ExtArgs["result"]["examSubject"]>
 export type ExamSubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.ExamSubject$groupArgs<ExtArgs>
   marks?: boolean | Prisma.ExamSubject$marksArgs<ExtArgs>
   subjectResults?: boolean | Prisma.ExamSubject$subjectResultsArgs<ExtArgs>
   examRoutines?: boolean | Prisma.ExamSubject$examRoutinesArgs<ExtArgs>
@@ -1301,10 +1886,12 @@ export type ExamSubjectInclude<ExtArgs extends runtime.Types.Extensions.Internal
 export type ExamSubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.ExamSubject$groupArgs<ExtArgs>
 }
 export type ExamSubjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.ExamSubject$groupArgs<ExtArgs>
 }
 
 export type $ExamSubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1312,6 +1899,7 @@ export type $ExamSubjectPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     exam: Prisma.$ExamPayload<ExtArgs>
     subject: Prisma.$SubjectPayload<ExtArgs>
+    group: Prisma.$AcademicGroupPayload<ExtArgs> | null
     marks: Prisma.$MarkPayload<ExtArgs>[]
     subjectResults: Prisma.$StudentSubjectResultPayload<ExtArgs>[]
     examRoutines: Prisma.$ExamRoutinePayload<ExtArgs>[]
@@ -1320,14 +1908,21 @@ export type $ExamSubjectPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     examId: string
     subjectId: string
+    groupId: string | null
     fullMarks: runtime.Decimal
     passMarks: runtime.Decimal
     hasWritten: boolean
-    hasMcq: boolean
-    hasPractical: boolean
     writtenFullMarks: runtime.Decimal | null
+    writtenPassMarks: runtime.Decimal | null
+    hasMcq: boolean
     mcqFullMarks: runtime.Decimal | null
+    mcqPassMarks: runtime.Decimal | null
+    hasPractical: boolean
     practicalFullMarks: runtime.Decimal | null
+    practicalPassMarks: runtime.Decimal | null
+    hasContinuousAssessment: boolean
+    continuousAssessmentFullMarks: runtime.Decimal | null
+    continuousAssessmentPassMarks: runtime.Decimal | null
   }, ExtArgs["result"]["examSubject"]>
   composites: {}
 }
@@ -1724,6 +2319,7 @@ export interface Prisma__ExamSubjectClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   exam<T extends Prisma.ExamDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamDefaultArgs<ExtArgs>>): Prisma.Prisma__ExamClient<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   subject<T extends Prisma.SubjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubjectDefaultArgs<ExtArgs>>): Prisma.Prisma__SubjectClient<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  group<T extends Prisma.ExamSubject$groupArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamSubject$groupArgs<ExtArgs>>): Prisma.Prisma__AcademicGroupClient<runtime.Types.Result.GetResult<Prisma.$AcademicGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   marks<T extends Prisma.ExamSubject$marksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamSubject$marksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subjectResults<T extends Prisma.ExamSubject$subjectResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamSubject$subjectResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentSubjectResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   examRoutines<T extends Prisma.ExamSubject$examRoutinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamSubject$examRoutinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamRoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1759,14 +2355,21 @@ export interface ExamSubjectFieldRefs {
   readonly id: Prisma.FieldRef<"ExamSubject", 'String'>
   readonly examId: Prisma.FieldRef<"ExamSubject", 'String'>
   readonly subjectId: Prisma.FieldRef<"ExamSubject", 'String'>
+  readonly groupId: Prisma.FieldRef<"ExamSubject", 'String'>
   readonly fullMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
   readonly passMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
   readonly hasWritten: Prisma.FieldRef<"ExamSubject", 'Boolean'>
-  readonly hasMcq: Prisma.FieldRef<"ExamSubject", 'Boolean'>
-  readonly hasPractical: Prisma.FieldRef<"ExamSubject", 'Boolean'>
   readonly writtenFullMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
+  readonly writtenPassMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
+  readonly hasMcq: Prisma.FieldRef<"ExamSubject", 'Boolean'>
   readonly mcqFullMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
+  readonly mcqPassMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
+  readonly hasPractical: Prisma.FieldRef<"ExamSubject", 'Boolean'>
   readonly practicalFullMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
+  readonly practicalPassMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
+  readonly hasContinuousAssessment: Prisma.FieldRef<"ExamSubject", 'Boolean'>
+  readonly continuousAssessmentFullMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
+  readonly continuousAssessmentPassMarks: Prisma.FieldRef<"ExamSubject", 'Decimal'>
 }
     
 
@@ -2160,6 +2763,25 @@ export type ExamSubjectDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many ExamSubjects to delete.
    */
   limit?: number
+}
+
+/**
+ * ExamSubject.group
+ */
+export type ExamSubject$groupArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AcademicGroup
+   */
+  select?: Prisma.AcademicGroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AcademicGroup
+   */
+  omit?: Prisma.AcademicGroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AcademicGroupInclude<ExtArgs> | null
+  where?: Prisma.AcademicGroupWhereInput
 }
 
 /**

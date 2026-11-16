@@ -30,6 +30,7 @@ export type MarkAvgAggregateOutputType = {
   writtenMarks: runtime.Decimal | null
   mcqMarks: runtime.Decimal | null
   practicalMarks: runtime.Decimal | null
+  continuousAssessmentMarks: runtime.Decimal | null
   totalMarks: runtime.Decimal | null
 }
 
@@ -37,6 +38,7 @@ export type MarkSumAggregateOutputType = {
   writtenMarks: runtime.Decimal | null
   mcqMarks: runtime.Decimal | null
   practicalMarks: runtime.Decimal | null
+  continuousAssessmentMarks: runtime.Decimal | null
   totalMarks: runtime.Decimal | null
 }
 
@@ -47,7 +49,10 @@ export type MarkMinAggregateOutputType = {
   writtenMarks: runtime.Decimal | null
   mcqMarks: runtime.Decimal | null
   practicalMarks: runtime.Decimal | null
+  continuousAssessmentMarks: runtime.Decimal | null
   totalMarks: runtime.Decimal | null
+  isAbsent: boolean | null
+  isLocked: boolean | null
   enteredBy: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -60,7 +65,10 @@ export type MarkMaxAggregateOutputType = {
   writtenMarks: runtime.Decimal | null
   mcqMarks: runtime.Decimal | null
   practicalMarks: runtime.Decimal | null
+  continuousAssessmentMarks: runtime.Decimal | null
   totalMarks: runtime.Decimal | null
+  isAbsent: boolean | null
+  isLocked: boolean | null
   enteredBy: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -73,7 +81,10 @@ export type MarkCountAggregateOutputType = {
   writtenMarks: number
   mcqMarks: number
   practicalMarks: number
+  continuousAssessmentMarks: number
   totalMarks: number
+  isAbsent: number
+  isLocked: number
   enteredBy: number
   createdAt: number
   updatedAt: number
@@ -85,6 +96,7 @@ export type MarkAvgAggregateInputType = {
   writtenMarks?: true
   mcqMarks?: true
   practicalMarks?: true
+  continuousAssessmentMarks?: true
   totalMarks?: true
 }
 
@@ -92,6 +104,7 @@ export type MarkSumAggregateInputType = {
   writtenMarks?: true
   mcqMarks?: true
   practicalMarks?: true
+  continuousAssessmentMarks?: true
   totalMarks?: true
 }
 
@@ -102,7 +115,10 @@ export type MarkMinAggregateInputType = {
   writtenMarks?: true
   mcqMarks?: true
   practicalMarks?: true
+  continuousAssessmentMarks?: true
   totalMarks?: true
+  isAbsent?: true
+  isLocked?: true
   enteredBy?: true
   createdAt?: true
   updatedAt?: true
@@ -115,7 +131,10 @@ export type MarkMaxAggregateInputType = {
   writtenMarks?: true
   mcqMarks?: true
   practicalMarks?: true
+  continuousAssessmentMarks?: true
   totalMarks?: true
+  isAbsent?: true
+  isLocked?: true
   enteredBy?: true
   createdAt?: true
   updatedAt?: true
@@ -128,7 +147,10 @@ export type MarkCountAggregateInputType = {
   writtenMarks?: true
   mcqMarks?: true
   practicalMarks?: true
+  continuousAssessmentMarks?: true
   totalMarks?: true
+  isAbsent?: true
+  isLocked?: true
   enteredBy?: true
   createdAt?: true
   updatedAt?: true
@@ -228,7 +250,10 @@ export type MarkGroupByOutputType = {
   writtenMarks: runtime.Decimal
   mcqMarks: runtime.Decimal
   practicalMarks: runtime.Decimal
+  continuousAssessmentMarks: runtime.Decimal
   totalMarks: runtime.Decimal
+  isAbsent: boolean
+  isLocked: boolean
   enteredBy: string
   createdAt: Date
   updatedAt: Date
@@ -264,7 +289,10 @@ export type MarkWhereInput = {
   writtenMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFilter<"Mark"> | boolean
+  isLocked?: Prisma.BoolFilter<"Mark"> | boolean
   enteredBy?: Prisma.UuidFilter<"Mark"> | string
   createdAt?: Prisma.DateTimeFilter<"Mark"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Mark"> | Date | string
@@ -280,7 +308,10 @@ export type MarkOrderByWithRelationInput = {
   writtenMarks?: Prisma.SortOrder
   mcqMarks?: Prisma.SortOrder
   practicalMarks?: Prisma.SortOrder
+  continuousAssessmentMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   enteredBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -300,7 +331,10 @@ export type MarkWhereUniqueInput = Prisma.AtLeast<{
   writtenMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFilter<"Mark"> | boolean
+  isLocked?: Prisma.BoolFilter<"Mark"> | boolean
   enteredBy?: Prisma.UuidFilter<"Mark"> | string
   createdAt?: Prisma.DateTimeFilter<"Mark"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Mark"> | Date | string
@@ -316,7 +350,10 @@ export type MarkOrderByWithAggregationInput = {
   writtenMarks?: Prisma.SortOrder
   mcqMarks?: Prisma.SortOrder
   practicalMarks?: Prisma.SortOrder
+  continuousAssessmentMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   enteredBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -337,7 +374,10 @@ export type MarkScalarWhereWithAggregatesInput = {
   writtenMarks?: Prisma.DecimalWithAggregatesFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalWithAggregatesFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalWithAggregatesFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalWithAggregatesFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalWithAggregatesFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolWithAggregatesFilter<"Mark"> | boolean
+  isLocked?: Prisma.BoolWithAggregatesFilter<"Mark"> | boolean
   enteredBy?: Prisma.UuidWithAggregatesFilter<"Mark"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Mark"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Mark"> | Date | string
@@ -348,7 +388,10 @@ export type MarkCreateInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutMarksInput
@@ -363,7 +406,10 @@ export type MarkUncheckedCreateInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -374,7 +420,10 @@ export type MarkUpdateInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutMarksNestedInput
@@ -389,7 +438,10 @@ export type MarkUncheckedUpdateInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enteredBy?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -402,7 +454,10 @@ export type MarkCreateManyInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -413,7 +468,10 @@ export type MarkUpdateManyMutationInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -425,7 +483,10 @@ export type MarkUncheckedUpdateManyInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enteredBy?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -453,7 +514,10 @@ export type MarkCountOrderByAggregateInput = {
   writtenMarks?: Prisma.SortOrder
   mcqMarks?: Prisma.SortOrder
   practicalMarks?: Prisma.SortOrder
+  continuousAssessmentMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   enteredBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -463,6 +527,7 @@ export type MarkAvgOrderByAggregateInput = {
   writtenMarks?: Prisma.SortOrder
   mcqMarks?: Prisma.SortOrder
   practicalMarks?: Prisma.SortOrder
+  continuousAssessmentMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
 }
 
@@ -473,7 +538,10 @@ export type MarkMaxOrderByAggregateInput = {
   writtenMarks?: Prisma.SortOrder
   mcqMarks?: Prisma.SortOrder
   practicalMarks?: Prisma.SortOrder
+  continuousAssessmentMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   enteredBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -486,7 +554,10 @@ export type MarkMinOrderByAggregateInput = {
   writtenMarks?: Prisma.SortOrder
   mcqMarks?: Prisma.SortOrder
   practicalMarks?: Prisma.SortOrder
+  continuousAssessmentMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   enteredBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -496,6 +567,7 @@ export type MarkSumOrderByAggregateInput = {
   writtenMarks?: Prisma.SortOrder
   mcqMarks?: Prisma.SortOrder
   practicalMarks?: Prisma.SortOrder
+  continuousAssessmentMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
 }
 
@@ -630,7 +702,10 @@ export type MarkCreateWithoutEnrollmentInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   examSubject: Prisma.ExamSubjectCreateNestedOneWithoutMarksInput
@@ -643,7 +718,10 @@ export type MarkUncheckedCreateWithoutEnrollmentInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -685,7 +763,10 @@ export type MarkScalarWhereInput = {
   writtenMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFilter<"Mark"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFilter<"Mark"> | boolean
+  isLocked?: Prisma.BoolFilter<"Mark"> | boolean
   enteredBy?: Prisma.UuidFilter<"Mark"> | string
   createdAt?: Prisma.DateTimeFilter<"Mark"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Mark"> | Date | string
@@ -696,7 +777,10 @@ export type MarkCreateWithoutCreatorInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutMarksInput
@@ -710,7 +794,10 @@ export type MarkUncheckedCreateWithoutCreatorInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -746,7 +833,10 @@ export type MarkCreateWithoutExamSubjectInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   enrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutMarksInput
@@ -759,7 +849,10 @@ export type MarkUncheckedCreateWithoutExamSubjectInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -797,7 +890,10 @@ export type MarkCreateManyEnrollmentInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -808,7 +904,10 @@ export type MarkUpdateWithoutEnrollmentInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examSubject?: Prisma.ExamSubjectUpdateOneRequiredWithoutMarksNestedInput
@@ -821,7 +920,10 @@ export type MarkUncheckedUpdateWithoutEnrollmentInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enteredBy?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -833,7 +935,10 @@ export type MarkUncheckedUpdateManyWithoutEnrollmentInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enteredBy?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -846,7 +951,10 @@ export type MarkCreateManyCreatorInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -856,7 +964,10 @@ export type MarkUpdateWithoutCreatorInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutMarksNestedInput
@@ -870,7 +981,10 @@ export type MarkUncheckedUpdateWithoutCreatorInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -882,7 +996,10 @@ export type MarkUncheckedUpdateManyWithoutCreatorInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -893,7 +1010,10 @@ export type MarkCreateManyExamSubjectInput = {
   writtenMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -904,7 +1024,10 @@ export type MarkUpdateWithoutExamSubjectInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutMarksNestedInput
@@ -917,7 +1040,10 @@ export type MarkUncheckedUpdateWithoutExamSubjectInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enteredBy?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -929,7 +1055,10 @@ export type MarkUncheckedUpdateManyWithoutExamSubjectInput = {
   writtenMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   mcqMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   practicalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  continuousAssessmentMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   enteredBy?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -944,7 +1073,10 @@ export type MarkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   writtenMarks?: boolean
   mcqMarks?: boolean
   practicalMarks?: boolean
+  continuousAssessmentMarks?: boolean
   totalMarks?: boolean
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -960,7 +1092,10 @@ export type MarkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   writtenMarks?: boolean
   mcqMarks?: boolean
   practicalMarks?: boolean
+  continuousAssessmentMarks?: boolean
   totalMarks?: boolean
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -976,7 +1111,10 @@ export type MarkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   writtenMarks?: boolean
   mcqMarks?: boolean
   practicalMarks?: boolean
+  continuousAssessmentMarks?: boolean
   totalMarks?: boolean
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -992,13 +1130,16 @@ export type MarkSelectScalar = {
   writtenMarks?: boolean
   mcqMarks?: boolean
   practicalMarks?: boolean
+  continuousAssessmentMarks?: boolean
   totalMarks?: boolean
+  isAbsent?: boolean
+  isLocked?: boolean
   enteredBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MarkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentEnrollmentId" | "examSubjectId" | "writtenMarks" | "mcqMarks" | "practicalMarks" | "totalMarks" | "enteredBy" | "createdAt" | "updatedAt", ExtArgs["result"]["mark"]>
+export type MarkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentEnrollmentId" | "examSubjectId" | "writtenMarks" | "mcqMarks" | "practicalMarks" | "continuousAssessmentMarks" | "totalMarks" | "isAbsent" | "isLocked" | "enteredBy" | "createdAt" | "updatedAt", ExtArgs["result"]["mark"]>
 export type MarkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   examSubject?: boolean | Prisma.ExamSubjectDefaultArgs<ExtArgs>
@@ -1026,10 +1167,37 @@ export type $MarkPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     studentEnrollmentId: string
     examSubjectId: string
+    /**
+     * লিখিত পরীক্ষার নম্বর
+     */
     writtenMarks: runtime.Decimal
+    /**
+     * MCQ পরীক্ষার নম্বর
+     */
     mcqMarks: runtime.Decimal
+    /**
+     * ব্যবহারিক নম্বর (যদি থাকে)
+     */
     practicalMarks: runtime.Decimal
+    /**
+     * ধারাবাহিক মূল্যায়ন (যদি থাকে)
+     */
+    continuousAssessmentMarks: runtime.Decimal
+    /**
+     * মোট নম্বর
+     */
     totalMarks: runtime.Decimal
+    /**
+     * পরীক্ষায় অনুপস্থিত ছিল কিনা
+     */
+    isAbsent: boolean
+    /**
+     * রেজাল্ট ফাইনাল হলে লক (এডিট বন্ধ)
+     */
+    isLocked: boolean
+    /**
+     * যে শিক্ষক নম্বর ইনপুট দিয়েছেন
+     */
     enteredBy: string
     createdAt: Date
     updatedAt: Date
@@ -1465,7 +1633,10 @@ export interface MarkFieldRefs {
   readonly writtenMarks: Prisma.FieldRef<"Mark", 'Decimal'>
   readonly mcqMarks: Prisma.FieldRef<"Mark", 'Decimal'>
   readonly practicalMarks: Prisma.FieldRef<"Mark", 'Decimal'>
+  readonly continuousAssessmentMarks: Prisma.FieldRef<"Mark", 'Decimal'>
   readonly totalMarks: Prisma.FieldRef<"Mark", 'Decimal'>
+  readonly isAbsent: Prisma.FieldRef<"Mark", 'Boolean'>
+  readonly isLocked: Prisma.FieldRef<"Mark", 'Boolean'>
   readonly enteredBy: Prisma.FieldRef<"Mark", 'String'>
   readonly createdAt: Prisma.FieldRef<"Mark", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Mark", 'DateTime'>

@@ -20,7 +20,6 @@ model Staff {
   administrator      Administrator?
   teacherAssignments TeacherAssignment[]
   classRoutines      ClassRoutine[]
-  examRoutines       ExamRoutine[]
 
   @@index([staffType, status])
 }
