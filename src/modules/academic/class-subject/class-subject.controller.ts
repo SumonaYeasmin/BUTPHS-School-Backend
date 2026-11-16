@@ -30,7 +30,7 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 @ApiTags('(Academic) Class Subjects & Curriculum')
 @Controller('academic/class-subjects')
 export class ClassSubjectController {
-  constructor(private readonly classSubjectService: ClassSubjectService) {}
+  constructor(private readonly classSubjectService: ClassSubjectService) { }
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)

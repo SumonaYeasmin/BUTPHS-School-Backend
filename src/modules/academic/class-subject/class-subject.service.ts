@@ -13,7 +13,7 @@ import {
 
 @Injectable()
 export class ClassSubjectService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   /**
    * 1. Assign a master subject to a specific class & academic year
