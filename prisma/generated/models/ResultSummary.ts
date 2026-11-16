@@ -27,6 +27,7 @@ export type AggregateResultSummary = {
 }
 
 export type ResultSummaryAvgAggregateOutputType = {
+  totalFullMarks: runtime.Decimal | null
   totalMarks: runtime.Decimal | null
   gpa: runtime.Decimal | null
   meritPosition: number | null
@@ -35,6 +36,7 @@ export type ResultSummaryAvgAggregateOutputType = {
 }
 
 export type ResultSummarySumAggregateOutputType = {
+  totalFullMarks: runtime.Decimal | null
   totalMarks: runtime.Decimal | null
   gpa: runtime.Decimal | null
   meritPosition: number | null
@@ -46,6 +48,7 @@ export type ResultSummaryMinAggregateOutputType = {
   id: string | null
   studentEnrollmentId: string | null
   examId: string | null
+  totalFullMarks: runtime.Decimal | null
   totalMarks: runtime.Decimal | null
   gpa: runtime.Decimal | null
   letterGrade: string | null
@@ -62,6 +65,7 @@ export type ResultSummaryMaxAggregateOutputType = {
   id: string | null
   studentEnrollmentId: string | null
   examId: string | null
+  totalFullMarks: runtime.Decimal | null
   totalMarks: runtime.Decimal | null
   gpa: runtime.Decimal | null
   letterGrade: string | null
@@ -78,6 +82,7 @@ export type ResultSummaryCountAggregateOutputType = {
   id: number
   studentEnrollmentId: number
   examId: number
+  totalFullMarks: number
   totalMarks: number
   gpa: number
   letterGrade: number
@@ -93,6 +98,7 @@ export type ResultSummaryCountAggregateOutputType = {
 
 
 export type ResultSummaryAvgAggregateInputType = {
+  totalFullMarks?: true
   totalMarks?: true
   gpa?: true
   meritPosition?: true
@@ -101,6 +107,7 @@ export type ResultSummaryAvgAggregateInputType = {
 }
 
 export type ResultSummarySumAggregateInputType = {
+  totalFullMarks?: true
   totalMarks?: true
   gpa?: true
   meritPosition?: true
@@ -112,6 +119,7 @@ export type ResultSummaryMinAggregateInputType = {
   id?: true
   studentEnrollmentId?: true
   examId?: true
+  totalFullMarks?: true
   totalMarks?: true
   gpa?: true
   letterGrade?: true
@@ -128,6 +136,7 @@ export type ResultSummaryMaxAggregateInputType = {
   id?: true
   studentEnrollmentId?: true
   examId?: true
+  totalFullMarks?: true
   totalMarks?: true
   gpa?: true
   letterGrade?: true
@@ -144,6 +153,7 @@ export type ResultSummaryCountAggregateInputType = {
   id?: true
   studentEnrollmentId?: true
   examId?: true
+  totalFullMarks?: true
   totalMarks?: true
   gpa?: true
   letterGrade?: true
@@ -247,6 +257,7 @@ export type ResultSummaryGroupByOutputType = {
   id: string
   studentEnrollmentId: string
   examId: string
+  totalFullMarks: runtime.Decimal
   totalMarks: runtime.Decimal
   gpa: runtime.Decimal | null
   letterGrade: string | null
@@ -286,6 +297,7 @@ export type ResultSummaryWhereInput = {
   id?: Prisma.UuidFilter<"ResultSummary"> | string
   studentEnrollmentId?: Prisma.UuidFilter<"ResultSummary"> | string
   examId?: Prisma.UuidFilter<"ResultSummary"> | string
+  totalFullMarks?: Prisma.DecimalFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.DecimalNullableFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.StringNullableFilter<"ResultSummary"> | string | null
@@ -304,6 +316,7 @@ export type ResultSummaryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   studentEnrollmentId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
+  totalFullMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   gpa?: Prisma.SortOrderInput | Prisma.SortOrder
   letterGrade?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -326,6 +339,7 @@ export type ResultSummaryWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ResultSummaryWhereInput | Prisma.ResultSummaryWhereInput[]
   studentEnrollmentId?: Prisma.UuidFilter<"ResultSummary"> | string
   examId?: Prisma.UuidFilter<"ResultSummary"> | string
+  totalFullMarks?: Prisma.DecimalFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.DecimalNullableFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.StringNullableFilter<"ResultSummary"> | string | null
@@ -344,6 +358,7 @@ export type ResultSummaryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   studentEnrollmentId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
+  totalFullMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   gpa?: Prisma.SortOrderInput | Prisma.SortOrder
   letterGrade?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -368,6 +383,7 @@ export type ResultSummaryScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"ResultSummary"> | string
   studentEnrollmentId?: Prisma.UuidWithAggregatesFilter<"ResultSummary"> | string
   examId?: Prisma.UuidWithAggregatesFilter<"ResultSummary"> | string
+  totalFullMarks?: Prisma.DecimalWithAggregatesFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalWithAggregatesFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.DecimalNullableWithAggregatesFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.StringNullableWithAggregatesFilter<"ResultSummary"> | string | null
@@ -382,6 +398,7 @@ export type ResultSummaryScalarWhereWithAggregatesInput = {
 
 export type ResultSummaryCreateInput = {
   id?: string
+  totalFullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
@@ -400,6 +417,7 @@ export type ResultSummaryUncheckedCreateInput = {
   id?: string
   studentEnrollmentId: string
   examId: string
+  totalFullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
@@ -414,6 +432,7 @@ export type ResultSummaryUncheckedCreateInput = {
 
 export type ResultSummaryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -432,6 +451,7 @@ export type ResultSummaryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -448,6 +468,7 @@ export type ResultSummaryCreateManyInput = {
   id?: string
   studentEnrollmentId: string
   examId: string
+  totalFullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
@@ -462,6 +483,7 @@ export type ResultSummaryCreateManyInput = {
 
 export type ResultSummaryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -478,6 +500,7 @@ export type ResultSummaryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -509,6 +532,7 @@ export type ResultSummaryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentEnrollmentId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
+  totalFullMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   gpa?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
@@ -522,6 +546,7 @@ export type ResultSummaryCountOrderByAggregateInput = {
 }
 
 export type ResultSummaryAvgOrderByAggregateInput = {
+  totalFullMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   gpa?: Prisma.SortOrder
   meritPosition?: Prisma.SortOrder
@@ -533,6 +558,7 @@ export type ResultSummaryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentEnrollmentId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
+  totalFullMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   gpa?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
@@ -549,6 +575,7 @@ export type ResultSummaryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentEnrollmentId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
+  totalFullMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   gpa?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
@@ -562,6 +589,7 @@ export type ResultSummaryMinOrderByAggregateInput = {
 }
 
 export type ResultSummarySumOrderByAggregateInput = {
+  totalFullMarks?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   gpa?: Prisma.SortOrder
   meritPosition?: Prisma.SortOrder
@@ -667,6 +695,7 @@ export type EnumResultStatusFieldUpdateOperationsInput = {
 
 export type ResultSummaryCreateWithoutEnrollmentInput = {
   id?: string
+  totalFullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
@@ -683,6 +712,7 @@ export type ResultSummaryCreateWithoutEnrollmentInput = {
 export type ResultSummaryUncheckedCreateWithoutEnrollmentInput = {
   id?: string
   examId: string
+  totalFullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
@@ -728,6 +758,7 @@ export type ResultSummaryScalarWhereInput = {
   id?: Prisma.UuidFilter<"ResultSummary"> | string
   studentEnrollmentId?: Prisma.UuidFilter<"ResultSummary"> | string
   examId?: Prisma.UuidFilter<"ResultSummary"> | string
+  totalFullMarks?: Prisma.DecimalFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.DecimalNullableFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.StringNullableFilter<"ResultSummary"> | string | null
@@ -742,6 +773,7 @@ export type ResultSummaryScalarWhereInput = {
 
 export type ResultSummaryCreateWithoutExamInput = {
   id?: string
+  totalFullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
@@ -758,6 +790,7 @@ export type ResultSummaryCreateWithoutExamInput = {
 export type ResultSummaryUncheckedCreateWithoutExamInput = {
   id?: string
   studentEnrollmentId: string
+  totalFullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
@@ -799,6 +832,7 @@ export type ResultSummaryUpdateManyWithWhereWithoutExamInput = {
 export type ResultSummaryCreateManyEnrollmentInput = {
   id?: string
   examId: string
+  totalFullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
@@ -813,6 +847,7 @@ export type ResultSummaryCreateManyEnrollmentInput = {
 
 export type ResultSummaryUpdateWithoutEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -829,6 +864,7 @@ export type ResultSummaryUpdateWithoutEnrollmentInput = {
 export type ResultSummaryUncheckedUpdateWithoutEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -844,6 +880,7 @@ export type ResultSummaryUncheckedUpdateWithoutEnrollmentInput = {
 export type ResultSummaryUncheckedUpdateManyWithoutEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -859,6 +896,7 @@ export type ResultSummaryUncheckedUpdateManyWithoutEnrollmentInput = {
 export type ResultSummaryCreateManyExamInput = {
   id?: string
   studentEnrollmentId: string
+  totalFullMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
@@ -873,6 +911,7 @@ export type ResultSummaryCreateManyExamInput = {
 
 export type ResultSummaryUpdateWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -889,6 +928,7 @@ export type ResultSummaryUpdateWithoutExamInput = {
 export type ResultSummaryUncheckedUpdateWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -904,6 +944,7 @@ export type ResultSummaryUncheckedUpdateWithoutExamInput = {
 export type ResultSummaryUncheckedUpdateManyWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  totalFullMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -922,6 +963,7 @@ export type ResultSummarySelect<ExtArgs extends runtime.Types.Extensions.Interna
   id?: boolean
   studentEnrollmentId?: boolean
   examId?: boolean
+  totalFullMarks?: boolean
   totalMarks?: boolean
   gpa?: boolean
   letterGrade?: boolean
@@ -940,6 +982,7 @@ export type ResultSummarySelectCreateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   studentEnrollmentId?: boolean
   examId?: boolean
+  totalFullMarks?: boolean
   totalMarks?: boolean
   gpa?: boolean
   letterGrade?: boolean
@@ -958,6 +1001,7 @@ export type ResultSummarySelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   studentEnrollmentId?: boolean
   examId?: boolean
+  totalFullMarks?: boolean
   totalMarks?: boolean
   gpa?: boolean
   letterGrade?: boolean
@@ -976,6 +1020,7 @@ export type ResultSummarySelectScalar = {
   id?: boolean
   studentEnrollmentId?: boolean
   examId?: boolean
+  totalFullMarks?: boolean
   totalMarks?: boolean
   gpa?: boolean
   letterGrade?: boolean
@@ -988,7 +1033,7 @@ export type ResultSummarySelectScalar = {
   updatedAt?: boolean
 }
 
-export type ResultSummaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentEnrollmentId" | "examId" | "totalMarks" | "gpa" | "letterGrade" | "meritPosition" | "sectionMeritPosition" | "failedSubjectCount" | "resultStatus" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["resultSummary"]>
+export type ResultSummaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentEnrollmentId" | "examId" | "totalFullMarks" | "totalMarks" | "gpa" | "letterGrade" | "meritPosition" | "sectionMeritPosition" | "failedSubjectCount" | "resultStatus" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["resultSummary"]>
 export type ResultSummaryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
@@ -1013,7 +1058,11 @@ export type $ResultSummaryPayload<ExtArgs extends runtime.Types.Extensions.Inter
     studentEnrollmentId: string
     examId: string
     /**
-     * সব বিষয় মিলিয়ে মোট প্রাপ্ত নম্বর
+     * সব বিষয়ের সর্বমোট পূর্ণমান (যেমন: ৯০০ বা ১০০০)
+     */
+    totalFullMarks: runtime.Decimal
+    /**
+     * সব বিষয় মিলিয়ে মোট প্রাপ্ত নম্বর (যেমন: ৭২০)
      */
     totalMarks: runtime.Decimal
     /**
@@ -1474,6 +1523,7 @@ export interface ResultSummaryFieldRefs {
   readonly id: Prisma.FieldRef<"ResultSummary", 'String'>
   readonly studentEnrollmentId: Prisma.FieldRef<"ResultSummary", 'String'>
   readonly examId: Prisma.FieldRef<"ResultSummary", 'String'>
+  readonly totalFullMarks: Prisma.FieldRef<"ResultSummary", 'Decimal'>
   readonly totalMarks: Prisma.FieldRef<"ResultSummary", 'Decimal'>
   readonly gpa: Prisma.FieldRef<"ResultSummary", 'Decimal'>
   readonly letterGrade: Prisma.FieldRef<"ResultSummary", 'String'>

@@ -56,8 +56,10 @@ export const ModelName = {
   SchoolClass: 'SchoolClass',
   Section: 'Section',
   Subject: 'Subject',
+  Book: 'Book',
   ClassSubject: 'ClassSubject',
   Student: 'Student',
+  StudentRFIDcard: 'StudentRFIDcard',
   StudentEnrollment: 'StudentEnrollment',
   StudentPromotion: 'StudentPromotion',
   Parent: 'Parent',
@@ -170,11 +172,33 @@ export type SectionScalarFieldEnum = (typeof SectionScalarFieldEnum)[keyof typeo
 export const SubjectScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  code: 'code',
-  description: 'description'
+  officialCode: 'officialCode',
+  category: 'category',
+  description: 'description',
+  displayOrder: 'displayOrder',
+  isSystemDefault: 'isSystemDefault',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
+
+
+export const BookScalarFieldEnum = {
+  id: 'id',
+  subjectId: 'subjectId',
+  classId: 'classId',
+  name: 'name',
+  bookCode: 'bookCode',
+  type: 'type',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookScalarFieldEnum = (typeof BookScalarFieldEnum)[keyof typeof BookScalarFieldEnum]
 
 
 export const ClassSubjectScalarFieldEnum = {
@@ -183,7 +207,11 @@ export const ClassSubjectScalarFieldEnum = {
   classId: 'classId',
   subjectId: 'subjectId',
   groupId: 'groupId',
-  isOptional: 'isOptional'
+  isOptional: 'isOptional',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ClassSubjectScalarFieldEnum = (typeof ClassSubjectScalarFieldEnum)[keyof typeof ClassSubjectScalarFieldEnum]
@@ -192,7 +220,6 @@ export type ClassSubjectScalarFieldEnum = (typeof ClassSubjectScalarFieldEnum)[k
 export const StudentScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
-  rfidCardNo: 'rfidCardNo',
   birthCertificateNo: 'birthCertificateNo',
   name: 'name',
   photo: 'photo',
@@ -209,6 +236,20 @@ export const StudentScalarFieldEnum = {
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
+
+
+export const StudentRFIDcardScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  cardNumber: 'cardNumber',
+  status: 'status',
+  issuedAt: 'issuedAt',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudentRFIDcardScalarFieldEnum = (typeof StudentRFIDcardScalarFieldEnum)[keyof typeof StudentRFIDcardScalarFieldEnum]
 
 
 export const StudentEnrollmentScalarFieldEnum = {
@@ -598,6 +639,7 @@ export const StudentSubjectResultScalarFieldEnum = {
   letterGrade: 'letterGrade',
   gradePoint: 'gradePoint',
   isPassed: 'isPassed',
+  isAbsent: 'isAbsent',
   calculatedAt: 'calculatedAt'
 } as const
 
@@ -608,6 +650,7 @@ export const ResultSummaryScalarFieldEnum = {
   id: 'id',
   studentEnrollmentId: 'studentEnrollmentId',
   examId: 'examId',
+  totalFullMarks: 'totalFullMarks',
   totalMarks: 'totalMarks',
   gpa: 'gpa',
   letterGrade: 'letterGrade',

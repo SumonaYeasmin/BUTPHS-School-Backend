@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { Prisma } from '../../../../prisma/generated/client';
+import { Prisma, BloodGroup, Religion } from '../../../../prisma/generated/client';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { QueryStudentDto } from './dto/query-student.dto';
@@ -120,8 +120,8 @@ export class StudentService {
     }
 
     if (dto.rfidCardNo?.trim()) {
-      const existingRFID = await this.prisma.student.findUnique({
-        where: { rfidCardNo: dto.rfidCardNo.trim() },
+      const existingRFID = await this.prisma.studentRFIDcard.findUnique({
+        where: { cardNumber: dto.rfidCardNo.trim() },
       });
       if (existingRFID) {
         throw new ConflictException(
@@ -143,15 +143,22 @@ export class StudentService {
           name: dto.name.trim(),
           gender: dto.gender,
           dateOfBirth,
-          bloodGroup: dto.bloodGroup?.trim() || null,
-          religion: dto.religion?.trim() || null,
+          bloodGroup: (dto.bloodGroup?.trim() as BloodGroup) || null,
+          religion: (dto.religion?.trim() as Religion) || null,
           birthCertificateNo: dto.birthCertificateNo?.trim() || null,
-          rfidCardNo: dto.rfidCardNo?.trim() || null,
           photo: dto.photo?.trim() || null,
           presentAddress: dto.presentAddress?.trim() || null,
           permanentAddress: dto.permanentAddress?.trim() || null,
           admissionDate,
           status: 'ACTIVE',
+          rfidcards: dto.rfidCardNo?.trim()
+            ? {
+                create: {
+                  cardNumber: dto.rfidCardNo.trim(),
+                  status: 'ACTIVE',
+                },
+              }
+            : undefined,
         },
       });
 
@@ -205,7 +212,7 @@ export class StudentService {
         { name: { contains: term, mode: 'insensitive' } },
         { studentId: { contains: term, mode: 'insensitive' } },
         { birthCertificateNo: { contains: term, mode: 'insensitive' } },
-        { rfidCardNo: { contains: term, mode: 'insensitive' } },
+        { rfidcards: { some: { cardNumber: { contains: term, mode: 'insensitive' } } } },
       ];
     }
 
@@ -325,6 +332,10 @@ export class StudentService {
     const student = await this.prisma.student.findUnique({
       where: { id },
       include: {
+        rfidcards: {
+          where: { status: 'ACTIVE' },
+          take: 1,
+        },
         enrollments: {
           where: { status: 'ACTIVE' },
           orderBy: { enrollmentDate: 'desc' },
@@ -356,16 +367,17 @@ export class StudentService {
     }
 
     // 2. Uniqueness check on rfidCardNo if updated
+    const currentActiveCard = student.rfidcards?.[0]?.cardNumber;
     if (
       dto.rfidCardNo !== undefined &&
-      dto.rfidCardNo.trim() !== student.rfidCardNo
+      dto.rfidCardNo.trim() !== currentActiveCard
     ) {
       const trimmedRFID = dto.rfidCardNo.trim();
       if (trimmedRFID) {
-        const existingRFID = await this.prisma.student.findUnique({
-          where: { rfidCardNo: trimmedRFID },
+        const existingRFID = await this.prisma.studentRFIDcard.findUnique({
+          where: { cardNumber: trimmedRFID },
         });
-        if (existingRFID && existingRFID.id !== id) {
+        if (existingRFID && existingRFID.studentId !== id) {
           throw new ConflictException(
             `Student with RFID card number '${trimmedRFID}' already exists`,
           );
@@ -467,14 +479,13 @@ export class StudentService {
         ? new Date(dto.dateOfBirth)
         : null;
     if (dto.bloodGroup !== undefined)
-      studentUpdateData.bloodGroup = dto.bloodGroup?.trim() || null;
+      studentUpdateData.bloodGroup =
+        (dto.bloodGroup?.trim() as BloodGroup) || null;
     if (dto.religion !== undefined)
-      studentUpdateData.religion = dto.religion?.trim() || null;
+      studentUpdateData.religion = (dto.religion?.trim() as Religion) || null;
     if (dto.birthCertificateNo !== undefined)
       studentUpdateData.birthCertificateNo =
         dto.birthCertificateNo?.trim() || null;
-    if (dto.rfidCardNo !== undefined)
-      studentUpdateData.rfidCardNo = dto.rfidCardNo?.trim() || null;
     if (dto.photo !== undefined)
       studentUpdateData.photo = dto.photo?.trim() || null;
     if (dto.presentAddress !== undefined)
@@ -485,6 +496,26 @@ export class StudentService {
 
     // 5. Execute in atomic transaction
     const updatedResult = await this.prisma.$transaction(async (tx) => {
+      if (
+        dto.rfidCardNo !== undefined &&
+        dto.rfidCardNo.trim() !== currentActiveCard
+      ) {
+        const trimmedRFID = dto.rfidCardNo.trim();
+        await tx.studentRFIDcard.updateMany({
+          where: { studentId: id, status: 'ACTIVE' },
+          data: { status: 'BLOCKED' },
+        });
+        if (trimmedRFID) {
+          await tx.studentRFIDcard.create({
+            data: {
+              studentId: id,
+              cardNumber: trimmedRFID,
+              status: 'ACTIVE',
+            },
+          });
+        }
+      }
+
       await tx.student.update({
         where: { id },
         data: studentUpdateData,

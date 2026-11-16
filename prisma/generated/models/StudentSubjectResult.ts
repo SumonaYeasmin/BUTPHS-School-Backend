@@ -45,6 +45,7 @@ export type StudentSubjectResultMinAggregateOutputType = {
   letterGrade: string | null
   gradePoint: runtime.Decimal | null
   isPassed: boolean | null
+  isAbsent: boolean | null
   calculatedAt: Date | null
 }
 
@@ -57,6 +58,7 @@ export type StudentSubjectResultMaxAggregateOutputType = {
   letterGrade: string | null
   gradePoint: runtime.Decimal | null
   isPassed: boolean | null
+  isAbsent: boolean | null
   calculatedAt: Date | null
 }
 
@@ -69,6 +71,7 @@ export type StudentSubjectResultCountAggregateOutputType = {
   letterGrade: number
   gradePoint: number
   isPassed: number
+  isAbsent: number
   calculatedAt: number
   _all: number
 }
@@ -93,6 +96,7 @@ export type StudentSubjectResultMinAggregateInputType = {
   letterGrade?: true
   gradePoint?: true
   isPassed?: true
+  isAbsent?: true
   calculatedAt?: true
 }
 
@@ -105,6 +109,7 @@ export type StudentSubjectResultMaxAggregateInputType = {
   letterGrade?: true
   gradePoint?: true
   isPassed?: true
+  isAbsent?: true
   calculatedAt?: true
 }
 
@@ -117,6 +122,7 @@ export type StudentSubjectResultCountAggregateInputType = {
   letterGrade?: true
   gradePoint?: true
   isPassed?: true
+  isAbsent?: true
   calculatedAt?: true
   _all?: true
 }
@@ -216,6 +222,7 @@ export type StudentSubjectResultGroupByOutputType = {
   letterGrade: string | null
   gradePoint: runtime.Decimal | null
   isPassed: boolean
+  isAbsent: boolean
   calculatedAt: Date
   _count: StudentSubjectResultCountAggregateOutputType | null
   _avg: StudentSubjectResultAvgAggregateOutputType | null
@@ -251,6 +258,7 @@ export type StudentSubjectResultWhereInput = {
   letterGrade?: Prisma.StringNullableFilter<"StudentSubjectResult"> | string | null
   gradePoint?: Prisma.DecimalNullableFilter<"StudentSubjectResult"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFilter<"StudentSubjectResult"> | boolean
+  isAbsent?: Prisma.BoolFilter<"StudentSubjectResult"> | boolean
   calculatedAt?: Prisma.DateTimeFilter<"StudentSubjectResult"> | Date | string
   enrollment?: Prisma.XOR<Prisma.StudentEnrollmentScalarRelationFilter, Prisma.StudentEnrollmentWhereInput>
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
@@ -266,6 +274,7 @@ export type StudentSubjectResultOrderByWithRelationInput = {
   letterGrade?: Prisma.SortOrderInput | Prisma.SortOrder
   gradePoint?: Prisma.SortOrderInput | Prisma.SortOrder
   isPassed?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
   calculatedAt?: Prisma.SortOrder
   enrollment?: Prisma.StudentEnrollmentOrderByWithRelationInput
   exam?: Prisma.ExamOrderByWithRelationInput
@@ -285,6 +294,7 @@ export type StudentSubjectResultWhereUniqueInput = Prisma.AtLeast<{
   letterGrade?: Prisma.StringNullableFilter<"StudentSubjectResult"> | string | null
   gradePoint?: Prisma.DecimalNullableFilter<"StudentSubjectResult"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFilter<"StudentSubjectResult"> | boolean
+  isAbsent?: Prisma.BoolFilter<"StudentSubjectResult"> | boolean
   calculatedAt?: Prisma.DateTimeFilter<"StudentSubjectResult"> | Date | string
   enrollment?: Prisma.XOR<Prisma.StudentEnrollmentScalarRelationFilter, Prisma.StudentEnrollmentWhereInput>
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
@@ -300,6 +310,7 @@ export type StudentSubjectResultOrderByWithAggregationInput = {
   letterGrade?: Prisma.SortOrderInput | Prisma.SortOrder
   gradePoint?: Prisma.SortOrderInput | Prisma.SortOrder
   isPassed?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
   calculatedAt?: Prisma.SortOrder
   _count?: Prisma.StudentSubjectResultCountOrderByAggregateInput
   _avg?: Prisma.StudentSubjectResultAvgOrderByAggregateInput
@@ -320,6 +331,7 @@ export type StudentSubjectResultScalarWhereWithAggregatesInput = {
   letterGrade?: Prisma.StringNullableWithAggregatesFilter<"StudentSubjectResult"> | string | null
   gradePoint?: Prisma.DecimalNullableWithAggregatesFilter<"StudentSubjectResult"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolWithAggregatesFilter<"StudentSubjectResult"> | boolean
+  isAbsent?: Prisma.BoolWithAggregatesFilter<"StudentSubjectResult"> | boolean
   calculatedAt?: Prisma.DateTimeWithAggregatesFilter<"StudentSubjectResult"> | Date | string
 }
 
@@ -329,6 +341,7 @@ export type StudentSubjectResultCreateInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
   enrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutSubjectResultsInput
   exam: Prisma.ExamCreateNestedOneWithoutSubjectResultsInput
@@ -344,6 +357,7 @@ export type StudentSubjectResultUncheckedCreateInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
 }
 
@@ -353,6 +367,7 @@ export type StudentSubjectResultUpdateInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutSubjectResultsNestedInput
   exam?: Prisma.ExamUpdateOneRequiredWithoutSubjectResultsNestedInput
@@ -368,6 +383,7 @@ export type StudentSubjectResultUncheckedUpdateInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -380,6 +396,7 @@ export type StudentSubjectResultCreateManyInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
 }
 
@@ -389,6 +406,7 @@ export type StudentSubjectResultUpdateManyMutationInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -401,6 +419,7 @@ export type StudentSubjectResultUncheckedUpdateManyInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -428,6 +447,7 @@ export type StudentSubjectResultCountOrderByAggregateInput = {
   letterGrade?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
   isPassed?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
   calculatedAt?: Prisma.SortOrder
 }
 
@@ -445,6 +465,7 @@ export type StudentSubjectResultMaxOrderByAggregateInput = {
   letterGrade?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
   isPassed?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
   calculatedAt?: Prisma.SortOrder
 }
 
@@ -457,6 +478,7 @@ export type StudentSubjectResultMinOrderByAggregateInput = {
   letterGrade?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
   isPassed?: Prisma.SortOrder
+  isAbsent?: Prisma.SortOrder
   calculatedAt?: Prisma.SortOrder
 }
 
@@ -597,6 +619,7 @@ export type StudentSubjectResultCreateWithoutEnrollmentInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
   exam: Prisma.ExamCreateNestedOneWithoutSubjectResultsInput
   examSubject: Prisma.ExamSubjectCreateNestedOneWithoutSubjectResultsInput
@@ -610,6 +633,7 @@ export type StudentSubjectResultUncheckedCreateWithoutEnrollmentInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
 }
 
@@ -651,6 +675,7 @@ export type StudentSubjectResultScalarWhereInput = {
   letterGrade?: Prisma.StringNullableFilter<"StudentSubjectResult"> | string | null
   gradePoint?: Prisma.DecimalNullableFilter<"StudentSubjectResult"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFilter<"StudentSubjectResult"> | boolean
+  isAbsent?: Prisma.BoolFilter<"StudentSubjectResult"> | boolean
   calculatedAt?: Prisma.DateTimeFilter<"StudentSubjectResult"> | Date | string
 }
 
@@ -660,6 +685,7 @@ export type StudentSubjectResultCreateWithoutExamInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
   enrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutSubjectResultsInput
   examSubject: Prisma.ExamSubjectCreateNestedOneWithoutSubjectResultsInput
@@ -673,6 +699,7 @@ export type StudentSubjectResultUncheckedCreateWithoutExamInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
 }
 
@@ -708,6 +735,7 @@ export type StudentSubjectResultCreateWithoutExamSubjectInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
   enrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutSubjectResultsInput
   exam: Prisma.ExamCreateNestedOneWithoutSubjectResultsInput
@@ -721,6 +749,7 @@ export type StudentSubjectResultUncheckedCreateWithoutExamSubjectInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
 }
 
@@ -758,6 +787,7 @@ export type StudentSubjectResultCreateManyEnrollmentInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
 }
 
@@ -767,6 +797,7 @@ export type StudentSubjectResultUpdateWithoutEnrollmentInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exam?: Prisma.ExamUpdateOneRequiredWithoutSubjectResultsNestedInput
   examSubject?: Prisma.ExamSubjectUpdateOneRequiredWithoutSubjectResultsNestedInput
@@ -780,6 +811,7 @@ export type StudentSubjectResultUncheckedUpdateWithoutEnrollmentInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -791,6 +823,7 @@ export type StudentSubjectResultUncheckedUpdateManyWithoutEnrollmentInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -802,6 +835,7 @@ export type StudentSubjectResultCreateManyExamInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
 }
 
@@ -811,6 +845,7 @@ export type StudentSubjectResultUpdateWithoutExamInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutSubjectResultsNestedInput
   examSubject?: Prisma.ExamSubjectUpdateOneRequiredWithoutSubjectResultsNestedInput
@@ -824,6 +859,7 @@ export type StudentSubjectResultUncheckedUpdateWithoutExamInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -835,6 +871,7 @@ export type StudentSubjectResultUncheckedUpdateManyWithoutExamInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -846,6 +883,7 @@ export type StudentSubjectResultCreateManyExamSubjectInput = {
   letterGrade?: string | null
   gradePoint?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed: boolean
+  isAbsent?: boolean
   calculatedAt?: Date | string
 }
 
@@ -855,6 +893,7 @@ export type StudentSubjectResultUpdateWithoutExamSubjectInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutSubjectResultsNestedInput
   exam?: Prisma.ExamUpdateOneRequiredWithoutSubjectResultsNestedInput
@@ -868,6 +907,7 @@ export type StudentSubjectResultUncheckedUpdateWithoutExamSubjectInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -879,6 +919,7 @@ export type StudentSubjectResultUncheckedUpdateManyWithoutExamSubjectInput = {
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradePoint?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAbsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -893,6 +934,7 @@ export type StudentSubjectResultSelect<ExtArgs extends runtime.Types.Extensions.
   letterGrade?: boolean
   gradePoint?: boolean
   isPassed?: boolean
+  isAbsent?: boolean
   calculatedAt?: boolean
   enrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
@@ -908,6 +950,7 @@ export type StudentSubjectResultSelectCreateManyAndReturn<ExtArgs extends runtim
   letterGrade?: boolean
   gradePoint?: boolean
   isPassed?: boolean
+  isAbsent?: boolean
   calculatedAt?: boolean
   enrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
@@ -923,6 +966,7 @@ export type StudentSubjectResultSelectUpdateManyAndReturn<ExtArgs extends runtim
   letterGrade?: boolean
   gradePoint?: boolean
   isPassed?: boolean
+  isAbsent?: boolean
   calculatedAt?: boolean
   enrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
@@ -938,10 +982,11 @@ export type StudentSubjectResultSelectScalar = {
   letterGrade?: boolean
   gradePoint?: boolean
   isPassed?: boolean
+  isAbsent?: boolean
   calculatedAt?: boolean
 }
 
-export type StudentSubjectResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentEnrollmentId" | "examId" | "examSubjectId" | "totalMarks" | "letterGrade" | "gradePoint" | "isPassed" | "calculatedAt", ExtArgs["result"]["studentSubjectResult"]>
+export type StudentSubjectResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentEnrollmentId" | "examId" | "examSubjectId" | "totalMarks" | "letterGrade" | "gradePoint" | "isPassed" | "isAbsent" | "calculatedAt", ExtArgs["result"]["studentSubjectResult"]>
 export type StudentSubjectResultInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
@@ -986,6 +1031,7 @@ export type $StudentSubjectResultPayload<ExtArgs extends runtime.Types.Extension
      * এই বিষয়ে পাস করেছে কিনা
      */
     isPassed: boolean
+    isAbsent: boolean
     calculatedAt: Date
   }, ExtArgs["result"]["studentSubjectResult"]>
   composites: {}
@@ -1421,6 +1467,7 @@ export interface StudentSubjectResultFieldRefs {
   readonly letterGrade: Prisma.FieldRef<"StudentSubjectResult", 'String'>
   readonly gradePoint: Prisma.FieldRef<"StudentSubjectResult", 'Decimal'>
   readonly isPassed: Prisma.FieldRef<"StudentSubjectResult", 'Boolean'>
+  readonly isAbsent: Prisma.FieldRef<"StudentSubjectResult", 'Boolean'>
   readonly calculatedAt: Prisma.FieldRef<"StudentSubjectResult", 'DateTime'>
 }
     

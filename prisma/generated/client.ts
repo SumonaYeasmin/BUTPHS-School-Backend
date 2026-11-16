@@ -65,6 +65,11 @@ export type Section = Prisma.SectionModel
  */
 export type Subject = Prisma.SubjectModel
 /**
+ * Model Book
+ * 
+ */
+export type Book = Prisma.BookModel
+/**
  * Model ClassSubject
  * 
  */
@@ -74,6 +79,11 @@ export type ClassSubject = Prisma.ClassSubjectModel
  * 
  */
 export type Student = Prisma.StudentModel
+/**
+ * Model StudentRFIDcard
+ * 
+ */
+export type StudentRFIDcard = Prisma.StudentRFIDcardModel
 /**
  * Model StudentEnrollment
  * 
