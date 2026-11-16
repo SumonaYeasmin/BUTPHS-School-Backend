@@ -122,14 +122,13 @@ model ClassSubject {
 model Student {
   id                 String        @id @default(uuid()) @db.Uuid
   studentId          String        @unique @db.VarChar(50)
-  rfidCardNo         String?       @unique @db.VarChar(50)
   birthCertificateNo String?       @unique @db.VarChar(17)
-  name               String        @db.VarChar(20)
+  name               String        @db.VarChar(150)
   photo              String?
   dateOfBirth        DateTime?     @db.Date
   gender             Gender
-  bloodGroup         String?       @db.VarChar(5)
-  religion           String?       @db.VarChar(50)
+  bloodGroup         BloodGroup?
+  religion           Religion?
   presentAddress     String?
   permanentAddress   String?
   admissionDate      DateTime      @db.Date
@@ -140,6 +139,25 @@ model Student {
   enrollments StudentEnrollment[]
   parents     ParentStudent[]
   promotions  StudentPromotion[]
+  rfidcards   StudentRFIDcard[]
+
+  @@index([status, name])
+}
+
+model StudentRFIDcard {
+  id         String     @id @default(uuid()) @db.Uuid
+  studentId  String     @db.Uuid
+  cardNumber String     @unique @db.VarChar(50)
+  status     CardStatus @default(ACTIVE)
+  issuedAt   DateTime   @default(now())
+  remarks    String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([cardNumber, status])
+  @@index([studentId, status])
 }
 
 model StudentEnrollment {
@@ -290,8 +308,8 @@ model AdmissionApplication {
   studentName      String                     @db.VarChar(150)
   dateOfBirth      DateTime                   @db.Date
   gender           Gender
-  bloodGroup       String?                    @db.VarChar(5)
-  religion         String?                    @db.VarChar(50)
+  bloodGroup       BloodGroup?
+  religion         Religion?
   birthCertificate String?                    @db.VarChar(50)
   fatherName       String                     @db.VarChar(150)
   motherName       String                     @db.VarChar(150)
