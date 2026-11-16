@@ -204,7 +204,6 @@ export type AcademicYearWhereInput = {
   academicEvents?: Prisma.AcademicEventListRelationFilter
   classRoutines?: Prisma.ClassRoutineListRelationFilter
   exams?: Prisma.ExamListRelationFilter
-  examRoutines?: Prisma.ExamRoutineListRelationFilter
   digitalResources?: Prisma.DigitalResourceListRelationFilter
 }
 
@@ -222,7 +221,6 @@ export type AcademicYearOrderByWithRelationInput = {
   academicEvents?: Prisma.AcademicEventOrderByRelationAggregateInput
   classRoutines?: Prisma.ClassRoutineOrderByRelationAggregateInput
   exams?: Prisma.ExamOrderByRelationAggregateInput
-  examRoutines?: Prisma.ExamRoutineOrderByRelationAggregateInput
   digitalResources?: Prisma.DigitalResourceOrderByRelationAggregateInput
 }
 
@@ -243,7 +241,6 @@ export type AcademicYearWhereUniqueInput = Prisma.AtLeast<{
   academicEvents?: Prisma.AcademicEventListRelationFilter
   classRoutines?: Prisma.ClassRoutineListRelationFilter
   exams?: Prisma.ExamListRelationFilter
-  examRoutines?: Prisma.ExamRoutineListRelationFilter
   digitalResources?: Prisma.DigitalResourceListRelationFilter
 }, "id" | "name">
 
@@ -287,7 +284,6 @@ export type AcademicYearCreateInput = {
   academicEvents?: Prisma.AcademicEventCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -305,7 +301,6 @@ export type AcademicYearUncheckedCreateInput = {
   academicEvents?: Prisma.AcademicEventUncheckedCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -323,7 +318,6 @@ export type AcademicYearUpdateInput = {
   academicEvents?: Prisma.AcademicEventUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -341,7 +335,6 @@ export type AcademicYearUncheckedUpdateInput = {
   academicEvents?: Prisma.AcademicEventUncheckedUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -527,22 +520,6 @@ export type AcademicYearUpdateOneRequiredWithoutExamsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AcademicYearUpdateToOneWithWhereWithoutExamsInput, Prisma.AcademicYearUpdateWithoutExamsInput>, Prisma.AcademicYearUncheckedUpdateWithoutExamsInput>
 }
 
-export type AcademicYearCreateNestedOneWithoutExamRoutinesInput = {
-  create?: Prisma.XOR<Prisma.AcademicYearCreateWithoutExamRoutinesInput, Prisma.AcademicYearUncheckedCreateWithoutExamRoutinesInput>
-  connectOrCreate?: Prisma.AcademicYearCreateOrConnectWithoutExamRoutinesInput
-  connect?: Prisma.AcademicYearWhereUniqueInput
-}
-
-export type AcademicYearUpdateOneWithoutExamRoutinesNestedInput = {
-  create?: Prisma.XOR<Prisma.AcademicYearCreateWithoutExamRoutinesInput, Prisma.AcademicYearUncheckedCreateWithoutExamRoutinesInput>
-  connectOrCreate?: Prisma.AcademicYearCreateOrConnectWithoutExamRoutinesInput
-  upsert?: Prisma.AcademicYearUpsertWithoutExamRoutinesInput
-  disconnect?: Prisma.AcademicYearWhereInput | boolean
-  delete?: Prisma.AcademicYearWhereInput | boolean
-  connect?: Prisma.AcademicYearWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AcademicYearUpdateToOneWithWhereWithoutExamRoutinesInput, Prisma.AcademicYearUpdateWithoutExamRoutinesInput>, Prisma.AcademicYearUncheckedUpdateWithoutExamRoutinesInput>
-}
-
 export type AcademicYearCreateWithoutClassSubjectsInput = {
   id?: string
   name: string
@@ -556,7 +533,6 @@ export type AcademicYearCreateWithoutClassSubjectsInput = {
   academicEvents?: Prisma.AcademicEventCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -573,7 +549,6 @@ export type AcademicYearUncheckedCreateWithoutClassSubjectsInput = {
   academicEvents?: Prisma.AcademicEventUncheckedCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -606,7 +581,6 @@ export type AcademicYearUpdateWithoutClassSubjectsInput = {
   academicEvents?: Prisma.AcademicEventUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -623,7 +597,6 @@ export type AcademicYearUncheckedUpdateWithoutClassSubjectsInput = {
   academicEvents?: Prisma.AcademicEventUncheckedUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -640,7 +613,6 @@ export type AcademicYearCreateWithoutEnrollmentsInput = {
   academicEvents?: Prisma.AcademicEventCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -657,7 +629,6 @@ export type AcademicYearUncheckedCreateWithoutEnrollmentsInput = {
   academicEvents?: Prisma.AcademicEventUncheckedCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -690,7 +661,6 @@ export type AcademicYearUpdateWithoutEnrollmentsInput = {
   academicEvents?: Prisma.AcademicEventUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -707,7 +677,6 @@ export type AcademicYearUncheckedUpdateWithoutEnrollmentsInput = {
   academicEvents?: Prisma.AcademicEventUncheckedUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -724,7 +693,6 @@ export type AcademicYearCreateWithoutTeacherAssignmentsInput = {
   academicEvents?: Prisma.AcademicEventCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -741,7 +709,6 @@ export type AcademicYearUncheckedCreateWithoutTeacherAssignmentsInput = {
   academicEvents?: Prisma.AcademicEventUncheckedCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -774,7 +741,6 @@ export type AcademicYearUpdateWithoutTeacherAssignmentsInput = {
   academicEvents?: Prisma.AcademicEventUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -791,7 +757,6 @@ export type AcademicYearUncheckedUpdateWithoutTeacherAssignmentsInput = {
   academicEvents?: Prisma.AcademicEventUncheckedUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -808,7 +773,6 @@ export type AcademicYearCreateWithoutAcademicEventsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -825,7 +789,6 @@ export type AcademicYearUncheckedCreateWithoutAcademicEventsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -858,7 +821,6 @@ export type AcademicYearUpdateWithoutAcademicEventsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -875,7 +837,6 @@ export type AcademicYearUncheckedUpdateWithoutAcademicEventsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -892,7 +853,6 @@ export type AcademicYearCreateWithoutClassRoutinesInput = {
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutAcademicYearInput
   academicEvents?: Prisma.AcademicEventCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -909,7 +869,6 @@ export type AcademicYearUncheckedCreateWithoutClassRoutinesInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutAcademicYearInput
   academicEvents?: Prisma.AcademicEventUncheckedCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -942,7 +901,6 @@ export type AcademicYearUpdateWithoutClassRoutinesInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutAcademicYearNestedInput
   academicEvents?: Prisma.AcademicEventUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -959,7 +917,6 @@ export type AcademicYearUncheckedUpdateWithoutClassRoutinesInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutAcademicYearNestedInput
   academicEvents?: Prisma.AcademicEventUncheckedUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -977,7 +934,6 @@ export type AcademicYearCreateWithoutDigitalResourcesInput = {
   academicEvents?: Prisma.AcademicEventCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutAcademicYearInput
 }
 
 export type AcademicYearUncheckedCreateWithoutDigitalResourcesInput = {
@@ -994,7 +950,6 @@ export type AcademicYearUncheckedCreateWithoutDigitalResourcesInput = {
   academicEvents?: Prisma.AcademicEventUncheckedCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
 }
 
 export type AcademicYearCreateOrConnectWithoutDigitalResourcesInput = {
@@ -1027,7 +982,6 @@ export type AcademicYearUpdateWithoutDigitalResourcesInput = {
   academicEvents?: Prisma.AcademicEventUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutAcademicYearNestedInput
 }
 
 export type AcademicYearUncheckedUpdateWithoutDigitalResourcesInput = {
@@ -1044,7 +998,6 @@ export type AcademicYearUncheckedUpdateWithoutDigitalResourcesInput = {
   academicEvents?: Prisma.AcademicEventUncheckedUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
 }
 
 export type AcademicYearCreateWithoutExamsInput = {
@@ -1060,7 +1013,6 @@ export type AcademicYearCreateWithoutExamsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutAcademicYearInput
   academicEvents?: Prisma.AcademicEventCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -1077,7 +1029,6 @@ export type AcademicYearUncheckedCreateWithoutExamsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutAcademicYearInput
   academicEvents?: Prisma.AcademicEventUncheckedCreateNestedManyWithoutAcademicYearInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutAcademicYearInput
 }
 
@@ -1110,7 +1061,6 @@ export type AcademicYearUpdateWithoutExamsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutAcademicYearNestedInput
   academicEvents?: Prisma.AcademicEventUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -1127,91 +1077,6 @@ export type AcademicYearUncheckedUpdateWithoutExamsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutAcademicYearNestedInput
   academicEvents?: Prisma.AcademicEventUncheckedUpdateManyWithoutAcademicYearNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
-  digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutAcademicYearNestedInput
-}
-
-export type AcademicYearCreateWithoutExamRoutinesInput = {
-  id?: string
-  name: string
-  startDate: Date | string
-  endDate: Date | string
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  enrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutAcademicYearInput
-  classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutAcademicYearInput
-  teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutAcademicYearInput
-  academicEvents?: Prisma.AcademicEventCreateNestedManyWithoutAcademicYearInput
-  classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutAcademicYearInput
-  exams?: Prisma.ExamCreateNestedManyWithoutAcademicYearInput
-  digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutAcademicYearInput
-}
-
-export type AcademicYearUncheckedCreateWithoutExamRoutinesInput = {
-  id?: string
-  name: string
-  startDate: Date | string
-  endDate: Date | string
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  enrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutAcademicYearInput
-  classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutAcademicYearInput
-  teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutAcademicYearInput
-  academicEvents?: Prisma.AcademicEventUncheckedCreateNestedManyWithoutAcademicYearInput
-  classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutAcademicYearInput
-  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutAcademicYearInput
-  digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutAcademicYearInput
-}
-
-export type AcademicYearCreateOrConnectWithoutExamRoutinesInput = {
-  where: Prisma.AcademicYearWhereUniqueInput
-  create: Prisma.XOR<Prisma.AcademicYearCreateWithoutExamRoutinesInput, Prisma.AcademicYearUncheckedCreateWithoutExamRoutinesInput>
-}
-
-export type AcademicYearUpsertWithoutExamRoutinesInput = {
-  update: Prisma.XOR<Prisma.AcademicYearUpdateWithoutExamRoutinesInput, Prisma.AcademicYearUncheckedUpdateWithoutExamRoutinesInput>
-  create: Prisma.XOR<Prisma.AcademicYearCreateWithoutExamRoutinesInput, Prisma.AcademicYearUncheckedCreateWithoutExamRoutinesInput>
-  where?: Prisma.AcademicYearWhereInput
-}
-
-export type AcademicYearUpdateToOneWithWhereWithoutExamRoutinesInput = {
-  where?: Prisma.AcademicYearWhereInput
-  data: Prisma.XOR<Prisma.AcademicYearUpdateWithoutExamRoutinesInput, Prisma.AcademicYearUncheckedUpdateWithoutExamRoutinesInput>
-}
-
-export type AcademicYearUpdateWithoutExamRoutinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  enrollments?: Prisma.StudentEnrollmentUpdateManyWithoutAcademicYearNestedInput
-  classSubjects?: Prisma.ClassSubjectUpdateManyWithoutAcademicYearNestedInput
-  teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutAcademicYearNestedInput
-  academicEvents?: Prisma.AcademicEventUpdateManyWithoutAcademicYearNestedInput
-  classRoutines?: Prisma.ClassRoutineUpdateManyWithoutAcademicYearNestedInput
-  exams?: Prisma.ExamUpdateManyWithoutAcademicYearNestedInput
-  digitalResources?: Prisma.DigitalResourceUpdateManyWithoutAcademicYearNestedInput
-}
-
-export type AcademicYearUncheckedUpdateWithoutExamRoutinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  enrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutAcademicYearNestedInput
-  classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutAcademicYearNestedInput
-  teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutAcademicYearNestedInput
-  academicEvents?: Prisma.AcademicEventUncheckedUpdateManyWithoutAcademicYearNestedInput
-  classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput
-  exams?: Prisma.ExamUncheckedUpdateManyWithoutAcademicYearNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutAcademicYearNestedInput
 }
 
@@ -1227,7 +1092,6 @@ export type AcademicYearCountOutputType = {
   academicEvents: number
   classRoutines: number
   exams: number
-  examRoutines: number
   digitalResources: number
 }
 
@@ -1238,7 +1102,6 @@ export type AcademicYearCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   academicEvents?: boolean | AcademicYearCountOutputTypeCountAcademicEventsArgs
   classRoutines?: boolean | AcademicYearCountOutputTypeCountClassRoutinesArgs
   exams?: boolean | AcademicYearCountOutputTypeCountExamsArgs
-  examRoutines?: boolean | AcademicYearCountOutputTypeCountExamRoutinesArgs
   digitalResources?: boolean | AcademicYearCountOutputTypeCountDigitalResourcesArgs
 }
 
@@ -1297,13 +1160,6 @@ export type AcademicYearCountOutputTypeCountExamsArgs<ExtArgs extends runtime.Ty
 /**
  * AcademicYearCountOutputType without action
  */
-export type AcademicYearCountOutputTypeCountExamRoutinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ExamRoutineWhereInput
-}
-
-/**
- * AcademicYearCountOutputType without action
- */
 export type AcademicYearCountOutputTypeCountDigitalResourcesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DigitalResourceWhereInput
 }
@@ -1323,7 +1179,6 @@ export type AcademicYearSelect<ExtArgs extends runtime.Types.Extensions.Internal
   academicEvents?: boolean | Prisma.AcademicYear$academicEventsArgs<ExtArgs>
   classRoutines?: boolean | Prisma.AcademicYear$classRoutinesArgs<ExtArgs>
   exams?: boolean | Prisma.AcademicYear$examsArgs<ExtArgs>
-  examRoutines?: boolean | Prisma.AcademicYear$examRoutinesArgs<ExtArgs>
   digitalResources?: boolean | Prisma.AcademicYear$digitalResourcesArgs<ExtArgs>
   _count?: boolean | Prisma.AcademicYearCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["academicYear"]>
@@ -1366,7 +1221,6 @@ export type AcademicYearInclude<ExtArgs extends runtime.Types.Extensions.Interna
   academicEvents?: boolean | Prisma.AcademicYear$academicEventsArgs<ExtArgs>
   classRoutines?: boolean | Prisma.AcademicYear$classRoutinesArgs<ExtArgs>
   exams?: boolean | Prisma.AcademicYear$examsArgs<ExtArgs>
-  examRoutines?: boolean | Prisma.AcademicYear$examRoutinesArgs<ExtArgs>
   digitalResources?: boolean | Prisma.AcademicYear$digitalResourcesArgs<ExtArgs>
   _count?: boolean | Prisma.AcademicYearCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1382,7 +1236,6 @@ export type $AcademicYearPayload<ExtArgs extends runtime.Types.Extensions.Intern
     academicEvents: Prisma.$AcademicEventPayload<ExtArgs>[]
     classRoutines: Prisma.$ClassRoutinePayload<ExtArgs>[]
     exams: Prisma.$ExamPayload<ExtArgs>[]
-    examRoutines: Prisma.$ExamRoutinePayload<ExtArgs>[]
     digitalResources: Prisma.$DigitalResourcePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1793,7 +1646,6 @@ export interface Prisma__AcademicYearClient<T, Null = never, ExtArgs extends run
   academicEvents<T extends Prisma.AcademicYear$academicEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AcademicYear$academicEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AcademicEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classRoutines<T extends Prisma.AcademicYear$classRoutinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AcademicYear$classRoutinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassRoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   exams<T extends Prisma.AcademicYear$examsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AcademicYear$examsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  examRoutines<T extends Prisma.AcademicYear$examRoutinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AcademicYear$examRoutinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamRoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   digitalResources<T extends Prisma.AcademicYear$digitalResourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AcademicYear$digitalResourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DigitalResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2360,30 +2212,6 @@ export type AcademicYear$examsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.ExamScalarFieldEnum | Prisma.ExamScalarFieldEnum[]
-}
-
-/**
- * AcademicYear.examRoutines
- */
-export type AcademicYear$examRoutinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ExamRoutine
-   */
-  select?: Prisma.ExamRoutineSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ExamRoutine
-   */
-  omit?: Prisma.ExamRoutineOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ExamRoutineInclude<ExtArgs> | null
-  where?: Prisma.ExamRoutineWhereInput
-  orderBy?: Prisma.ExamRoutineOrderByWithRelationInput | Prisma.ExamRoutineOrderByWithRelationInput[]
-  cursor?: Prisma.ExamRoutineWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ExamRoutineScalarFieldEnum | Prisma.ExamRoutineScalarFieldEnum[]
 }
 
 /**

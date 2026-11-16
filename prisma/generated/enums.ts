@@ -120,16 +120,37 @@ export type SmsStatus = (typeof SmsStatus)[keyof typeof SmsStatus]
 export const ExamType = {
   HALF_YEARLY: 'HALF_YEARLY',
   ANNUAL: 'ANNUAL',
-  SELECTION: 'SELECTION',
-  OTHER: 'OTHER'
+  MODEL_TEST: 'MODEL_TEST',
+  SELECTION: 'SELECTION'
 } as const
 
 export type ExamType = (typeof ExamType)[keyof typeof ExamType]
 
 
+export const ExamStatus = {
+  UPCOMING: 'UPCOMING',
+  ONGOING: 'ONGOING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ExamStatus = (typeof ExamStatus)[keyof typeof ExamStatus]
+
+
+export const ExamRoutineStatus = {
+  SCHEDULED: 'SCHEDULED',
+  POSTPONED: 'POSTPONED',
+  CANCELLED: 'CANCELLED',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type ExamRoutineStatus = (typeof ExamRoutineStatus)[keyof typeof ExamRoutineStatus]
+
+
 export const ResultPublicationStatus = {
   DRAFT: 'DRAFT',
-  PUBLISHED: 'PUBLISHED'
+  PUBLISHED: 'PUBLISHED',
+  WITHHELD: 'WITHHELD'
 } as const
 
 export type ResultPublicationStatus = (typeof ResultPublicationStatus)[keyof typeof ResultPublicationStatus]

@@ -27,40 +27,46 @@ export type AggregateExamRoutine = {
 export type ExamRoutineMinAggregateOutputType = {
   id: string | null
   examId: string | null
-  teacherAssignmentId: string | null
-  staffId: string | null
   examSubjectId: string | null
+  sectionId: string | null
   examDate: Date | null
   startTime: Date | null
   endTime: Date | null
-  room: string | null
-  academicYearId: string | null
+  roomNo: string | null
+  status: $Enums.ExamRoutineStatus | null
+  instructions: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ExamRoutineMaxAggregateOutputType = {
   id: string | null
   examId: string | null
-  teacherAssignmentId: string | null
-  staffId: string | null
   examSubjectId: string | null
+  sectionId: string | null
   examDate: Date | null
   startTime: Date | null
   endTime: Date | null
-  room: string | null
-  academicYearId: string | null
+  roomNo: string | null
+  status: $Enums.ExamRoutineStatus | null
+  instructions: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ExamRoutineCountAggregateOutputType = {
   id: number
   examId: number
-  teacherAssignmentId: number
-  staffId: number
   examSubjectId: number
+  sectionId: number
   examDate: number
   startTime: number
   endTime: number
-  room: number
-  academicYearId: number
+  roomNo: number
+  status: number
+  instructions: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -68,40 +74,46 @@ export type ExamRoutineCountAggregateOutputType = {
 export type ExamRoutineMinAggregateInputType = {
   id?: true
   examId?: true
-  teacherAssignmentId?: true
-  staffId?: true
   examSubjectId?: true
+  sectionId?: true
   examDate?: true
   startTime?: true
   endTime?: true
-  room?: true
-  academicYearId?: true
+  roomNo?: true
+  status?: true
+  instructions?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ExamRoutineMaxAggregateInputType = {
   id?: true
   examId?: true
-  teacherAssignmentId?: true
-  staffId?: true
   examSubjectId?: true
+  sectionId?: true
   examDate?: true
   startTime?: true
   endTime?: true
-  room?: true
-  academicYearId?: true
+  roomNo?: true
+  status?: true
+  instructions?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ExamRoutineCountAggregateInputType = {
   id?: true
   examId?: true
-  teacherAssignmentId?: true
-  staffId?: true
   examSubjectId?: true
+  sectionId?: true
   examDate?: true
   startTime?: true
   endTime?: true
-  room?: true
-  academicYearId?: true
+  roomNo?: true
+  status?: true
+  instructions?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -180,14 +192,16 @@ export type ExamRoutineGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 export type ExamRoutineGroupByOutputType = {
   id: string
   examId: string
-  teacherAssignmentId: string | null
-  staffId: string | null
   examSubjectId: string
+  sectionId: string | null
   examDate: Date
   startTime: Date
   endTime: Date
-  room: string | null
-  academicYearId: string | null
+  roomNo: string | null
+  status: $Enums.ExamRoutineStatus
+  instructions: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: ExamRoutineCountAggregateOutputType | null
   _min: ExamRoutineMinAggregateOutputType | null
   _max: ExamRoutineMaxAggregateOutputType | null
@@ -214,71 +228,74 @@ export type ExamRoutineWhereInput = {
   NOT?: Prisma.ExamRoutineWhereInput | Prisma.ExamRoutineWhereInput[]
   id?: Prisma.UuidFilter<"ExamRoutine"> | string
   examId?: Prisma.UuidFilter<"ExamRoutine"> | string
-  teacherAssignmentId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
-  staffId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
   examSubjectId?: Prisma.UuidFilter<"ExamRoutine"> | string
+  sectionId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
   examDate?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
   startTime?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
   endTime?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
-  room?: Prisma.StringNullableFilter<"ExamRoutine"> | string | null
-  academicYearId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
+  roomNo?: Prisma.StringNullableFilter<"ExamRoutine"> | string | null
+  status?: Prisma.EnumExamRoutineStatusFilter<"ExamRoutine"> | $Enums.ExamRoutineStatus
+  instructions?: Prisma.StringNullableFilter<"ExamRoutine"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
-  teacherAssignment?: Prisma.XOR<Prisma.TeacherAssignmentNullableScalarRelationFilter, Prisma.TeacherAssignmentWhereInput> | null
-  staff?: Prisma.XOR<Prisma.StaffNullableScalarRelationFilter, Prisma.StaffWhereInput> | null
   examSubject?: Prisma.XOR<Prisma.ExamSubjectScalarRelationFilter, Prisma.ExamSubjectWhereInput>
-  academicYear?: Prisma.XOR<Prisma.AcademicYearNullableScalarRelationFilter, Prisma.AcademicYearWhereInput> | null
+  section?: Prisma.XOR<Prisma.SectionNullableScalarRelationFilter, Prisma.SectionWhereInput> | null
 }
 
 export type ExamRoutineOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
-  teacherAssignmentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  staffId?: Prisma.SortOrderInput | Prisma.SortOrder
   examSubjectId?: Prisma.SortOrder
+  sectionId?: Prisma.SortOrderInput | Prisma.SortOrder
   examDate?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  room?: Prisma.SortOrderInput | Prisma.SortOrder
-  academicYearId?: Prisma.SortOrderInput | Prisma.SortOrder
+  roomNo?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  instructions?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   exam?: Prisma.ExamOrderByWithRelationInput
-  teacherAssignment?: Prisma.TeacherAssignmentOrderByWithRelationInput
-  staff?: Prisma.StaffOrderByWithRelationInput
   examSubject?: Prisma.ExamSubjectOrderByWithRelationInput
-  academicYear?: Prisma.AcademicYearOrderByWithRelationInput
+  section?: Prisma.SectionOrderByWithRelationInput
 }
 
 export type ExamRoutineWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  examId_examSubjectId_sectionId?: Prisma.ExamRoutineExamIdExamSubjectIdSectionIdCompoundUniqueInput
   AND?: Prisma.ExamRoutineWhereInput | Prisma.ExamRoutineWhereInput[]
   OR?: Prisma.ExamRoutineWhereInput[]
   NOT?: Prisma.ExamRoutineWhereInput | Prisma.ExamRoutineWhereInput[]
   examId?: Prisma.UuidFilter<"ExamRoutine"> | string
-  teacherAssignmentId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
-  staffId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
   examSubjectId?: Prisma.UuidFilter<"ExamRoutine"> | string
+  sectionId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
   examDate?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
   startTime?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
   endTime?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
-  room?: Prisma.StringNullableFilter<"ExamRoutine"> | string | null
-  academicYearId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
+  roomNo?: Prisma.StringNullableFilter<"ExamRoutine"> | string | null
+  status?: Prisma.EnumExamRoutineStatusFilter<"ExamRoutine"> | $Enums.ExamRoutineStatus
+  instructions?: Prisma.StringNullableFilter<"ExamRoutine"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
-  teacherAssignment?: Prisma.XOR<Prisma.TeacherAssignmentNullableScalarRelationFilter, Prisma.TeacherAssignmentWhereInput> | null
-  staff?: Prisma.XOR<Prisma.StaffNullableScalarRelationFilter, Prisma.StaffWhereInput> | null
   examSubject?: Prisma.XOR<Prisma.ExamSubjectScalarRelationFilter, Prisma.ExamSubjectWhereInput>
-  academicYear?: Prisma.XOR<Prisma.AcademicYearNullableScalarRelationFilter, Prisma.AcademicYearWhereInput> | null
-}, "id">
+  section?: Prisma.XOR<Prisma.SectionNullableScalarRelationFilter, Prisma.SectionWhereInput> | null
+}, "id" | "examId_examSubjectId_sectionId">
 
 export type ExamRoutineOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
-  teacherAssignmentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  staffId?: Prisma.SortOrderInput | Prisma.SortOrder
   examSubjectId?: Prisma.SortOrder
+  sectionId?: Prisma.SortOrderInput | Prisma.SortOrder
   examDate?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  room?: Prisma.SortOrderInput | Prisma.SortOrder
-  academicYearId?: Prisma.SortOrderInput | Prisma.SortOrder
+  roomNo?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  instructions?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ExamRoutineCountOrderByAggregateInput
   _max?: Prisma.ExamRoutineMaxOrderByAggregateInput
   _min?: Prisma.ExamRoutineMinOrderByAggregateInput
@@ -290,14 +307,16 @@ export type ExamRoutineScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ExamRoutineScalarWhereWithAggregatesInput | Prisma.ExamRoutineScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"ExamRoutine"> | string
   examId?: Prisma.UuidWithAggregatesFilter<"ExamRoutine"> | string
-  teacherAssignmentId?: Prisma.UuidNullableWithAggregatesFilter<"ExamRoutine"> | string | null
-  staffId?: Prisma.UuidNullableWithAggregatesFilter<"ExamRoutine"> | string | null
   examSubjectId?: Prisma.UuidWithAggregatesFilter<"ExamRoutine"> | string
+  sectionId?: Prisma.UuidNullableWithAggregatesFilter<"ExamRoutine"> | string | null
   examDate?: Prisma.DateTimeWithAggregatesFilter<"ExamRoutine"> | Date | string
   startTime?: Prisma.DateTimeWithAggregatesFilter<"ExamRoutine"> | Date | string
   endTime?: Prisma.DateTimeWithAggregatesFilter<"ExamRoutine"> | Date | string
-  room?: Prisma.StringNullableWithAggregatesFilter<"ExamRoutine"> | string | null
-  academicYearId?: Prisma.UuidNullableWithAggregatesFilter<"ExamRoutine"> | string | null
+  roomNo?: Prisma.StringNullableWithAggregatesFilter<"ExamRoutine"> | string | null
+  status?: Prisma.EnumExamRoutineStatusWithAggregatesFilter<"ExamRoutine"> | $Enums.ExamRoutineStatus
+  instructions?: Prisma.StringNullableWithAggregatesFilter<"ExamRoutine"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"ExamRoutine"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ExamRoutine"> | Date | string
 }
 
 export type ExamRoutineCreateInput = {
@@ -305,25 +324,29 @@ export type ExamRoutineCreateInput = {
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   exam: Prisma.ExamCreateNestedOneWithoutExamRoutinesInput
-  teacherAssignment?: Prisma.TeacherAssignmentCreateNestedOneWithoutExamRoutinesInput
-  staff?: Prisma.StaffCreateNestedOneWithoutExamRoutinesInput
   examSubject: Prisma.ExamSubjectCreateNestedOneWithoutExamRoutinesInput
-  academicYear?: Prisma.AcademicYearCreateNestedOneWithoutExamRoutinesInput
+  section?: Prisma.SectionCreateNestedOneWithoutExamRoutinesInput
 }
 
 export type ExamRoutineUncheckedCreateInput = {
   id?: string
   examId: string
-  teacherAssignmentId?: string | null
-  staffId?: string | null
   examSubjectId: string
+  sectionId?: string | null
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ExamRoutineUpdateInput = {
@@ -331,38 +354,44 @@ export type ExamRoutineUpdateInput = {
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exam?: Prisma.ExamUpdateOneRequiredWithoutExamRoutinesNestedInput
-  teacherAssignment?: Prisma.TeacherAssignmentUpdateOneWithoutExamRoutinesNestedInput
-  staff?: Prisma.StaffUpdateOneWithoutExamRoutinesNestedInput
   examSubject?: Prisma.ExamSubjectUpdateOneRequiredWithoutExamRoutinesNestedInput
-  academicYear?: Prisma.AcademicYearUpdateOneWithoutExamRoutinesNestedInput
+  section?: Prisma.SectionUpdateOneWithoutExamRoutinesNestedInput
 }
 
 export type ExamRoutineUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ExamRoutineCreateManyInput = {
   id?: string
   examId: string
-  teacherAssignmentId?: string | null
-  staffId?: string | null
   examSubjectId: string
+  sectionId?: string | null
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ExamRoutineUpdateManyMutationInput = {
@@ -370,20 +399,26 @@ export type ExamRoutineUpdateManyMutationInput = {
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ExamRoutineUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ExamRoutineListRelationFilter = {
@@ -396,126 +431,96 @@ export type ExamRoutineOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type ExamRoutineExamIdExamSubjectIdSectionIdCompoundUniqueInput = {
+  examId: string
+  examSubjectId: string
+  sectionId: string
+}
+
 export type ExamRoutineCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
-  teacherAssignmentId?: Prisma.SortOrder
-  staffId?: Prisma.SortOrder
   examSubjectId?: Prisma.SortOrder
+  sectionId?: Prisma.SortOrder
   examDate?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  room?: Prisma.SortOrder
-  academicYearId?: Prisma.SortOrder
+  roomNo?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  instructions?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ExamRoutineMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
-  teacherAssignmentId?: Prisma.SortOrder
-  staffId?: Prisma.SortOrder
   examSubjectId?: Prisma.SortOrder
+  sectionId?: Prisma.SortOrder
   examDate?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  room?: Prisma.SortOrder
-  academicYearId?: Prisma.SortOrder
+  roomNo?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  instructions?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ExamRoutineMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   examId?: Prisma.SortOrder
-  teacherAssignmentId?: Prisma.SortOrder
-  staffId?: Prisma.SortOrder
   examSubjectId?: Prisma.SortOrder
+  sectionId?: Prisma.SortOrder
   examDate?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  room?: Prisma.SortOrder
-  academicYearId?: Prisma.SortOrder
+  roomNo?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  instructions?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
-export type ExamRoutineCreateNestedManyWithoutAcademicYearInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutAcademicYearInput, Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput> | Prisma.ExamRoutineCreateWithoutAcademicYearInput[] | Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutAcademicYearInput | Prisma.ExamRoutineCreateOrConnectWithoutAcademicYearInput[]
-  createMany?: Prisma.ExamRoutineCreateManyAcademicYearInputEnvelope
+export type ExamRoutineCreateNestedManyWithoutSectionInput = {
+  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutSectionInput, Prisma.ExamRoutineUncheckedCreateWithoutSectionInput> | Prisma.ExamRoutineCreateWithoutSectionInput[] | Prisma.ExamRoutineUncheckedCreateWithoutSectionInput[]
+  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutSectionInput | Prisma.ExamRoutineCreateOrConnectWithoutSectionInput[]
+  createMany?: Prisma.ExamRoutineCreateManySectionInputEnvelope
   connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
 }
 
-export type ExamRoutineUncheckedCreateNestedManyWithoutAcademicYearInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutAcademicYearInput, Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput> | Prisma.ExamRoutineCreateWithoutAcademicYearInput[] | Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutAcademicYearInput | Prisma.ExamRoutineCreateOrConnectWithoutAcademicYearInput[]
-  createMany?: Prisma.ExamRoutineCreateManyAcademicYearInputEnvelope
+export type ExamRoutineUncheckedCreateNestedManyWithoutSectionInput = {
+  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutSectionInput, Prisma.ExamRoutineUncheckedCreateWithoutSectionInput> | Prisma.ExamRoutineCreateWithoutSectionInput[] | Prisma.ExamRoutineUncheckedCreateWithoutSectionInput[]
+  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutSectionInput | Prisma.ExamRoutineCreateOrConnectWithoutSectionInput[]
+  createMany?: Prisma.ExamRoutineCreateManySectionInputEnvelope
   connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
 }
 
-export type ExamRoutineUpdateManyWithoutAcademicYearNestedInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutAcademicYearInput, Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput> | Prisma.ExamRoutineCreateWithoutAcademicYearInput[] | Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutAcademicYearInput | Prisma.ExamRoutineCreateOrConnectWithoutAcademicYearInput[]
-  upsert?: Prisma.ExamRoutineUpsertWithWhereUniqueWithoutAcademicYearInput | Prisma.ExamRoutineUpsertWithWhereUniqueWithoutAcademicYearInput[]
-  createMany?: Prisma.ExamRoutineCreateManyAcademicYearInputEnvelope
+export type ExamRoutineUpdateManyWithoutSectionNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutSectionInput, Prisma.ExamRoutineUncheckedCreateWithoutSectionInput> | Prisma.ExamRoutineCreateWithoutSectionInput[] | Prisma.ExamRoutineUncheckedCreateWithoutSectionInput[]
+  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutSectionInput | Prisma.ExamRoutineCreateOrConnectWithoutSectionInput[]
+  upsert?: Prisma.ExamRoutineUpsertWithWhereUniqueWithoutSectionInput | Prisma.ExamRoutineUpsertWithWhereUniqueWithoutSectionInput[]
+  createMany?: Prisma.ExamRoutineCreateManySectionInputEnvelope
   set?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
   disconnect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
   delete?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
   connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  update?: Prisma.ExamRoutineUpdateWithWhereUniqueWithoutAcademicYearInput | Prisma.ExamRoutineUpdateWithWhereUniqueWithoutAcademicYearInput[]
-  updateMany?: Prisma.ExamRoutineUpdateManyWithWhereWithoutAcademicYearInput | Prisma.ExamRoutineUpdateManyWithWhereWithoutAcademicYearInput[]
+  update?: Prisma.ExamRoutineUpdateWithWhereUniqueWithoutSectionInput | Prisma.ExamRoutineUpdateWithWhereUniqueWithoutSectionInput[]
+  updateMany?: Prisma.ExamRoutineUpdateManyWithWhereWithoutSectionInput | Prisma.ExamRoutineUpdateManyWithWhereWithoutSectionInput[]
   deleteMany?: Prisma.ExamRoutineScalarWhereInput | Prisma.ExamRoutineScalarWhereInput[]
 }
 
-export type ExamRoutineUncheckedUpdateManyWithoutAcademicYearNestedInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutAcademicYearInput, Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput> | Prisma.ExamRoutineCreateWithoutAcademicYearInput[] | Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutAcademicYearInput | Prisma.ExamRoutineCreateOrConnectWithoutAcademicYearInput[]
-  upsert?: Prisma.ExamRoutineUpsertWithWhereUniqueWithoutAcademicYearInput | Prisma.ExamRoutineUpsertWithWhereUniqueWithoutAcademicYearInput[]
-  createMany?: Prisma.ExamRoutineCreateManyAcademicYearInputEnvelope
+export type ExamRoutineUncheckedUpdateManyWithoutSectionNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutSectionInput, Prisma.ExamRoutineUncheckedCreateWithoutSectionInput> | Prisma.ExamRoutineCreateWithoutSectionInput[] | Prisma.ExamRoutineUncheckedCreateWithoutSectionInput[]
+  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutSectionInput | Prisma.ExamRoutineCreateOrConnectWithoutSectionInput[]
+  upsert?: Prisma.ExamRoutineUpsertWithWhereUniqueWithoutSectionInput | Prisma.ExamRoutineUpsertWithWhereUniqueWithoutSectionInput[]
+  createMany?: Prisma.ExamRoutineCreateManySectionInputEnvelope
   set?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
   disconnect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
   delete?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
   connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  update?: Prisma.ExamRoutineUpdateWithWhereUniqueWithoutAcademicYearInput | Prisma.ExamRoutineUpdateWithWhereUniqueWithoutAcademicYearInput[]
-  updateMany?: Prisma.ExamRoutineUpdateManyWithWhereWithoutAcademicYearInput | Prisma.ExamRoutineUpdateManyWithWhereWithoutAcademicYearInput[]
-  deleteMany?: Prisma.ExamRoutineScalarWhereInput | Prisma.ExamRoutineScalarWhereInput[]
-}
-
-export type ExamRoutineCreateNestedManyWithoutTeacherAssignmentInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput, Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput> | Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput[] | Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutTeacherAssignmentInput | Prisma.ExamRoutineCreateOrConnectWithoutTeacherAssignmentInput[]
-  createMany?: Prisma.ExamRoutineCreateManyTeacherAssignmentInputEnvelope
-  connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-}
-
-export type ExamRoutineUncheckedCreateNestedManyWithoutTeacherAssignmentInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput, Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput> | Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput[] | Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutTeacherAssignmentInput | Prisma.ExamRoutineCreateOrConnectWithoutTeacherAssignmentInput[]
-  createMany?: Prisma.ExamRoutineCreateManyTeacherAssignmentInputEnvelope
-  connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-}
-
-export type ExamRoutineUpdateManyWithoutTeacherAssignmentNestedInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput, Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput> | Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput[] | Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutTeacherAssignmentInput | Prisma.ExamRoutineCreateOrConnectWithoutTeacherAssignmentInput[]
-  upsert?: Prisma.ExamRoutineUpsertWithWhereUniqueWithoutTeacherAssignmentInput | Prisma.ExamRoutineUpsertWithWhereUniqueWithoutTeacherAssignmentInput[]
-  createMany?: Prisma.ExamRoutineCreateManyTeacherAssignmentInputEnvelope
-  set?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  disconnect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  delete?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  update?: Prisma.ExamRoutineUpdateWithWhereUniqueWithoutTeacherAssignmentInput | Prisma.ExamRoutineUpdateWithWhereUniqueWithoutTeacherAssignmentInput[]
-  updateMany?: Prisma.ExamRoutineUpdateManyWithWhereWithoutTeacherAssignmentInput | Prisma.ExamRoutineUpdateManyWithWhereWithoutTeacherAssignmentInput[]
-  deleteMany?: Prisma.ExamRoutineScalarWhereInput | Prisma.ExamRoutineScalarWhereInput[]
-}
-
-export type ExamRoutineUncheckedUpdateManyWithoutTeacherAssignmentNestedInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput, Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput> | Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput[] | Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutTeacherAssignmentInput | Prisma.ExamRoutineCreateOrConnectWithoutTeacherAssignmentInput[]
-  upsert?: Prisma.ExamRoutineUpsertWithWhereUniqueWithoutTeacherAssignmentInput | Prisma.ExamRoutineUpsertWithWhereUniqueWithoutTeacherAssignmentInput[]
-  createMany?: Prisma.ExamRoutineCreateManyTeacherAssignmentInputEnvelope
-  set?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  disconnect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  delete?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  update?: Prisma.ExamRoutineUpdateWithWhereUniqueWithoutTeacherAssignmentInput | Prisma.ExamRoutineUpdateWithWhereUniqueWithoutTeacherAssignmentInput[]
-  updateMany?: Prisma.ExamRoutineUpdateManyWithWhereWithoutTeacherAssignmentInput | Prisma.ExamRoutineUpdateManyWithWhereWithoutTeacherAssignmentInput[]
+  update?: Prisma.ExamRoutineUpdateWithWhereUniqueWithoutSectionInput | Prisma.ExamRoutineUpdateWithWhereUniqueWithoutSectionInput[]
+  updateMany?: Prisma.ExamRoutineUpdateManyWithWhereWithoutSectionInput | Prisma.ExamRoutineUpdateManyWithWhereWithoutSectionInput[]
   deleteMany?: Prisma.ExamRoutineScalarWhereInput | Prisma.ExamRoutineScalarWhereInput[]
 }
 
@@ -603,96 +608,62 @@ export type ExamRoutineUncheckedUpdateManyWithoutExamSubjectNestedInput = {
   deleteMany?: Prisma.ExamRoutineScalarWhereInput | Prisma.ExamRoutineScalarWhereInput[]
 }
 
-export type ExamRoutineCreateNestedManyWithoutStaffInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutStaffInput, Prisma.ExamRoutineUncheckedCreateWithoutStaffInput> | Prisma.ExamRoutineCreateWithoutStaffInput[] | Prisma.ExamRoutineUncheckedCreateWithoutStaffInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutStaffInput | Prisma.ExamRoutineCreateOrConnectWithoutStaffInput[]
-  createMany?: Prisma.ExamRoutineCreateManyStaffInputEnvelope
-  connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
+export type EnumExamRoutineStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ExamRoutineStatus
 }
 
-export type ExamRoutineUncheckedCreateNestedManyWithoutStaffInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutStaffInput, Prisma.ExamRoutineUncheckedCreateWithoutStaffInput> | Prisma.ExamRoutineCreateWithoutStaffInput[] | Prisma.ExamRoutineUncheckedCreateWithoutStaffInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutStaffInput | Prisma.ExamRoutineCreateOrConnectWithoutStaffInput[]
-  createMany?: Prisma.ExamRoutineCreateManyStaffInputEnvelope
-  connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-}
-
-export type ExamRoutineUpdateManyWithoutStaffNestedInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutStaffInput, Prisma.ExamRoutineUncheckedCreateWithoutStaffInput> | Prisma.ExamRoutineCreateWithoutStaffInput[] | Prisma.ExamRoutineUncheckedCreateWithoutStaffInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutStaffInput | Prisma.ExamRoutineCreateOrConnectWithoutStaffInput[]
-  upsert?: Prisma.ExamRoutineUpsertWithWhereUniqueWithoutStaffInput | Prisma.ExamRoutineUpsertWithWhereUniqueWithoutStaffInput[]
-  createMany?: Prisma.ExamRoutineCreateManyStaffInputEnvelope
-  set?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  disconnect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  delete?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  update?: Prisma.ExamRoutineUpdateWithWhereUniqueWithoutStaffInput | Prisma.ExamRoutineUpdateWithWhereUniqueWithoutStaffInput[]
-  updateMany?: Prisma.ExamRoutineUpdateManyWithWhereWithoutStaffInput | Prisma.ExamRoutineUpdateManyWithWhereWithoutStaffInput[]
-  deleteMany?: Prisma.ExamRoutineScalarWhereInput | Prisma.ExamRoutineScalarWhereInput[]
-}
-
-export type ExamRoutineUncheckedUpdateManyWithoutStaffNestedInput = {
-  create?: Prisma.XOR<Prisma.ExamRoutineCreateWithoutStaffInput, Prisma.ExamRoutineUncheckedCreateWithoutStaffInput> | Prisma.ExamRoutineCreateWithoutStaffInput[] | Prisma.ExamRoutineUncheckedCreateWithoutStaffInput[]
-  connectOrCreate?: Prisma.ExamRoutineCreateOrConnectWithoutStaffInput | Prisma.ExamRoutineCreateOrConnectWithoutStaffInput[]
-  upsert?: Prisma.ExamRoutineUpsertWithWhereUniqueWithoutStaffInput | Prisma.ExamRoutineUpsertWithWhereUniqueWithoutStaffInput[]
-  createMany?: Prisma.ExamRoutineCreateManyStaffInputEnvelope
-  set?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  disconnect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  delete?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  connect?: Prisma.ExamRoutineWhereUniqueInput | Prisma.ExamRoutineWhereUniqueInput[]
-  update?: Prisma.ExamRoutineUpdateWithWhereUniqueWithoutStaffInput | Prisma.ExamRoutineUpdateWithWhereUniqueWithoutStaffInput[]
-  updateMany?: Prisma.ExamRoutineUpdateManyWithWhereWithoutStaffInput | Prisma.ExamRoutineUpdateManyWithWhereWithoutStaffInput[]
-  deleteMany?: Prisma.ExamRoutineScalarWhereInput | Prisma.ExamRoutineScalarWhereInput[]
-}
-
-export type ExamRoutineCreateWithoutAcademicYearInput = {
+export type ExamRoutineCreateWithoutSectionInput = {
   id?: string
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   exam: Prisma.ExamCreateNestedOneWithoutExamRoutinesInput
-  teacherAssignment?: Prisma.TeacherAssignmentCreateNestedOneWithoutExamRoutinesInput
-  staff?: Prisma.StaffCreateNestedOneWithoutExamRoutinesInput
   examSubject: Prisma.ExamSubjectCreateNestedOneWithoutExamRoutinesInput
 }
 
-export type ExamRoutineUncheckedCreateWithoutAcademicYearInput = {
+export type ExamRoutineUncheckedCreateWithoutSectionInput = {
   id?: string
   examId: string
-  teacherAssignmentId?: string | null
-  staffId?: string | null
   examSubjectId: string
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
-export type ExamRoutineCreateOrConnectWithoutAcademicYearInput = {
+export type ExamRoutineCreateOrConnectWithoutSectionInput = {
   where: Prisma.ExamRoutineWhereUniqueInput
-  create: Prisma.XOR<Prisma.ExamRoutineCreateWithoutAcademicYearInput, Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput>
+  create: Prisma.XOR<Prisma.ExamRoutineCreateWithoutSectionInput, Prisma.ExamRoutineUncheckedCreateWithoutSectionInput>
 }
 
-export type ExamRoutineCreateManyAcademicYearInputEnvelope = {
-  data: Prisma.ExamRoutineCreateManyAcademicYearInput | Prisma.ExamRoutineCreateManyAcademicYearInput[]
+export type ExamRoutineCreateManySectionInputEnvelope = {
+  data: Prisma.ExamRoutineCreateManySectionInput | Prisma.ExamRoutineCreateManySectionInput[]
   skipDuplicates?: boolean
 }
 
-export type ExamRoutineUpsertWithWhereUniqueWithoutAcademicYearInput = {
+export type ExamRoutineUpsertWithWhereUniqueWithoutSectionInput = {
   where: Prisma.ExamRoutineWhereUniqueInput
-  update: Prisma.XOR<Prisma.ExamRoutineUpdateWithoutAcademicYearInput, Prisma.ExamRoutineUncheckedUpdateWithoutAcademicYearInput>
-  create: Prisma.XOR<Prisma.ExamRoutineCreateWithoutAcademicYearInput, Prisma.ExamRoutineUncheckedCreateWithoutAcademicYearInput>
+  update: Prisma.XOR<Prisma.ExamRoutineUpdateWithoutSectionInput, Prisma.ExamRoutineUncheckedUpdateWithoutSectionInput>
+  create: Prisma.XOR<Prisma.ExamRoutineCreateWithoutSectionInput, Prisma.ExamRoutineUncheckedCreateWithoutSectionInput>
 }
 
-export type ExamRoutineUpdateWithWhereUniqueWithoutAcademicYearInput = {
+export type ExamRoutineUpdateWithWhereUniqueWithoutSectionInput = {
   where: Prisma.ExamRoutineWhereUniqueInput
-  data: Prisma.XOR<Prisma.ExamRoutineUpdateWithoutAcademicYearInput, Prisma.ExamRoutineUncheckedUpdateWithoutAcademicYearInput>
+  data: Prisma.XOR<Prisma.ExamRoutineUpdateWithoutSectionInput, Prisma.ExamRoutineUncheckedUpdateWithoutSectionInput>
 }
 
-export type ExamRoutineUpdateManyWithWhereWithoutAcademicYearInput = {
+export type ExamRoutineUpdateManyWithWhereWithoutSectionInput = {
   where: Prisma.ExamRoutineScalarWhereInput
-  data: Prisma.XOR<Prisma.ExamRoutineUpdateManyMutationInput, Prisma.ExamRoutineUncheckedUpdateManyWithoutAcademicYearInput>
+  data: Prisma.XOR<Prisma.ExamRoutineUpdateManyMutationInput, Prisma.ExamRoutineUncheckedUpdateManyWithoutSectionInput>
 }
 
 export type ExamRoutineScalarWhereInput = {
@@ -701,64 +672,16 @@ export type ExamRoutineScalarWhereInput = {
   NOT?: Prisma.ExamRoutineScalarWhereInput | Prisma.ExamRoutineScalarWhereInput[]
   id?: Prisma.UuidFilter<"ExamRoutine"> | string
   examId?: Prisma.UuidFilter<"ExamRoutine"> | string
-  teacherAssignmentId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
-  staffId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
   examSubjectId?: Prisma.UuidFilter<"ExamRoutine"> | string
+  sectionId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
   examDate?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
   startTime?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
   endTime?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
-  room?: Prisma.StringNullableFilter<"ExamRoutine"> | string | null
-  academicYearId?: Prisma.UuidNullableFilter<"ExamRoutine"> | string | null
-}
-
-export type ExamRoutineCreateWithoutTeacherAssignmentInput = {
-  id?: string
-  examDate: Date | string
-  startTime: Date | string
-  endTime: Date | string
-  room?: string | null
-  exam: Prisma.ExamCreateNestedOneWithoutExamRoutinesInput
-  staff?: Prisma.StaffCreateNestedOneWithoutExamRoutinesInput
-  examSubject: Prisma.ExamSubjectCreateNestedOneWithoutExamRoutinesInput
-  academicYear?: Prisma.AcademicYearCreateNestedOneWithoutExamRoutinesInput
-}
-
-export type ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput = {
-  id?: string
-  examId: string
-  staffId?: string | null
-  examSubjectId: string
-  examDate: Date | string
-  startTime: Date | string
-  endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
-}
-
-export type ExamRoutineCreateOrConnectWithoutTeacherAssignmentInput = {
-  where: Prisma.ExamRoutineWhereUniqueInput
-  create: Prisma.XOR<Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput, Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput>
-}
-
-export type ExamRoutineCreateManyTeacherAssignmentInputEnvelope = {
-  data: Prisma.ExamRoutineCreateManyTeacherAssignmentInput | Prisma.ExamRoutineCreateManyTeacherAssignmentInput[]
-  skipDuplicates?: boolean
-}
-
-export type ExamRoutineUpsertWithWhereUniqueWithoutTeacherAssignmentInput = {
-  where: Prisma.ExamRoutineWhereUniqueInput
-  update: Prisma.XOR<Prisma.ExamRoutineUpdateWithoutTeacherAssignmentInput, Prisma.ExamRoutineUncheckedUpdateWithoutTeacherAssignmentInput>
-  create: Prisma.XOR<Prisma.ExamRoutineCreateWithoutTeacherAssignmentInput, Prisma.ExamRoutineUncheckedCreateWithoutTeacherAssignmentInput>
-}
-
-export type ExamRoutineUpdateWithWhereUniqueWithoutTeacherAssignmentInput = {
-  where: Prisma.ExamRoutineWhereUniqueInput
-  data: Prisma.XOR<Prisma.ExamRoutineUpdateWithoutTeacherAssignmentInput, Prisma.ExamRoutineUncheckedUpdateWithoutTeacherAssignmentInput>
-}
-
-export type ExamRoutineUpdateManyWithWhereWithoutTeacherAssignmentInput = {
-  where: Prisma.ExamRoutineScalarWhereInput
-  data: Prisma.XOR<Prisma.ExamRoutineUpdateManyMutationInput, Prisma.ExamRoutineUncheckedUpdateManyWithoutTeacherAssignmentInput>
+  roomNo?: Prisma.StringNullableFilter<"ExamRoutine"> | string | null
+  status?: Prisma.EnumExamRoutineStatusFilter<"ExamRoutine"> | $Enums.ExamRoutineStatus
+  instructions?: Prisma.StringNullableFilter<"ExamRoutine"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ExamRoutine"> | Date | string
 }
 
 export type ExamRoutineCreateWithoutExamInput = {
@@ -766,23 +689,27 @@ export type ExamRoutineCreateWithoutExamInput = {
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
-  teacherAssignment?: Prisma.TeacherAssignmentCreateNestedOneWithoutExamRoutinesInput
-  staff?: Prisma.StaffCreateNestedOneWithoutExamRoutinesInput
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   examSubject: Prisma.ExamSubjectCreateNestedOneWithoutExamRoutinesInput
-  academicYear?: Prisma.AcademicYearCreateNestedOneWithoutExamRoutinesInput
+  section?: Prisma.SectionCreateNestedOneWithoutExamRoutinesInput
 }
 
 export type ExamRoutineUncheckedCreateWithoutExamInput = {
   id?: string
-  teacherAssignmentId?: string | null
-  staffId?: string | null
   examSubjectId: string
+  sectionId?: string | null
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ExamRoutineCreateOrConnectWithoutExamInput = {
@@ -816,23 +743,27 @@ export type ExamRoutineCreateWithoutExamSubjectInput = {
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   exam: Prisma.ExamCreateNestedOneWithoutExamRoutinesInput
-  teacherAssignment?: Prisma.TeacherAssignmentCreateNestedOneWithoutExamRoutinesInput
-  staff?: Prisma.StaffCreateNestedOneWithoutExamRoutinesInput
-  academicYear?: Prisma.AcademicYearCreateNestedOneWithoutExamRoutinesInput
+  section?: Prisma.SectionCreateNestedOneWithoutExamRoutinesInput
 }
 
 export type ExamRoutineUncheckedCreateWithoutExamSubjectInput = {
   id?: string
   examId: string
-  teacherAssignmentId?: string | null
-  staffId?: string | null
+  sectionId?: string | null
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ExamRoutineCreateOrConnectWithoutExamSubjectInput = {
@@ -861,162 +792,74 @@ export type ExamRoutineUpdateManyWithWhereWithoutExamSubjectInput = {
   data: Prisma.XOR<Prisma.ExamRoutineUpdateManyMutationInput, Prisma.ExamRoutineUncheckedUpdateManyWithoutExamSubjectInput>
 }
 
-export type ExamRoutineCreateWithoutStaffInput = {
-  id?: string
-  examDate: Date | string
-  startTime: Date | string
-  endTime: Date | string
-  room?: string | null
-  exam: Prisma.ExamCreateNestedOneWithoutExamRoutinesInput
-  teacherAssignment?: Prisma.TeacherAssignmentCreateNestedOneWithoutExamRoutinesInput
-  examSubject: Prisma.ExamSubjectCreateNestedOneWithoutExamRoutinesInput
-  academicYear?: Prisma.AcademicYearCreateNestedOneWithoutExamRoutinesInput
-}
-
-export type ExamRoutineUncheckedCreateWithoutStaffInput = {
+export type ExamRoutineCreateManySectionInput = {
   id?: string
   examId: string
-  teacherAssignmentId?: string | null
   examSubjectId: string
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
-export type ExamRoutineCreateOrConnectWithoutStaffInput = {
-  where: Prisma.ExamRoutineWhereUniqueInput
-  create: Prisma.XOR<Prisma.ExamRoutineCreateWithoutStaffInput, Prisma.ExamRoutineUncheckedCreateWithoutStaffInput>
-}
-
-export type ExamRoutineCreateManyStaffInputEnvelope = {
-  data: Prisma.ExamRoutineCreateManyStaffInput | Prisma.ExamRoutineCreateManyStaffInput[]
-  skipDuplicates?: boolean
-}
-
-export type ExamRoutineUpsertWithWhereUniqueWithoutStaffInput = {
-  where: Prisma.ExamRoutineWhereUniqueInput
-  update: Prisma.XOR<Prisma.ExamRoutineUpdateWithoutStaffInput, Prisma.ExamRoutineUncheckedUpdateWithoutStaffInput>
-  create: Prisma.XOR<Prisma.ExamRoutineCreateWithoutStaffInput, Prisma.ExamRoutineUncheckedCreateWithoutStaffInput>
-}
-
-export type ExamRoutineUpdateWithWhereUniqueWithoutStaffInput = {
-  where: Prisma.ExamRoutineWhereUniqueInput
-  data: Prisma.XOR<Prisma.ExamRoutineUpdateWithoutStaffInput, Prisma.ExamRoutineUncheckedUpdateWithoutStaffInput>
-}
-
-export type ExamRoutineUpdateManyWithWhereWithoutStaffInput = {
-  where: Prisma.ExamRoutineScalarWhereInput
-  data: Prisma.XOR<Prisma.ExamRoutineUpdateManyMutationInput, Prisma.ExamRoutineUncheckedUpdateManyWithoutStaffInput>
-}
-
-export type ExamRoutineCreateManyAcademicYearInput = {
-  id?: string
-  examId: string
-  teacherAssignmentId?: string | null
-  staffId?: string | null
-  examSubjectId: string
-  examDate: Date | string
-  startTime: Date | string
-  endTime: Date | string
-  room?: string | null
-}
-
-export type ExamRoutineUpdateWithoutAcademicYearInput = {
+export type ExamRoutineUpdateWithoutSectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exam?: Prisma.ExamUpdateOneRequiredWithoutExamRoutinesNestedInput
-  teacherAssignment?: Prisma.TeacherAssignmentUpdateOneWithoutExamRoutinesNestedInput
-  staff?: Prisma.StaffUpdateOneWithoutExamRoutinesNestedInput
   examSubject?: Prisma.ExamSubjectUpdateOneRequiredWithoutExamRoutinesNestedInput
 }
 
-export type ExamRoutineUncheckedUpdateWithoutAcademicYearInput = {
+export type ExamRoutineUncheckedUpdateWithoutSectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ExamRoutineUncheckedUpdateManyWithoutAcademicYearInput = {
+export type ExamRoutineUncheckedUpdateManyWithoutSectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type ExamRoutineCreateManyTeacherAssignmentInput = {
-  id?: string
-  examId: string
-  staffId?: string | null
-  examSubjectId: string
-  examDate: Date | string
-  startTime: Date | string
-  endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
-}
-
-export type ExamRoutineUpdateWithoutTeacherAssignmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exam?: Prisma.ExamUpdateOneRequiredWithoutExamRoutinesNestedInput
-  staff?: Prisma.StaffUpdateOneWithoutExamRoutinesNestedInput
-  examSubject?: Prisma.ExamSubjectUpdateOneRequiredWithoutExamRoutinesNestedInput
-  academicYear?: Prisma.AcademicYearUpdateOneWithoutExamRoutinesNestedInput
-}
-
-export type ExamRoutineUncheckedUpdateWithoutTeacherAssignmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type ExamRoutineUncheckedUpdateManyWithoutTeacherAssignmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ExamRoutineCreateManyExamInput = {
   id?: string
-  teacherAssignmentId?: string | null
-  staffId?: string | null
   examSubjectId: string
+  sectionId?: string | null
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ExamRoutineUpdateWithoutExamInput = {
@@ -1024,47 +867,55 @@ export type ExamRoutineUpdateWithoutExamInput = {
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teacherAssignment?: Prisma.TeacherAssignmentUpdateOneWithoutExamRoutinesNestedInput
-  staff?: Prisma.StaffUpdateOneWithoutExamRoutinesNestedInput
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examSubject?: Prisma.ExamSubjectUpdateOneRequiredWithoutExamRoutinesNestedInput
-  academicYear?: Prisma.AcademicYearUpdateOneWithoutExamRoutinesNestedInput
+  section?: Prisma.SectionUpdateOneWithoutExamRoutinesNestedInput
 }
 
 export type ExamRoutineUncheckedUpdateWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ExamRoutineUncheckedUpdateManyWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ExamRoutineCreateManyExamSubjectInput = {
   id?: string
   examId: string
-  teacherAssignmentId?: string | null
-  staffId?: string | null
+  sectionId?: string | null
   examDate: Date | string
   startTime: Date | string
   endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
+  roomNo?: string | null
+  status?: $Enums.ExamRoutineStatus
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ExamRoutineUpdateWithoutExamSubjectInput = {
@@ -1072,83 +923,41 @@ export type ExamRoutineUpdateWithoutExamSubjectInput = {
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exam?: Prisma.ExamUpdateOneRequiredWithoutExamRoutinesNestedInput
-  teacherAssignment?: Prisma.TeacherAssignmentUpdateOneWithoutExamRoutinesNestedInput
-  staff?: Prisma.StaffUpdateOneWithoutExamRoutinesNestedInput
-  academicYear?: Prisma.AcademicYearUpdateOneWithoutExamRoutinesNestedInput
+  section?: Prisma.SectionUpdateOneWithoutExamRoutinesNestedInput
 }
 
 export type ExamRoutineUncheckedUpdateWithoutExamSubjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ExamRoutineUncheckedUpdateManyWithoutExamSubjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type ExamRoutineCreateManyStaffInput = {
-  id?: string
-  examId: string
-  teacherAssignmentId?: string | null
-  examSubjectId: string
-  examDate: Date | string
-  startTime: Date | string
-  endTime: Date | string
-  room?: string | null
-  academicYearId?: string | null
-}
-
-export type ExamRoutineUpdateWithoutStaffInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exam?: Prisma.ExamUpdateOneRequiredWithoutExamRoutinesNestedInput
-  teacherAssignment?: Prisma.TeacherAssignmentUpdateOneWithoutExamRoutinesNestedInput
-  examSubject?: Prisma.ExamSubjectUpdateOneRequiredWithoutExamRoutinesNestedInput
-  academicYear?: Prisma.AcademicYearUpdateOneWithoutExamRoutinesNestedInput
-}
-
-export type ExamRoutineUncheckedUpdateWithoutStaffInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type ExamRoutineUncheckedUpdateManyWithoutStaffInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  examId?: Prisma.StringFieldUpdateOperationsInput | string
-  teacherAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  examDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicYearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumExamRoutineStatusFieldUpdateOperationsInput | $Enums.ExamRoutineStatus
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1156,113 +965,130 @@ export type ExamRoutineUncheckedUpdateManyWithoutStaffInput = {
 export type ExamRoutineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   examId?: boolean
-  teacherAssignmentId?: boolean
-  staffId?: boolean
   examSubjectId?: boolean
+  sectionId?: boolean
   examDate?: boolean
   startTime?: boolean
   endTime?: boolean
-  room?: boolean
-  academicYearId?: boolean
+  roomNo?: boolean
+  status?: boolean
+  instructions?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
-  teacherAssignment?: boolean | Prisma.ExamRoutine$teacherAssignmentArgs<ExtArgs>
-  staff?: boolean | Prisma.ExamRoutine$staffArgs<ExtArgs>
   examSubject?: boolean | Prisma.ExamSubjectDefaultArgs<ExtArgs>
-  academicYear?: boolean | Prisma.ExamRoutine$academicYearArgs<ExtArgs>
+  section?: boolean | Prisma.ExamRoutine$sectionArgs<ExtArgs>
 }, ExtArgs["result"]["examRoutine"]>
 
 export type ExamRoutineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   examId?: boolean
-  teacherAssignmentId?: boolean
-  staffId?: boolean
   examSubjectId?: boolean
+  sectionId?: boolean
   examDate?: boolean
   startTime?: boolean
   endTime?: boolean
-  room?: boolean
-  academicYearId?: boolean
+  roomNo?: boolean
+  status?: boolean
+  instructions?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
-  teacherAssignment?: boolean | Prisma.ExamRoutine$teacherAssignmentArgs<ExtArgs>
-  staff?: boolean | Prisma.ExamRoutine$staffArgs<ExtArgs>
   examSubject?: boolean | Prisma.ExamSubjectDefaultArgs<ExtArgs>
-  academicYear?: boolean | Prisma.ExamRoutine$academicYearArgs<ExtArgs>
+  section?: boolean | Prisma.ExamRoutine$sectionArgs<ExtArgs>
 }, ExtArgs["result"]["examRoutine"]>
 
 export type ExamRoutineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   examId?: boolean
-  teacherAssignmentId?: boolean
-  staffId?: boolean
   examSubjectId?: boolean
+  sectionId?: boolean
   examDate?: boolean
   startTime?: boolean
   endTime?: boolean
-  room?: boolean
-  academicYearId?: boolean
+  roomNo?: boolean
+  status?: boolean
+  instructions?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
-  teacherAssignment?: boolean | Prisma.ExamRoutine$teacherAssignmentArgs<ExtArgs>
-  staff?: boolean | Prisma.ExamRoutine$staffArgs<ExtArgs>
   examSubject?: boolean | Prisma.ExamSubjectDefaultArgs<ExtArgs>
-  academicYear?: boolean | Prisma.ExamRoutine$academicYearArgs<ExtArgs>
+  section?: boolean | Prisma.ExamRoutine$sectionArgs<ExtArgs>
 }, ExtArgs["result"]["examRoutine"]>
 
 export type ExamRoutineSelectScalar = {
   id?: boolean
   examId?: boolean
-  teacherAssignmentId?: boolean
-  staffId?: boolean
   examSubjectId?: boolean
+  sectionId?: boolean
   examDate?: boolean
   startTime?: boolean
   endTime?: boolean
-  room?: boolean
-  academicYearId?: boolean
+  roomNo?: boolean
+  status?: boolean
+  instructions?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type ExamRoutineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "examId" | "teacherAssignmentId" | "staffId" | "examSubjectId" | "examDate" | "startTime" | "endTime" | "room" | "academicYearId", ExtArgs["result"]["examRoutine"]>
+export type ExamRoutineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "examId" | "examSubjectId" | "sectionId" | "examDate" | "startTime" | "endTime" | "roomNo" | "status" | "instructions" | "createdAt" | "updatedAt", ExtArgs["result"]["examRoutine"]>
 export type ExamRoutineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
-  teacherAssignment?: boolean | Prisma.ExamRoutine$teacherAssignmentArgs<ExtArgs>
-  staff?: boolean | Prisma.ExamRoutine$staffArgs<ExtArgs>
   examSubject?: boolean | Prisma.ExamSubjectDefaultArgs<ExtArgs>
-  academicYear?: boolean | Prisma.ExamRoutine$academicYearArgs<ExtArgs>
+  section?: boolean | Prisma.ExamRoutine$sectionArgs<ExtArgs>
 }
 export type ExamRoutineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
-  teacherAssignment?: boolean | Prisma.ExamRoutine$teacherAssignmentArgs<ExtArgs>
-  staff?: boolean | Prisma.ExamRoutine$staffArgs<ExtArgs>
   examSubject?: boolean | Prisma.ExamSubjectDefaultArgs<ExtArgs>
-  academicYear?: boolean | Prisma.ExamRoutine$academicYearArgs<ExtArgs>
+  section?: boolean | Prisma.ExamRoutine$sectionArgs<ExtArgs>
 }
 export type ExamRoutineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
-  teacherAssignment?: boolean | Prisma.ExamRoutine$teacherAssignmentArgs<ExtArgs>
-  staff?: boolean | Prisma.ExamRoutine$staffArgs<ExtArgs>
   examSubject?: boolean | Prisma.ExamSubjectDefaultArgs<ExtArgs>
-  academicYear?: boolean | Prisma.ExamRoutine$academicYearArgs<ExtArgs>
+  section?: boolean | Prisma.ExamRoutine$sectionArgs<ExtArgs>
 }
 
 export type $ExamRoutinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ExamRoutine"
   objects: {
     exam: Prisma.$ExamPayload<ExtArgs>
-    teacherAssignment: Prisma.$TeacherAssignmentPayload<ExtArgs> | null
-    staff: Prisma.$StaffPayload<ExtArgs> | null
     examSubject: Prisma.$ExamSubjectPayload<ExtArgs>
-    academicYear: Prisma.$AcademicYearPayload<ExtArgs> | null
+    section: Prisma.$SectionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     examId: string
-    teacherAssignmentId: string | null
-    staffId: string | null
     examSubjectId: string
+    /**
+     * ঐচ্ছিক: নির্দিষ্ট সেকশনের জন্য আলাদা রুম হলে
+     */
+    sectionId: string | null
+    /**
+     * পরীক্ষার তারিখ
+     */
     examDate: Date
+    /**
+     * শুরু (যেমন: সকাল ১০:০০)
+     */
     startTime: Date
+    /**
+     * শেষ (যেমন: দুপুর ০১:০০)
+     */
     endTime: Date
-    room: string | null
-    academicYearId: string | null
+    /**
+     * পরীক্ষার রুম / হল নম্বর (যেমন: রুম ১০২)
+     */
+    roomNo: string | null
+    /**
+     * রুটিন স্ট্যাটাস (SCHEDULED, POSTPONED, CANCELLED, COMPLETED)
+     */
+    status: $Enums.ExamRoutineStatus
+    /**
+     * বিশেষ নির্দেশনা (যেমন: ক্যালকুলেটর নিষিদ্ধ)
+     */
+    instructions: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["examRoutine"]>
   composites: {}
 }
@@ -1658,10 +1484,8 @@ readonly fields: ExamRoutineFieldRefs;
 export interface Prisma__ExamRoutineClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   exam<T extends Prisma.ExamDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamDefaultArgs<ExtArgs>>): Prisma.Prisma__ExamClient<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  teacherAssignment<T extends Prisma.ExamRoutine$teacherAssignmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamRoutine$teacherAssignmentArgs<ExtArgs>>): Prisma.Prisma__TeacherAssignmentClient<runtime.Types.Result.GetResult<Prisma.$TeacherAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  staff<T extends Prisma.ExamRoutine$staffArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamRoutine$staffArgs<ExtArgs>>): Prisma.Prisma__StaffClient<runtime.Types.Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   examSubject<T extends Prisma.ExamSubjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamSubjectDefaultArgs<ExtArgs>>): Prisma.Prisma__ExamSubjectClient<runtime.Types.Result.GetResult<Prisma.$ExamSubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  academicYear<T extends Prisma.ExamRoutine$academicYearArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamRoutine$academicYearArgs<ExtArgs>>): Prisma.Prisma__AcademicYearClient<runtime.Types.Result.GetResult<Prisma.$AcademicYearPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  section<T extends Prisma.ExamRoutine$sectionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamRoutine$sectionArgs<ExtArgs>>): Prisma.Prisma__SectionClient<runtime.Types.Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1693,14 +1517,16 @@ export interface Prisma__ExamRoutineClient<T, Null = never, ExtArgs extends runt
 export interface ExamRoutineFieldRefs {
   readonly id: Prisma.FieldRef<"ExamRoutine", 'String'>
   readonly examId: Prisma.FieldRef<"ExamRoutine", 'String'>
-  readonly teacherAssignmentId: Prisma.FieldRef<"ExamRoutine", 'String'>
-  readonly staffId: Prisma.FieldRef<"ExamRoutine", 'String'>
   readonly examSubjectId: Prisma.FieldRef<"ExamRoutine", 'String'>
+  readonly sectionId: Prisma.FieldRef<"ExamRoutine", 'String'>
   readonly examDate: Prisma.FieldRef<"ExamRoutine", 'DateTime'>
   readonly startTime: Prisma.FieldRef<"ExamRoutine", 'DateTime'>
   readonly endTime: Prisma.FieldRef<"ExamRoutine", 'DateTime'>
-  readonly room: Prisma.FieldRef<"ExamRoutine", 'String'>
-  readonly academicYearId: Prisma.FieldRef<"ExamRoutine", 'String'>
+  readonly roomNo: Prisma.FieldRef<"ExamRoutine", 'String'>
+  readonly status: Prisma.FieldRef<"ExamRoutine", 'ExamRoutineStatus'>
+  readonly instructions: Prisma.FieldRef<"ExamRoutine", 'String'>
+  readonly createdAt: Prisma.FieldRef<"ExamRoutine", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"ExamRoutine", 'DateTime'>
 }
     
 
@@ -2097,60 +1923,22 @@ export type ExamRoutineDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
- * ExamRoutine.teacherAssignment
+ * ExamRoutine.section
  */
-export type ExamRoutine$teacherAssignmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ExamRoutine$sectionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeacherAssignment
+   * Select specific fields to fetch from the Section
    */
-  select?: Prisma.TeacherAssignmentSelect<ExtArgs> | null
+  select?: Prisma.SectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeacherAssignment
+   * Omit specific fields from the Section
    */
-  omit?: Prisma.TeacherAssignmentOmit<ExtArgs> | null
+  omit?: Prisma.SectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TeacherAssignmentInclude<ExtArgs> | null
-  where?: Prisma.TeacherAssignmentWhereInput
-}
-
-/**
- * ExamRoutine.staff
- */
-export type ExamRoutine$staffArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Staff
-   */
-  select?: Prisma.StaffSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Staff
-   */
-  omit?: Prisma.StaffOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.StaffInclude<ExtArgs> | null
-  where?: Prisma.StaffWhereInput
-}
-
-/**
- * ExamRoutine.academicYear
- */
-export type ExamRoutine$academicYearArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AcademicYear
-   */
-  select?: Prisma.AcademicYearSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the AcademicYear
-   */
-  omit?: Prisma.AcademicYearOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AcademicYearInclude<ExtArgs> | null
-  where?: Prisma.AcademicYearWhereInput
+  include?: Prisma.SectionInclude<ExtArgs> | null
+  where?: Prisma.SectionWhereInput
 }
 
 /**

@@ -477,7 +477,12 @@ export const GradingScaleScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  isActive: 'isActive'
+  maxGpa: 'maxGpa',
+  isDefault: 'isDefault',
+  isSystemDefault: 'isSystemDefault',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type GradingScaleScalarFieldEnum = (typeof GradingScaleScalarFieldEnum)[keyof typeof GradingScaleScalarFieldEnum]
@@ -486,10 +491,13 @@ export type GradingScaleScalarFieldEnum = (typeof GradingScaleScalarFieldEnum)[k
 export const GradeRangeScalarFieldEnum = {
   id: 'id',
   gradingScaleId: 'gradingScaleId',
-  minMarks: 'minMarks',
-  maxMarks: 'maxMarks',
+  minPercentage: 'minPercentage',
+  maxPercentage: 'maxPercentage',
   letterGrade: 'letterGrade',
-  gradePoint: 'gradePoint'
+  gradePoint: 'gradePoint',
+  remarks: 'remarks',
+  isFailGrade: 'isFailGrade',
+  displayOrder: 'displayOrder'
 } as const
 
 export type GradeRangeScalarFieldEnum = (typeof GradeRangeScalarFieldEnum)[keyof typeof GradeRangeScalarFieldEnum]
@@ -504,7 +512,15 @@ export const ExamScalarFieldEnum = {
   examType: 'examType',
   startDate: 'startDate',
   endDate: 'endDate',
+  status: 'status',
+  marksEntryDeadline: 'marksEntryDeadline',
+  allowCombinedPass: 'allowCombinedPass',
+  weightagePercentage: 'weightagePercentage',
   resultStatus: 'resultStatus',
+  publishedAt: 'publishedAt',
+  isLocked: 'isLocked',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -516,14 +532,21 @@ export const ExamSubjectScalarFieldEnum = {
   id: 'id',
   examId: 'examId',
   subjectId: 'subjectId',
+  groupId: 'groupId',
   fullMarks: 'fullMarks',
   passMarks: 'passMarks',
   hasWritten: 'hasWritten',
-  hasMcq: 'hasMcq',
-  hasPractical: 'hasPractical',
   writtenFullMarks: 'writtenFullMarks',
+  writtenPassMarks: 'writtenPassMarks',
+  hasMcq: 'hasMcq',
   mcqFullMarks: 'mcqFullMarks',
-  practicalFullMarks: 'practicalFullMarks'
+  mcqPassMarks: 'mcqPassMarks',
+  hasPractical: 'hasPractical',
+  practicalFullMarks: 'practicalFullMarks',
+  practicalPassMarks: 'practicalPassMarks',
+  hasContinuousAssessment: 'hasContinuousAssessment',
+  continuousAssessmentFullMarks: 'continuousAssessmentFullMarks',
+  continuousAssessmentPassMarks: 'continuousAssessmentPassMarks'
 } as const
 
 export type ExamSubjectScalarFieldEnum = (typeof ExamSubjectScalarFieldEnum)[keyof typeof ExamSubjectScalarFieldEnum]
@@ -532,14 +555,16 @@ export type ExamSubjectScalarFieldEnum = (typeof ExamSubjectScalarFieldEnum)[key
 export const ExamRoutineScalarFieldEnum = {
   id: 'id',
   examId: 'examId',
-  teacherAssignmentId: 'teacherAssignmentId',
-  staffId: 'staffId',
   examSubjectId: 'examSubjectId',
+  sectionId: 'sectionId',
   examDate: 'examDate',
   startTime: 'startTime',
   endTime: 'endTime',
-  room: 'room',
-  academicYearId: 'academicYearId'
+  roomNo: 'roomNo',
+  status: 'status',
+  instructions: 'instructions',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ExamRoutineScalarFieldEnum = (typeof ExamRoutineScalarFieldEnum)[keyof typeof ExamRoutineScalarFieldEnum]
@@ -552,7 +577,10 @@ export const MarkScalarFieldEnum = {
   writtenMarks: 'writtenMarks',
   mcqMarks: 'mcqMarks',
   practicalMarks: 'practicalMarks',
+  continuousAssessmentMarks: 'continuousAssessmentMarks',
   totalMarks: 'totalMarks',
+  isAbsent: 'isAbsent',
+  isLocked: 'isLocked',
   enteredBy: 'enteredBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -584,6 +612,8 @@ export const ResultSummaryScalarFieldEnum = {
   gpa: 'gpa',
   letterGrade: 'letterGrade',
   meritPosition: 'meritPosition',
+  sectionMeritPosition: 'sectionMeritPosition',
+  failedSubjectCount: 'failedSubjectCount',
   resultStatus: 'resultStatus',
   publishedAt: 'publishedAt',
   createdAt: 'createdAt',

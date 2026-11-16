@@ -20,8 +20,18 @@ export type ExamModel = runtime.Types.Result.DefaultSelection<Prisma.$ExamPayloa
 
 export type AggregateExam = {
   _count: ExamCountAggregateOutputType | null
+  _avg: ExamAvgAggregateOutputType | null
+  _sum: ExamSumAggregateOutputType | null
   _min: ExamMinAggregateOutputType | null
   _max: ExamMaxAggregateOutputType | null
+}
+
+export type ExamAvgAggregateOutputType = {
+  weightagePercentage: runtime.Decimal | null
+}
+
+export type ExamSumAggregateOutputType = {
+  weightagePercentage: runtime.Decimal | null
 }
 
 export type ExamMinAggregateOutputType = {
@@ -33,7 +43,15 @@ export type ExamMinAggregateOutputType = {
   examType: $Enums.ExamType | null
   startDate: Date | null
   endDate: Date | null
+  status: $Enums.ExamStatus | null
+  marksEntryDeadline: Date | null
+  allowCombinedPass: boolean | null
+  weightagePercentage: runtime.Decimal | null
   resultStatus: $Enums.ResultPublicationStatus | null
+  publishedAt: Date | null
+  isLocked: boolean | null
+  isDeleted: boolean | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,7 +65,15 @@ export type ExamMaxAggregateOutputType = {
   examType: $Enums.ExamType | null
   startDate: Date | null
   endDate: Date | null
+  status: $Enums.ExamStatus | null
+  marksEntryDeadline: Date | null
+  allowCombinedPass: boolean | null
+  weightagePercentage: runtime.Decimal | null
   resultStatus: $Enums.ResultPublicationStatus | null
+  publishedAt: Date | null
+  isLocked: boolean | null
+  isDeleted: boolean | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,12 +87,28 @@ export type ExamCountAggregateOutputType = {
   examType: number
   startDate: number
   endDate: number
+  status: number
+  marksEntryDeadline: number
+  allowCombinedPass: number
+  weightagePercentage: number
   resultStatus: number
+  publishedAt: number
+  isLocked: number
+  isDeleted: number
+  deletedAt: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type ExamAvgAggregateInputType = {
+  weightagePercentage?: true
+}
+
+export type ExamSumAggregateInputType = {
+  weightagePercentage?: true
+}
 
 export type ExamMinAggregateInputType = {
   id?: true
@@ -77,7 +119,15 @@ export type ExamMinAggregateInputType = {
   examType?: true
   startDate?: true
   endDate?: true
+  status?: true
+  marksEntryDeadline?: true
+  allowCombinedPass?: true
+  weightagePercentage?: true
   resultStatus?: true
+  publishedAt?: true
+  isLocked?: true
+  isDeleted?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -91,7 +141,15 @@ export type ExamMaxAggregateInputType = {
   examType?: true
   startDate?: true
   endDate?: true
+  status?: true
+  marksEntryDeadline?: true
+  allowCombinedPass?: true
+  weightagePercentage?: true
   resultStatus?: true
+  publishedAt?: true
+  isLocked?: true
+  isDeleted?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -105,7 +163,15 @@ export type ExamCountAggregateInputType = {
   examType?: true
   startDate?: true
   endDate?: true
+  status?: true
+  marksEntryDeadline?: true
+  allowCombinedPass?: true
+  weightagePercentage?: true
   resultStatus?: true
+  publishedAt?: true
+  isLocked?: true
+  isDeleted?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -149,6 +215,18 @@ export type ExamAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ExamAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ExamSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ExamMinAggregateInputType
@@ -179,6 +257,8 @@ export type ExamGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: ExamCountAggregateInputType | true
+  _avg?: ExamAvgAggregateInputType
+  _sum?: ExamSumAggregateInputType
   _min?: ExamMinAggregateInputType
   _max?: ExamMaxAggregateInputType
 }
@@ -192,10 +272,20 @@ export type ExamGroupByOutputType = {
   examType: $Enums.ExamType
   startDate: Date
   endDate: Date
+  status: $Enums.ExamStatus
+  marksEntryDeadline: Date | null
+  allowCombinedPass: boolean
+  weightagePercentage: runtime.Decimal | null
   resultStatus: $Enums.ResultPublicationStatus
+  publishedAt: Date | null
+  isLocked: boolean
+  isDeleted: boolean
+  deletedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: ExamCountAggregateOutputType | null
+  _avg: ExamAvgAggregateOutputType | null
+  _sum: ExamSumAggregateOutputType | null
   _min: ExamMinAggregateOutputType | null
   _max: ExamMaxAggregateOutputType | null
 }
@@ -227,7 +317,15 @@ export type ExamWhereInput = {
   examType?: Prisma.EnumExamTypeFilter<"Exam"> | $Enums.ExamType
   startDate?: Prisma.DateTimeFilter<"Exam"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  status?: Prisma.EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
+  allowCombinedPass?: Prisma.BoolFilter<"Exam"> | boolean
+  weightagePercentage?: Prisma.DecimalNullableFilter<"Exam"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFilter<"Exam"> | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
+  isLocked?: Prisma.BoolFilter<"Exam"> | boolean
+  isDeleted?: Prisma.BoolFilter<"Exam"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   academicYear?: Prisma.XOR<Prisma.AcademicYearScalarRelationFilter, Prisma.AcademicYearWhereInput>
@@ -248,7 +346,15 @@ export type ExamOrderByWithRelationInput = {
   examType?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  marksEntryDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
+  allowCombinedPass?: Prisma.SortOrder
+  weightagePercentage?: Prisma.SortOrderInput | Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   academicYear?: Prisma.AcademicYearOrderByWithRelationInput
@@ -273,7 +379,15 @@ export type ExamWhereUniqueInput = Prisma.AtLeast<{
   examType?: Prisma.EnumExamTypeFilter<"Exam"> | $Enums.ExamType
   startDate?: Prisma.DateTimeFilter<"Exam"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  status?: Prisma.EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
+  allowCombinedPass?: Prisma.BoolFilter<"Exam"> | boolean
+  weightagePercentage?: Prisma.DecimalNullableFilter<"Exam"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFilter<"Exam"> | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
+  isLocked?: Prisma.BoolFilter<"Exam"> | boolean
+  isDeleted?: Prisma.BoolFilter<"Exam"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   academicYear?: Prisma.XOR<Prisma.AcademicYearScalarRelationFilter, Prisma.AcademicYearWhereInput>
@@ -294,12 +408,22 @@ export type ExamOrderByWithAggregationInput = {
   examType?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  marksEntryDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
+  allowCombinedPass?: Prisma.SortOrder
+  weightagePercentage?: Prisma.SortOrderInput | Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ExamCountOrderByAggregateInput
+  _avg?: Prisma.ExamAvgOrderByAggregateInput
   _max?: Prisma.ExamMaxOrderByAggregateInput
   _min?: Prisma.ExamMinOrderByAggregateInput
+  _sum?: Prisma.ExamSumOrderByAggregateInput
 }
 
 export type ExamScalarWhereWithAggregatesInput = {
@@ -314,7 +438,15 @@ export type ExamScalarWhereWithAggregatesInput = {
   examType?: Prisma.EnumExamTypeWithAggregatesFilter<"Exam"> | $Enums.ExamType
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
   endDate?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
+  status?: Prisma.EnumExamStatusWithAggregatesFilter<"Exam"> | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.DateTimeNullableWithAggregatesFilter<"Exam"> | Date | string | null
+  allowCombinedPass?: Prisma.BoolWithAggregatesFilter<"Exam"> | boolean
+  weightagePercentage?: Prisma.DecimalNullableWithAggregatesFilter<"Exam"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusWithAggregatesFilter<"Exam"> | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Exam"> | Date | string | null
+  isLocked?: Prisma.BoolWithAggregatesFilter<"Exam"> | boolean
+  isDeleted?: Prisma.BoolWithAggregatesFilter<"Exam"> | boolean
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Exam"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
 }
@@ -325,7 +457,15 @@ export type ExamCreateInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   academicYear: Prisma.AcademicYearCreateNestedOneWithoutExamsInput
@@ -346,7 +486,15 @@ export type ExamUncheckedCreateInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -361,7 +509,15 @@ export type ExamUpdateInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   academicYear?: Prisma.AcademicYearUpdateOneRequiredWithoutExamsNestedInput
@@ -382,7 +538,15 @@ export type ExamUncheckedUpdateInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -400,7 +564,15 @@ export type ExamCreateManyInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -411,7 +583,15 @@ export type ExamUpdateManyMutationInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -425,7 +605,15 @@ export type ExamUncheckedUpdateManyInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -455,9 +643,21 @@ export type ExamCountOrderByAggregateInput = {
   examType?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  marksEntryDeadline?: Prisma.SortOrder
+  allowCombinedPass?: Prisma.SortOrder
+  weightagePercentage?: Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ExamAvgOrderByAggregateInput = {
+  weightagePercentage?: Prisma.SortOrder
 }
 
 export type ExamMaxOrderByAggregateInput = {
@@ -469,7 +669,15 @@ export type ExamMaxOrderByAggregateInput = {
   examType?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  marksEntryDeadline?: Prisma.SortOrder
+  allowCombinedPass?: Prisma.SortOrder
+  weightagePercentage?: Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -483,9 +691,21 @@ export type ExamMinOrderByAggregateInput = {
   examType?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  marksEntryDeadline?: Prisma.SortOrder
+  allowCombinedPass?: Prisma.SortOrder
+  weightagePercentage?: Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ExamSumOrderByAggregateInput = {
+  weightagePercentage?: Prisma.SortOrder
 }
 
 export type ExamScalarRelationFilter = {
@@ -623,6 +843,18 @@ export type EnumExamTypeFieldUpdateOperationsInput = {
   set?: $Enums.ExamType
 }
 
+export type EnumExamStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ExamStatus
+}
+
+export type NullableDecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type EnumResultPublicationStatusFieldUpdateOperationsInput = {
   set?: $Enums.ResultPublicationStatus
 }
@@ -689,7 +921,15 @@ export type ExamCreateWithoutAcademicYearInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   schoolClass: Prisma.SchoolClassCreateNestedOneWithoutExamsInput
@@ -708,7 +948,15 @@ export type ExamUncheckedCreateWithoutAcademicYearInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -755,7 +1003,15 @@ export type ExamScalarWhereInput = {
   examType?: Prisma.EnumExamTypeFilter<"Exam"> | $Enums.ExamType
   startDate?: Prisma.DateTimeFilter<"Exam"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Exam"> | Date | string
+  status?: Prisma.EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
+  allowCombinedPass?: Prisma.BoolFilter<"Exam"> | boolean
+  weightagePercentage?: Prisma.DecimalNullableFilter<"Exam"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFilter<"Exam"> | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
+  isLocked?: Prisma.BoolFilter<"Exam"> | boolean
+  isDeleted?: Prisma.BoolFilter<"Exam"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"Exam"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
 }
@@ -766,7 +1022,15 @@ export type ExamCreateWithoutSchoolClassInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   academicYear: Prisma.AcademicYearCreateNestedOneWithoutExamsInput
@@ -785,7 +1049,15 @@ export type ExamUncheckedCreateWithoutSchoolClassInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -826,7 +1098,15 @@ export type ExamCreateWithoutGradingScaleInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   academicYear: Prisma.AcademicYearCreateNestedOneWithoutExamsInput
@@ -845,7 +1125,15 @@ export type ExamUncheckedCreateWithoutGradingScaleInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -886,7 +1174,15 @@ export type ExamCreateWithoutExamSubjectsInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   academicYear: Prisma.AcademicYearCreateNestedOneWithoutExamsInput
@@ -906,7 +1202,15 @@ export type ExamUncheckedCreateWithoutExamSubjectsInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutExamInput
@@ -936,7 +1240,15 @@ export type ExamUpdateWithoutExamSubjectsInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   academicYear?: Prisma.AcademicYearUpdateOneRequiredWithoutExamsNestedInput
@@ -956,7 +1268,15 @@ export type ExamUncheckedUpdateWithoutExamSubjectsInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutExamNestedInput
@@ -970,7 +1290,15 @@ export type ExamCreateWithoutExamRoutinesInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   academicYear: Prisma.AcademicYearCreateNestedOneWithoutExamsInput
@@ -990,7 +1318,15 @@ export type ExamUncheckedCreateWithoutExamRoutinesInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -1020,7 +1356,15 @@ export type ExamUpdateWithoutExamRoutinesInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   academicYear?: Prisma.AcademicYearUpdateOneRequiredWithoutExamsNestedInput
@@ -1040,7 +1384,15 @@ export type ExamUncheckedUpdateWithoutExamRoutinesInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1054,7 +1406,15 @@ export type ExamCreateWithoutSubjectResultsInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   academicYear: Prisma.AcademicYearCreateNestedOneWithoutExamsInput
@@ -1074,7 +1434,15 @@ export type ExamUncheckedCreateWithoutSubjectResultsInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -1104,7 +1472,15 @@ export type ExamUpdateWithoutSubjectResultsInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   academicYear?: Prisma.AcademicYearUpdateOneRequiredWithoutExamsNestedInput
@@ -1124,7 +1500,15 @@ export type ExamUncheckedUpdateWithoutSubjectResultsInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1138,7 +1522,15 @@ export type ExamCreateWithoutResultSummariesInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   academicYear: Prisma.AcademicYearCreateNestedOneWithoutExamsInput
@@ -1158,7 +1550,15 @@ export type ExamUncheckedCreateWithoutResultSummariesInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -1188,7 +1588,15 @@ export type ExamUpdateWithoutResultSummariesInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   academicYear?: Prisma.AcademicYearUpdateOneRequiredWithoutExamsNestedInput
@@ -1208,7 +1616,15 @@ export type ExamUncheckedUpdateWithoutResultSummariesInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1224,7 +1640,15 @@ export type ExamCreateManyAcademicYearInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1235,7 +1659,15 @@ export type ExamUpdateWithoutAcademicYearInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schoolClass?: Prisma.SchoolClassUpdateOneRequiredWithoutExamsNestedInput
@@ -1254,7 +1686,15 @@ export type ExamUncheckedUpdateWithoutAcademicYearInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1271,7 +1711,15 @@ export type ExamUncheckedUpdateManyWithoutAcademicYearInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1284,7 +1732,15 @@ export type ExamCreateManySchoolClassInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1295,7 +1751,15 @@ export type ExamUpdateWithoutSchoolClassInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   academicYear?: Prisma.AcademicYearUpdateOneRequiredWithoutExamsNestedInput
@@ -1314,7 +1778,15 @@ export type ExamUncheckedUpdateWithoutSchoolClassInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1331,7 +1803,15 @@ export type ExamUncheckedUpdateManyWithoutSchoolClassInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1344,7 +1824,15 @@ export type ExamCreateManyGradingScaleInput = {
   examType: $Enums.ExamType
   startDate: Date | string
   endDate: Date | string
+  status?: $Enums.ExamStatus
+  marksEntryDeadline?: Date | string | null
+  allowCombinedPass?: boolean
+  weightagePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: $Enums.ResultPublicationStatus
+  publishedAt?: Date | string | null
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1355,7 +1843,15 @@ export type ExamUpdateWithoutGradingScaleInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   academicYear?: Prisma.AcademicYearUpdateOneRequiredWithoutExamsNestedInput
@@ -1374,7 +1870,15 @@ export type ExamUncheckedUpdateWithoutGradingScaleInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1391,7 +1895,15 @@ export type ExamUncheckedUpdateManyWithoutGradingScaleInput = {
   examType?: Prisma.EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+  marksEntryDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  allowCombinedPass?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  weightagePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   resultStatus?: Prisma.EnumResultPublicationStatusFieldUpdateOperationsInput | $Enums.ResultPublicationStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1463,7 +1975,15 @@ export type ExamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   examType?: boolean
   startDate?: boolean
   endDate?: boolean
+  status?: boolean
+  marksEntryDeadline?: boolean
+  allowCombinedPass?: boolean
+  weightagePercentage?: boolean
   resultStatus?: boolean
+  publishedAt?: boolean
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   academicYear?: boolean | Prisma.AcademicYearDefaultArgs<ExtArgs>
@@ -1485,7 +2005,15 @@ export type ExamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   examType?: boolean
   startDate?: boolean
   endDate?: boolean
+  status?: boolean
+  marksEntryDeadline?: boolean
+  allowCombinedPass?: boolean
+  weightagePercentage?: boolean
   resultStatus?: boolean
+  publishedAt?: boolean
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   academicYear?: boolean | Prisma.AcademicYearDefaultArgs<ExtArgs>
@@ -1502,7 +2030,15 @@ export type ExamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   examType?: boolean
   startDate?: boolean
   endDate?: boolean
+  status?: boolean
+  marksEntryDeadline?: boolean
+  allowCombinedPass?: boolean
+  weightagePercentage?: boolean
   resultStatus?: boolean
+  publishedAt?: boolean
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   academicYear?: boolean | Prisma.AcademicYearDefaultArgs<ExtArgs>
@@ -1519,12 +2055,20 @@ export type ExamSelectScalar = {
   examType?: boolean
   startDate?: boolean
   endDate?: boolean
+  status?: boolean
+  marksEntryDeadline?: boolean
+  allowCombinedPass?: boolean
+  weightagePercentage?: boolean
   resultStatus?: boolean
+  publishedAt?: boolean
+  isLocked?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "academicYearId" | "classId" | "gradingScaleId" | "name" | "examType" | "startDate" | "endDate" | "resultStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["exam"]>
+export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "academicYearId" | "classId" | "gradingScaleId" | "name" | "examType" | "startDate" | "endDate" | "status" | "marksEntryDeadline" | "allowCombinedPass" | "weightagePercentage" | "resultStatus" | "publishedAt" | "isLocked" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["exam"]>
 export type ExamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   academicYear?: boolean | Prisma.AcademicYearDefaultArgs<ExtArgs>
   schoolClass?: boolean | Prisma.SchoolClassDefaultArgs<ExtArgs>
@@ -1566,7 +2110,15 @@ export type $ExamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     examType: $Enums.ExamType
     startDate: Date
     endDate: Date
+    status: $Enums.ExamStatus
+    marksEntryDeadline: Date | null
+    allowCombinedPass: boolean
+    weightagePercentage: runtime.Decimal | null
     resultStatus: $Enums.ResultPublicationStatus
+    publishedAt: Date | null
+    isLocked: boolean
+    isDeleted: boolean
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["exam"]>
@@ -2007,7 +2559,15 @@ export interface ExamFieldRefs {
   readonly examType: Prisma.FieldRef<"Exam", 'ExamType'>
   readonly startDate: Prisma.FieldRef<"Exam", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Exam", 'DateTime'>
+  readonly status: Prisma.FieldRef<"Exam", 'ExamStatus'>
+  readonly marksEntryDeadline: Prisma.FieldRef<"Exam", 'DateTime'>
+  readonly allowCombinedPass: Prisma.FieldRef<"Exam", 'Boolean'>
+  readonly weightagePercentage: Prisma.FieldRef<"Exam", 'Decimal'>
   readonly resultStatus: Prisma.FieldRef<"Exam", 'ResultPublicationStatus'>
+  readonly publishedAt: Prisma.FieldRef<"Exam", 'DateTime'>
+  readonly isLocked: Prisma.FieldRef<"Exam", 'Boolean'>
+  readonly isDeleted: Prisma.FieldRef<"Exam", 'Boolean'>
+  readonly deletedAt: Prisma.FieldRef<"Exam", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Exam", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Exam", 'DateTime'>
 }

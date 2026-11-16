@@ -30,12 +30,16 @@ export type ResultSummaryAvgAggregateOutputType = {
   totalMarks: runtime.Decimal | null
   gpa: runtime.Decimal | null
   meritPosition: number | null
+  sectionMeritPosition: number | null
+  failedSubjectCount: number | null
 }
 
 export type ResultSummarySumAggregateOutputType = {
   totalMarks: runtime.Decimal | null
   gpa: runtime.Decimal | null
   meritPosition: number | null
+  sectionMeritPosition: number | null
+  failedSubjectCount: number | null
 }
 
 export type ResultSummaryMinAggregateOutputType = {
@@ -46,6 +50,8 @@ export type ResultSummaryMinAggregateOutputType = {
   gpa: runtime.Decimal | null
   letterGrade: string | null
   meritPosition: number | null
+  sectionMeritPosition: number | null
+  failedSubjectCount: number | null
   resultStatus: $Enums.ResultStatus | null
   publishedAt: Date | null
   createdAt: Date | null
@@ -60,6 +66,8 @@ export type ResultSummaryMaxAggregateOutputType = {
   gpa: runtime.Decimal | null
   letterGrade: string | null
   meritPosition: number | null
+  sectionMeritPosition: number | null
+  failedSubjectCount: number | null
   resultStatus: $Enums.ResultStatus | null
   publishedAt: Date | null
   createdAt: Date | null
@@ -74,6 +82,8 @@ export type ResultSummaryCountAggregateOutputType = {
   gpa: number
   letterGrade: number
   meritPosition: number
+  sectionMeritPosition: number
+  failedSubjectCount: number
   resultStatus: number
   publishedAt: number
   createdAt: number
@@ -86,12 +96,16 @@ export type ResultSummaryAvgAggregateInputType = {
   totalMarks?: true
   gpa?: true
   meritPosition?: true
+  sectionMeritPosition?: true
+  failedSubjectCount?: true
 }
 
 export type ResultSummarySumAggregateInputType = {
   totalMarks?: true
   gpa?: true
   meritPosition?: true
+  sectionMeritPosition?: true
+  failedSubjectCount?: true
 }
 
 export type ResultSummaryMinAggregateInputType = {
@@ -102,6 +116,8 @@ export type ResultSummaryMinAggregateInputType = {
   gpa?: true
   letterGrade?: true
   meritPosition?: true
+  sectionMeritPosition?: true
+  failedSubjectCount?: true
   resultStatus?: true
   publishedAt?: true
   createdAt?: true
@@ -116,6 +132,8 @@ export type ResultSummaryMaxAggregateInputType = {
   gpa?: true
   letterGrade?: true
   meritPosition?: true
+  sectionMeritPosition?: true
+  failedSubjectCount?: true
   resultStatus?: true
   publishedAt?: true
   createdAt?: true
@@ -130,6 +148,8 @@ export type ResultSummaryCountAggregateInputType = {
   gpa?: true
   letterGrade?: true
   meritPosition?: true
+  sectionMeritPosition?: true
+  failedSubjectCount?: true
   resultStatus?: true
   publishedAt?: true
   createdAt?: true
@@ -231,6 +251,8 @@ export type ResultSummaryGroupByOutputType = {
   gpa: runtime.Decimal | null
   letterGrade: string | null
   meritPosition: number | null
+  sectionMeritPosition: number | null
+  failedSubjectCount: number
   resultStatus: $Enums.ResultStatus
   publishedAt: Date | null
   createdAt: Date
@@ -268,6 +290,8 @@ export type ResultSummaryWhereInput = {
   gpa?: Prisma.DecimalNullableFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.StringNullableFilter<"ResultSummary"> | string | null
   meritPosition?: Prisma.IntNullableFilter<"ResultSummary"> | number | null
+  sectionMeritPosition?: Prisma.IntNullableFilter<"ResultSummary"> | number | null
+  failedSubjectCount?: Prisma.IntFilter<"ResultSummary"> | number
   resultStatus?: Prisma.EnumResultStatusFilter<"ResultSummary"> | $Enums.ResultStatus
   publishedAt?: Prisma.DateTimeNullableFilter<"ResultSummary"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ResultSummary"> | Date | string
@@ -284,6 +308,8 @@ export type ResultSummaryOrderByWithRelationInput = {
   gpa?: Prisma.SortOrderInput | Prisma.SortOrder
   letterGrade?: Prisma.SortOrderInput | Prisma.SortOrder
   meritPosition?: Prisma.SortOrderInput | Prisma.SortOrder
+  sectionMeritPosition?: Prisma.SortOrderInput | Prisma.SortOrder
+  failedSubjectCount?: Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -304,6 +330,8 @@ export type ResultSummaryWhereUniqueInput = Prisma.AtLeast<{
   gpa?: Prisma.DecimalNullableFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.StringNullableFilter<"ResultSummary"> | string | null
   meritPosition?: Prisma.IntNullableFilter<"ResultSummary"> | number | null
+  sectionMeritPosition?: Prisma.IntNullableFilter<"ResultSummary"> | number | null
+  failedSubjectCount?: Prisma.IntFilter<"ResultSummary"> | number
   resultStatus?: Prisma.EnumResultStatusFilter<"ResultSummary"> | $Enums.ResultStatus
   publishedAt?: Prisma.DateTimeNullableFilter<"ResultSummary"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ResultSummary"> | Date | string
@@ -320,6 +348,8 @@ export type ResultSummaryOrderByWithAggregationInput = {
   gpa?: Prisma.SortOrderInput | Prisma.SortOrder
   letterGrade?: Prisma.SortOrderInput | Prisma.SortOrder
   meritPosition?: Prisma.SortOrderInput | Prisma.SortOrder
+  sectionMeritPosition?: Prisma.SortOrderInput | Prisma.SortOrder
+  failedSubjectCount?: Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -342,6 +372,8 @@ export type ResultSummaryScalarWhereWithAggregatesInput = {
   gpa?: Prisma.DecimalNullableWithAggregatesFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.StringNullableWithAggregatesFilter<"ResultSummary"> | string | null
   meritPosition?: Prisma.IntNullableWithAggregatesFilter<"ResultSummary"> | number | null
+  sectionMeritPosition?: Prisma.IntNullableWithAggregatesFilter<"ResultSummary"> | number | null
+  failedSubjectCount?: Prisma.IntWithAggregatesFilter<"ResultSummary"> | number
   resultStatus?: Prisma.EnumResultStatusWithAggregatesFilter<"ResultSummary"> | $Enums.ResultStatus
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ResultSummary"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ResultSummary"> | Date | string
@@ -354,6 +386,8 @@ export type ResultSummaryCreateInput = {
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
   meritPosition?: number | null
+  sectionMeritPosition?: number | null
+  failedSubjectCount?: number
   resultStatus: $Enums.ResultStatus
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -370,6 +404,8 @@ export type ResultSummaryUncheckedCreateInput = {
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
   meritPosition?: number | null
+  sectionMeritPosition?: number | null
+  failedSubjectCount?: number
   resultStatus: $Enums.ResultStatus
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -382,6 +418,8 @@ export type ResultSummaryUpdateInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -398,6 +436,8 @@ export type ResultSummaryUncheckedUpdateInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -412,6 +452,8 @@ export type ResultSummaryCreateManyInput = {
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
   meritPosition?: number | null
+  sectionMeritPosition?: number | null
+  failedSubjectCount?: number
   resultStatus: $Enums.ResultStatus
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -424,6 +466,8 @@ export type ResultSummaryUpdateManyMutationInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -438,6 +482,8 @@ export type ResultSummaryUncheckedUpdateManyInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -467,6 +513,8 @@ export type ResultSummaryCountOrderByAggregateInput = {
   gpa?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
   meritPosition?: Prisma.SortOrder
+  sectionMeritPosition?: Prisma.SortOrder
+  failedSubjectCount?: Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -477,6 +525,8 @@ export type ResultSummaryAvgOrderByAggregateInput = {
   totalMarks?: Prisma.SortOrder
   gpa?: Prisma.SortOrder
   meritPosition?: Prisma.SortOrder
+  sectionMeritPosition?: Prisma.SortOrder
+  failedSubjectCount?: Prisma.SortOrder
 }
 
 export type ResultSummaryMaxOrderByAggregateInput = {
@@ -487,6 +537,8 @@ export type ResultSummaryMaxOrderByAggregateInput = {
   gpa?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
   meritPosition?: Prisma.SortOrder
+  sectionMeritPosition?: Prisma.SortOrder
+  failedSubjectCount?: Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -501,6 +553,8 @@ export type ResultSummaryMinOrderByAggregateInput = {
   gpa?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
   meritPosition?: Prisma.SortOrder
+  sectionMeritPosition?: Prisma.SortOrder
+  failedSubjectCount?: Prisma.SortOrder
   resultStatus?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -511,6 +565,8 @@ export type ResultSummarySumOrderByAggregateInput = {
   totalMarks?: Prisma.SortOrder
   gpa?: Prisma.SortOrder
   meritPosition?: Prisma.SortOrder
+  sectionMeritPosition?: Prisma.SortOrder
+  failedSubjectCount?: Prisma.SortOrder
 }
 
 export type ResultSummaryCreateNestedManyWithoutEnrollmentInput = {
@@ -615,6 +671,8 @@ export type ResultSummaryCreateWithoutEnrollmentInput = {
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
   meritPosition?: number | null
+  sectionMeritPosition?: number | null
+  failedSubjectCount?: number
   resultStatus: $Enums.ResultStatus
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -629,6 +687,8 @@ export type ResultSummaryUncheckedCreateWithoutEnrollmentInput = {
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
   meritPosition?: number | null
+  sectionMeritPosition?: number | null
+  failedSubjectCount?: number
   resultStatus: $Enums.ResultStatus
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -672,6 +732,8 @@ export type ResultSummaryScalarWhereInput = {
   gpa?: Prisma.DecimalNullableFilter<"ResultSummary"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.StringNullableFilter<"ResultSummary"> | string | null
   meritPosition?: Prisma.IntNullableFilter<"ResultSummary"> | number | null
+  sectionMeritPosition?: Prisma.IntNullableFilter<"ResultSummary"> | number | null
+  failedSubjectCount?: Prisma.IntFilter<"ResultSummary"> | number
   resultStatus?: Prisma.EnumResultStatusFilter<"ResultSummary"> | $Enums.ResultStatus
   publishedAt?: Prisma.DateTimeNullableFilter<"ResultSummary"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ResultSummary"> | Date | string
@@ -684,6 +746,8 @@ export type ResultSummaryCreateWithoutExamInput = {
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
   meritPosition?: number | null
+  sectionMeritPosition?: number | null
+  failedSubjectCount?: number
   resultStatus: $Enums.ResultStatus
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -698,6 +762,8 @@ export type ResultSummaryUncheckedCreateWithoutExamInput = {
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
   meritPosition?: number | null
+  sectionMeritPosition?: number | null
+  failedSubjectCount?: number
   resultStatus: $Enums.ResultStatus
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -737,6 +803,8 @@ export type ResultSummaryCreateManyEnrollmentInput = {
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
   meritPosition?: number | null
+  sectionMeritPosition?: number | null
+  failedSubjectCount?: number
   resultStatus: $Enums.ResultStatus
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -749,6 +817,8 @@ export type ResultSummaryUpdateWithoutEnrollmentInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -763,6 +833,8 @@ export type ResultSummaryUncheckedUpdateWithoutEnrollmentInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -776,6 +848,8 @@ export type ResultSummaryUncheckedUpdateManyWithoutEnrollmentInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -789,6 +863,8 @@ export type ResultSummaryCreateManyExamInput = {
   gpa?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: string | null
   meritPosition?: number | null
+  sectionMeritPosition?: number | null
+  failedSubjectCount?: number
   resultStatus: $Enums.ResultStatus
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -801,6 +877,8 @@ export type ResultSummaryUpdateWithoutExamInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -815,6 +893,8 @@ export type ResultSummaryUncheckedUpdateWithoutExamInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -828,6 +908,8 @@ export type ResultSummaryUncheckedUpdateManyWithoutExamInput = {
   gpa?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   letterGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sectionMeritPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  failedSubjectCount?: Prisma.IntFieldUpdateOperationsInput | number
   resultStatus?: Prisma.EnumResultStatusFieldUpdateOperationsInput | $Enums.ResultStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -844,6 +926,8 @@ export type ResultSummarySelect<ExtArgs extends runtime.Types.Extensions.Interna
   gpa?: boolean
   letterGrade?: boolean
   meritPosition?: boolean
+  sectionMeritPosition?: boolean
+  failedSubjectCount?: boolean
   resultStatus?: boolean
   publishedAt?: boolean
   createdAt?: boolean
@@ -860,6 +944,8 @@ export type ResultSummarySelectCreateManyAndReturn<ExtArgs extends runtime.Types
   gpa?: boolean
   letterGrade?: boolean
   meritPosition?: boolean
+  sectionMeritPosition?: boolean
+  failedSubjectCount?: boolean
   resultStatus?: boolean
   publishedAt?: boolean
   createdAt?: boolean
@@ -876,6 +962,8 @@ export type ResultSummarySelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   gpa?: boolean
   letterGrade?: boolean
   meritPosition?: boolean
+  sectionMeritPosition?: boolean
+  failedSubjectCount?: boolean
   resultStatus?: boolean
   publishedAt?: boolean
   createdAt?: boolean
@@ -892,13 +980,15 @@ export type ResultSummarySelectScalar = {
   gpa?: boolean
   letterGrade?: boolean
   meritPosition?: boolean
+  sectionMeritPosition?: boolean
+  failedSubjectCount?: boolean
   resultStatus?: boolean
   publishedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ResultSummaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentEnrollmentId" | "examId" | "totalMarks" | "gpa" | "letterGrade" | "meritPosition" | "resultStatus" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["resultSummary"]>
+export type ResultSummaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentEnrollmentId" | "examId" | "totalMarks" | "gpa" | "letterGrade" | "meritPosition" | "sectionMeritPosition" | "failedSubjectCount" | "resultStatus" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["resultSummary"]>
 export type ResultSummaryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
@@ -922,11 +1012,37 @@ export type $ResultSummaryPayload<ExtArgs extends runtime.Types.Extensions.Inter
     id: string
     studentEnrollmentId: string
     examId: string
+    /**
+     * সব বিষয় মিলিয়ে মোট প্রাপ্ত নম্বর
+     */
     totalMarks: runtime.Decimal
+    /**
+     * অর্জিত মোট জিপিএ (GPA)
+     */
     gpa: runtime.Decimal | null
+    /**
+     * সামগ্রিক গ্রেড (A+, A, F ইত্যাদি)
+     */
     letterGrade: string | null
+    /**
+     * পুরো ক্লাসের মেধা স্থান (১ম, ২য়, ৩য় ইত্যাদি)
+     */
     meritPosition: number | null
+    /**
+     * নিজ সেকশনের মেধা স্থান
+     */
+    sectionMeritPosition: number | null
+    /**
+     * ফেল করা বিষয়ের সংখ্যা
+     */
+    failedSubjectCount: number
+    /**
+     * চূড়ান্ত অবস্থা (PASS, FAIL, INCOMPLETE)
+     */
     resultStatus: $Enums.ResultStatus
+    /**
+     * ফলাফল প্রকাশের সময়
+     */
     publishedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1362,6 +1478,8 @@ export interface ResultSummaryFieldRefs {
   readonly gpa: Prisma.FieldRef<"ResultSummary", 'Decimal'>
   readonly letterGrade: Prisma.FieldRef<"ResultSummary", 'String'>
   readonly meritPosition: Prisma.FieldRef<"ResultSummary", 'Int'>
+  readonly sectionMeritPosition: Prisma.FieldRef<"ResultSummary", 'Int'>
+  readonly failedSubjectCount: Prisma.FieldRef<"ResultSummary", 'Int'>
   readonly resultStatus: Prisma.FieldRef<"ResultSummary", 'ResultStatus'>
   readonly publishedAt: Prisma.FieldRef<"ResultSummary", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"ResultSummary", 'DateTime'>

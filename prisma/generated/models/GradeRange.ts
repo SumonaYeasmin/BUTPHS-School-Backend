@@ -27,83 +27,105 @@ export type AggregateGradeRange = {
 }
 
 export type GradeRangeAvgAggregateOutputType = {
-  minMarks: runtime.Decimal | null
-  maxMarks: runtime.Decimal | null
+  minPercentage: runtime.Decimal | null
+  maxPercentage: runtime.Decimal | null
   gradePoint: runtime.Decimal | null
+  displayOrder: number | null
 }
 
 export type GradeRangeSumAggregateOutputType = {
-  minMarks: runtime.Decimal | null
-  maxMarks: runtime.Decimal | null
+  minPercentage: runtime.Decimal | null
+  maxPercentage: runtime.Decimal | null
   gradePoint: runtime.Decimal | null
+  displayOrder: number | null
 }
 
 export type GradeRangeMinAggregateOutputType = {
   id: string | null
   gradingScaleId: string | null
-  minMarks: runtime.Decimal | null
-  maxMarks: runtime.Decimal | null
+  minPercentage: runtime.Decimal | null
+  maxPercentage: runtime.Decimal | null
   letterGrade: string | null
   gradePoint: runtime.Decimal | null
+  remarks: string | null
+  isFailGrade: boolean | null
+  displayOrder: number | null
 }
 
 export type GradeRangeMaxAggregateOutputType = {
   id: string | null
   gradingScaleId: string | null
-  minMarks: runtime.Decimal | null
-  maxMarks: runtime.Decimal | null
+  minPercentage: runtime.Decimal | null
+  maxPercentage: runtime.Decimal | null
   letterGrade: string | null
   gradePoint: runtime.Decimal | null
+  remarks: string | null
+  isFailGrade: boolean | null
+  displayOrder: number | null
 }
 
 export type GradeRangeCountAggregateOutputType = {
   id: number
   gradingScaleId: number
-  minMarks: number
-  maxMarks: number
+  minPercentage: number
+  maxPercentage: number
   letterGrade: number
   gradePoint: number
+  remarks: number
+  isFailGrade: number
+  displayOrder: number
   _all: number
 }
 
 
 export type GradeRangeAvgAggregateInputType = {
-  minMarks?: true
-  maxMarks?: true
+  minPercentage?: true
+  maxPercentage?: true
   gradePoint?: true
+  displayOrder?: true
 }
 
 export type GradeRangeSumAggregateInputType = {
-  minMarks?: true
-  maxMarks?: true
+  minPercentage?: true
+  maxPercentage?: true
   gradePoint?: true
+  displayOrder?: true
 }
 
 export type GradeRangeMinAggregateInputType = {
   id?: true
   gradingScaleId?: true
-  minMarks?: true
-  maxMarks?: true
+  minPercentage?: true
+  maxPercentage?: true
   letterGrade?: true
   gradePoint?: true
+  remarks?: true
+  isFailGrade?: true
+  displayOrder?: true
 }
 
 export type GradeRangeMaxAggregateInputType = {
   id?: true
   gradingScaleId?: true
-  minMarks?: true
-  maxMarks?: true
+  minPercentage?: true
+  maxPercentage?: true
   letterGrade?: true
   gradePoint?: true
+  remarks?: true
+  isFailGrade?: true
+  displayOrder?: true
 }
 
 export type GradeRangeCountAggregateInputType = {
   id?: true
   gradingScaleId?: true
-  minMarks?: true
-  maxMarks?: true
+  minPercentage?: true
+  maxPercentage?: true
   letterGrade?: true
   gradePoint?: true
+  remarks?: true
+  isFailGrade?: true
+  displayOrder?: true
   _all?: true
 }
 
@@ -196,10 +218,13 @@ export type GradeRangeGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type GradeRangeGroupByOutputType = {
   id: string
   gradingScaleId: string
-  minMarks: runtime.Decimal
-  maxMarks: runtime.Decimal
+  minPercentage: runtime.Decimal
+  maxPercentage: runtime.Decimal
   letterGrade: string
   gradePoint: runtime.Decimal
+  remarks: string | null
+  isFailGrade: boolean
+  displayOrder: number
   _count: GradeRangeCountAggregateOutputType | null
   _avg: GradeRangeAvgAggregateOutputType | null
   _sum: GradeRangeSumAggregateOutputType | null
@@ -228,20 +253,26 @@ export type GradeRangeWhereInput = {
   NOT?: Prisma.GradeRangeWhereInput | Prisma.GradeRangeWhereInput[]
   id?: Prisma.UuidFilter<"GradeRange"> | string
   gradingScaleId?: Prisma.UuidFilter<"GradeRange"> | string
-  minMarks?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFilter<"GradeRange"> | string
   gradePoint?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.StringNullableFilter<"GradeRange"> | string | null
+  isFailGrade?: Prisma.BoolFilter<"GradeRange"> | boolean
+  displayOrder?: Prisma.IntFilter<"GradeRange"> | number
   gradingScale?: Prisma.XOR<Prisma.GradingScaleScalarRelationFilter, Prisma.GradingScaleWhereInput>
 }
 
 export type GradeRangeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   gradingScaleId?: Prisma.SortOrder
-  minMarks?: Prisma.SortOrder
-  maxMarks?: Prisma.SortOrder
+  minPercentage?: Prisma.SortOrder
+  maxPercentage?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
+  remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  isFailGrade?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
   gradingScale?: Prisma.GradingScaleOrderByWithRelationInput
 }
 
@@ -252,20 +283,26 @@ export type GradeRangeWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.GradeRangeWhereInput[]
   NOT?: Prisma.GradeRangeWhereInput | Prisma.GradeRangeWhereInput[]
   gradingScaleId?: Prisma.UuidFilter<"GradeRange"> | string
-  minMarks?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFilter<"GradeRange"> | string
   gradePoint?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.StringNullableFilter<"GradeRange"> | string | null
+  isFailGrade?: Prisma.BoolFilter<"GradeRange"> | boolean
+  displayOrder?: Prisma.IntFilter<"GradeRange"> | number
   gradingScale?: Prisma.XOR<Prisma.GradingScaleScalarRelationFilter, Prisma.GradingScaleWhereInput>
 }, "id" | "gradingScaleId_letterGrade">
 
 export type GradeRangeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   gradingScaleId?: Prisma.SortOrder
-  minMarks?: Prisma.SortOrder
-  maxMarks?: Prisma.SortOrder
+  minPercentage?: Prisma.SortOrder
+  maxPercentage?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
+  remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  isFailGrade?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
   _count?: Prisma.GradeRangeCountOrderByAggregateInput
   _avg?: Prisma.GradeRangeAvgOrderByAggregateInput
   _max?: Prisma.GradeRangeMaxOrderByAggregateInput
@@ -279,72 +316,96 @@ export type GradeRangeScalarWhereWithAggregatesInput = {
   NOT?: Prisma.GradeRangeScalarWhereWithAggregatesInput | Prisma.GradeRangeScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"GradeRange"> | string
   gradingScaleId?: Prisma.UuidWithAggregatesFilter<"GradeRange"> | string
-  minMarks?: Prisma.DecimalWithAggregatesFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalWithAggregatesFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalWithAggregatesFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalWithAggregatesFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringWithAggregatesFilter<"GradeRange"> | string
   gradePoint?: Prisma.DecimalWithAggregatesFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.StringNullableWithAggregatesFilter<"GradeRange"> | string | null
+  isFailGrade?: Prisma.BoolWithAggregatesFilter<"GradeRange"> | boolean
+  displayOrder?: Prisma.IntWithAggregatesFilter<"GradeRange"> | number
 }
 
 export type GradeRangeCreateInput = {
   id?: string
-  minMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade: string
   gradePoint: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: string | null
+  isFailGrade?: boolean
+  displayOrder?: number
   gradingScale: Prisma.GradingScaleCreateNestedOneWithoutGradeRangesInput
 }
 
 export type GradeRangeUncheckedCreateInput = {
   id?: string
   gradingScaleId: string
-  minMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade: string
   gradePoint: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: string | null
+  isFailGrade?: boolean
+  displayOrder?: number
 }
 
 export type GradeRangeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  minMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFieldUpdateOperationsInput | string
   gradePoint?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFailGrade?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   gradingScale?: Prisma.GradingScaleUpdateOneRequiredWithoutGradeRangesNestedInput
 }
 
 export type GradeRangeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gradingScaleId?: Prisma.StringFieldUpdateOperationsInput | string
-  minMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFieldUpdateOperationsInput | string
   gradePoint?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFailGrade?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type GradeRangeCreateManyInput = {
   id?: string
   gradingScaleId: string
-  minMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade: string
   gradePoint: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: string | null
+  isFailGrade?: boolean
+  displayOrder?: number
 }
 
 export type GradeRangeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  minMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFieldUpdateOperationsInput | string
   gradePoint?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFailGrade?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type GradeRangeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gradingScaleId?: Prisma.StringFieldUpdateOperationsInput | string
-  minMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFieldUpdateOperationsInput | string
   gradePoint?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFailGrade?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type GradeRangeListRelationFilter = {
@@ -365,40 +426,51 @@ export type GradeRangeGradingScaleIdLetterGradeCompoundUniqueInput = {
 export type GradeRangeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   gradingScaleId?: Prisma.SortOrder
-  minMarks?: Prisma.SortOrder
-  maxMarks?: Prisma.SortOrder
+  minPercentage?: Prisma.SortOrder
+  maxPercentage?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
+  remarks?: Prisma.SortOrder
+  isFailGrade?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
 }
 
 export type GradeRangeAvgOrderByAggregateInput = {
-  minMarks?: Prisma.SortOrder
-  maxMarks?: Prisma.SortOrder
+  minPercentage?: Prisma.SortOrder
+  maxPercentage?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
 }
 
 export type GradeRangeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   gradingScaleId?: Prisma.SortOrder
-  minMarks?: Prisma.SortOrder
-  maxMarks?: Prisma.SortOrder
+  minPercentage?: Prisma.SortOrder
+  maxPercentage?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
+  remarks?: Prisma.SortOrder
+  isFailGrade?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
 }
 
 export type GradeRangeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   gradingScaleId?: Prisma.SortOrder
-  minMarks?: Prisma.SortOrder
-  maxMarks?: Prisma.SortOrder
+  minPercentage?: Prisma.SortOrder
+  maxPercentage?: Prisma.SortOrder
   letterGrade?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
+  remarks?: Prisma.SortOrder
+  isFailGrade?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
 }
 
 export type GradeRangeSumOrderByAggregateInput = {
-  minMarks?: Prisma.SortOrder
-  maxMarks?: Prisma.SortOrder
+  minPercentage?: Prisma.SortOrder
+  maxPercentage?: Prisma.SortOrder
   gradePoint?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
 }
 
 export type GradeRangeCreateNestedManyWithoutGradingScaleInput = {
@@ -443,28 +515,26 @@ export type GradeRangeUncheckedUpdateManyWithoutGradingScaleNestedInput = {
   deleteMany?: Prisma.GradeRangeScalarWhereInput | Prisma.GradeRangeScalarWhereInput[]
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type GradeRangeCreateWithoutGradingScaleInput = {
   id?: string
-  minMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade: string
   gradePoint: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: string | null
+  isFailGrade?: boolean
+  displayOrder?: number
 }
 
 export type GradeRangeUncheckedCreateWithoutGradingScaleInput = {
   id?: string
-  minMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade: string
   gradePoint: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: string | null
+  isFailGrade?: boolean
+  displayOrder?: number
 }
 
 export type GradeRangeCreateOrConnectWithoutGradingScaleInput = {
@@ -499,42 +569,57 @@ export type GradeRangeScalarWhereInput = {
   NOT?: Prisma.GradeRangeScalarWhereInput | Prisma.GradeRangeScalarWhereInput[]
   id?: Prisma.UuidFilter<"GradeRange"> | string
   gradingScaleId?: Prisma.UuidFilter<"GradeRange"> | string
-  minMarks?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFilter<"GradeRange"> | string
   gradePoint?: Prisma.DecimalFilter<"GradeRange"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.StringNullableFilter<"GradeRange"> | string | null
+  isFailGrade?: Prisma.BoolFilter<"GradeRange"> | boolean
+  displayOrder?: Prisma.IntFilter<"GradeRange"> | number
 }
 
 export type GradeRangeCreateManyGradingScaleInput = {
   id?: string
-  minMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks: runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade: string
   gradePoint: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: string | null
+  isFailGrade?: boolean
+  displayOrder?: number
 }
 
 export type GradeRangeUpdateWithoutGradingScaleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  minMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFieldUpdateOperationsInput | string
   gradePoint?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFailGrade?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type GradeRangeUncheckedUpdateWithoutGradingScaleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  minMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFieldUpdateOperationsInput | string
   gradePoint?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFailGrade?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type GradeRangeUncheckedUpdateManyWithoutGradingScaleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  minMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  maxMarks?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  maxPercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   letterGrade?: Prisma.StringFieldUpdateOperationsInput | string
   gradePoint?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFailGrade?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -542,43 +627,55 @@ export type GradeRangeUncheckedUpdateManyWithoutGradingScaleInput = {
 export type GradeRangeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   gradingScaleId?: boolean
-  minMarks?: boolean
-  maxMarks?: boolean
+  minPercentage?: boolean
+  maxPercentage?: boolean
   letterGrade?: boolean
   gradePoint?: boolean
+  remarks?: boolean
+  isFailGrade?: boolean
+  displayOrder?: boolean
   gradingScale?: boolean | Prisma.GradingScaleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gradeRange"]>
 
 export type GradeRangeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   gradingScaleId?: boolean
-  minMarks?: boolean
-  maxMarks?: boolean
+  minPercentage?: boolean
+  maxPercentage?: boolean
   letterGrade?: boolean
   gradePoint?: boolean
+  remarks?: boolean
+  isFailGrade?: boolean
+  displayOrder?: boolean
   gradingScale?: boolean | Prisma.GradingScaleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gradeRange"]>
 
 export type GradeRangeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   gradingScaleId?: boolean
-  minMarks?: boolean
-  maxMarks?: boolean
+  minPercentage?: boolean
+  maxPercentage?: boolean
   letterGrade?: boolean
   gradePoint?: boolean
+  remarks?: boolean
+  isFailGrade?: boolean
+  displayOrder?: boolean
   gradingScale?: boolean | Prisma.GradingScaleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gradeRange"]>
 
 export type GradeRangeSelectScalar = {
   id?: boolean
   gradingScaleId?: boolean
-  minMarks?: boolean
-  maxMarks?: boolean
+  minPercentage?: boolean
+  maxPercentage?: boolean
   letterGrade?: boolean
   gradePoint?: boolean
+  remarks?: boolean
+  isFailGrade?: boolean
+  displayOrder?: boolean
 }
 
-export type GradeRangeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "gradingScaleId" | "minMarks" | "maxMarks" | "letterGrade" | "gradePoint", ExtArgs["result"]["gradeRange"]>
+export type GradeRangeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "gradingScaleId" | "minPercentage" | "maxPercentage" | "letterGrade" | "gradePoint" | "remarks" | "isFailGrade" | "displayOrder", ExtArgs["result"]["gradeRange"]>
 export type GradeRangeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gradingScale?: boolean | Prisma.GradingScaleDefaultArgs<ExtArgs>
 }
@@ -597,10 +694,13 @@ export type $GradeRangePayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     gradingScaleId: string
-    minMarks: runtime.Decimal
-    maxMarks: runtime.Decimal
+    minPercentage: runtime.Decimal
+    maxPercentage: runtime.Decimal
     letterGrade: string
     gradePoint: runtime.Decimal
+    remarks: string | null
+    isFailGrade: boolean
+    displayOrder: number
   }, ExtArgs["result"]["gradeRange"]>
   composites: {}
 }
@@ -1027,10 +1127,13 @@ export interface Prisma__GradeRangeClient<T, Null = never, ExtArgs extends runti
 export interface GradeRangeFieldRefs {
   readonly id: Prisma.FieldRef<"GradeRange", 'String'>
   readonly gradingScaleId: Prisma.FieldRef<"GradeRange", 'String'>
-  readonly minMarks: Prisma.FieldRef<"GradeRange", 'Decimal'>
-  readonly maxMarks: Prisma.FieldRef<"GradeRange", 'Decimal'>
+  readonly minPercentage: Prisma.FieldRef<"GradeRange", 'Decimal'>
+  readonly maxPercentage: Prisma.FieldRef<"GradeRange", 'Decimal'>
   readonly letterGrade: Prisma.FieldRef<"GradeRange", 'String'>
   readonly gradePoint: Prisma.FieldRef<"GradeRange", 'Decimal'>
+  readonly remarks: Prisma.FieldRef<"GradeRange", 'String'>
+  readonly isFailGrade: Prisma.FieldRef<"GradeRange", 'Boolean'>
+  readonly displayOrder: Prisma.FieldRef<"GradeRange", 'Int'>
 }
     
 

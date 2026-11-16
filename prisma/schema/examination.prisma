@@ -122,22 +122,22 @@ model ExamRoutine {
 }
 
 model Mark {
-  id                        String   @id @default(uuid()) @db.Uuid
-  studentEnrollmentId       String   @db.Uuid
-  examSubjectId             String   @db.Uuid
+  id                  String @id @default(uuid()) @db.Uuid
+  studentEnrollmentId String @db.Uuid
+  examSubjectId       String @db.Uuid
 
-  writtenMarks              Decimal  @default(0) @db.Decimal(7, 2) /// লিখিত পরীক্ষার নম্বর
-  mcqMarks                  Decimal  @default(0) @db.Decimal(7, 2) /// MCQ পরীক্ষার নম্বর
-  practicalMarks            Decimal  @default(0) @db.Decimal(7, 2) /// ব্যবহারিক নম্বর (যদি থাকে)
-  continuousAssessmentMarks Decimal  @default(0) @db.Decimal(7, 2) /// ধারাবাহিক মূল্যায়ন (যদি থাকে)
-  totalMarks                Decimal  @db.Decimal(7, 2) /// মোট নম্বর
+  writtenMarks              Decimal @default(0) @db.Decimal(7, 2) /// লিখিত পরীক্ষার নম্বর
+  mcqMarks                  Decimal @default(0) @db.Decimal(7, 2) /// MCQ পরীক্ষার নম্বর
+  practicalMarks            Decimal @default(0) @db.Decimal(7, 2) /// ব্যবহারিক নম্বর (যদি থাকে)
+  continuousAssessmentMarks Decimal @default(0) @db.Decimal(7, 2) /// ধারাবাহিক মূল্যায়ন (যদি থাকে)
+  totalMarks                Decimal @db.Decimal(7, 2) /// মোট নম্বর
 
-  isAbsent                  Boolean  @default(false) /// পরীক্ষায় অনুপস্থিত ছিল কিনা
-  isLocked                  Boolean  @default(false) /// রেজাল্ট ফাইনাল হলে লক (এডিট বন্ধ)
+  isAbsent Boolean @default(false) /// পরীক্ষায় অনুপস্থিত ছিল কিনা
+  isLocked Boolean @default(false) /// রেজাল্ট ফাইনাল হলে লক (এডিট বন্ধ)
 
-  enteredBy                 String   @db.Uuid /// যে শিক্ষক নম্বর ইনপুট দিয়েছেন
-  createdAt                 DateTime @default(now())
-  updatedAt                 DateTime @updatedAt
+  enteredBy String   @db.Uuid /// যে শিক্ষক নম্বর ইনপুট দিয়েছেন
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   enrollment  StudentEnrollment @relation(fields: [studentEnrollmentId], references: [id], onDelete: Restrict)
   examSubject ExamSubject       @relation(fields: [examSubjectId], references: [id], onDelete: Restrict)
@@ -146,6 +146,7 @@ model Mark {
   @@unique([studentEnrollmentId, examSubjectId])
   @@index([examSubjectId])
 }
+
 model StudentSubjectResult {
   id                  String   @id @default(uuid()) @db.Uuid
   studentEnrollmentId String   @db.Uuid
@@ -155,6 +156,7 @@ model StudentSubjectResult {
   letterGrade         String?  @db.VarChar(5) /// লেটার গ্রেড (A+, A, B ইত্যাদি)
   gradePoint          Decimal? @db.Decimal(3, 2) /// গ্রেড পয়েন্ট (৫.০০, ৪.০০ ইত্যাদি)
   isPassed            Boolean /// এই বিষয়ে পাস করেছে কিনা
+  isAbsent            Boolean  @default(false)
   calculatedAt        DateTime @default(now())
 
   enrollment  StudentEnrollment @relation(fields: [studentEnrollmentId], references: [id], onDelete: Restrict)
@@ -169,7 +171,8 @@ model ResultSummary {
   id                   String       @id @default(uuid()) @db.Uuid
   studentEnrollmentId  String       @db.Uuid
   examId               String       @db.Uuid
-  totalMarks           Decimal      @db.Decimal(9, 2) /// সব বিষয় মিলিয়ে মোট প্রাপ্ত নম্বর
+  totalFullMarks       Decimal      @db.Decimal(9, 2) /// সব বিষয়ের সর্বমোট পূর্ণমান (যেমন: ৯০০ বা ১০০০)
+  totalMarks           Decimal      @db.Decimal(9, 2) /// সব বিষয় মিলিয়ে মোট প্রাপ্ত নম্বর (যেমন: ৭২০)
   gpa                  Decimal?     @db.Decimal(3, 2) /// অর্জিত মোট জিপিএ (GPA)
   letterGrade          String?      @db.VarChar(5) /// সামগ্রিক গ্রেড (A+, A, F ইত্যাদি)
   meritPosition        Int? /// পুরো ক্লাসের মেধা স্থান (১ম, ২য়, ৩য় ইত্যাদি)

@@ -970,9 +970,21 @@ export type $StudentSubjectResultPayload<ExtArgs extends runtime.Types.Extension
     studentEnrollmentId: string
     examId: string
     examSubjectId: string
+    /**
+     * মোট নম্বর
+     */
     totalMarks: runtime.Decimal
+    /**
+     * লেটার গ্রেড (A+, A, B ইত্যাদি)
+     */
     letterGrade: string | null
+    /**
+     * গ্রেড পয়েন্ট (৫.০০, ৪.০০ ইত্যাদি)
+     */
     gradePoint: runtime.Decimal | null
+    /**
+     * এই বিষয়ে পাস করেছে কিনা
+     */
     isPassed: boolean
     calculatedAt: Date
   }, ExtArgs["result"]["studentSubjectResult"]>
