@@ -38,6 +38,7 @@ model SchoolClass {
   exams                 Exam[]
   digitalResources      DigitalResource[]
   admissionApplications AdmissionApplication[]
+  books                 Book[]
 }
 
 model Section {
@@ -56,24 +57,57 @@ model Section {
 }
 
 model Subject {
-  id               String            @id @default(uuid()) @db.Uuid
-  name             String            @db.VarChar(150)
-  code             String?           @unique @db.VarChar(30)
-  description      String?
+  id              String          @id @default(uuid()) @db.Uuid
+  name            String          @unique @db.VarChar(150)
+  officialCode    String?         @unique @db.VarChar(30)
+  category        SubjectCategory @default(GENERAL)
+  description     String?
+  displayOrder    Int             @default(0)
+  isSystemDefault Boolean         @default(false)
+  isActive        Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  books            Book[]
   classSubjects    ClassSubject[]
   examSubjects     ExamSubject[]
   digitalResources DigitalResource[]
 
-  @@unique([name])
+  @@index([isActive, displayOrder])
+  @@index([category])
+}
+
+model Book {
+  id           String   @id @default(uuid()) @db.Uuid
+  subjectId    String   @db.Uuid
+  classId      String   @db.Uuid
+  name         String   @db.VarChar(200)
+  bookCode     String?  @db.VarChar(50)
+  type         BookType @default(TEXTBOOK)
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  subject     Subject     @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  schoolClass SchoolClass @relation(fields: [classId], references: [id], onDelete: Restrict)
+
+  @@unique([classId, subjectId, name])
+  @@index([classId, subjectId])
+  @@index([isActive])
 }
 
 model ClassSubject {
-  id             String  @id @default(uuid()) @db.Uuid
-  academicYearId String  @db.Uuid
-  classId        String  @db.Uuid
-  subjectId      String  @db.Uuid
-  groupId        String? @db.Uuid
-  isOptional     Boolean @default(false)
+  id             String   @id @default(uuid()) @db.Uuid
+  academicYearId String   @db.Uuid
+  classId        String   @db.Uuid
+  subjectId      String   @db.Uuid
+  groupId        String?  @db.Uuid
+  isOptional     Boolean  @default(false)
+  displayOrder   Int      @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   academicYear       AcademicYear        @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
   schoolClass        SchoolClass         @relation(fields: [classId], references: [id], onDelete: Restrict)
@@ -89,8 +123,8 @@ model Student {
   id                 String        @id @default(uuid()) @db.Uuid
   studentId          String        @unique @db.VarChar(50)
   rfidCardNo         String?       @unique @db.VarChar(50)
-  birthCertificateNo String?       @unique @db.VarChar(50)
-  name               String        @db.VarChar(150)
+  birthCertificateNo String?       @unique @db.VarChar(17)
+  name               String        @db.VarChar(20)
   photo              String?
   dateOfBirth        DateTime?     @db.Date
   gender             Gender
