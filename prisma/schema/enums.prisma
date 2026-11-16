@@ -78,13 +78,28 @@ enum SmsStatus {
 enum ExamType {
   HALF_YEARLY
   ANNUAL
+  MODEL_TEST
   SELECTION
-  OTHER
+}
+
+enum ExamStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum ExamRoutineStatus {
+  SCHEDULED
+  POSTPONED
+  CANCELLED
+  COMPLETED
 }
 
 enum ResultPublicationStatus {
   DRAFT
   PUBLISHED
+  WITHHELD
 }
 
 enum ResultStatus {

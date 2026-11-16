@@ -15,7 +15,6 @@ model AcademicYear {
   academicEvents     AcademicEvent[]
   classRoutines      ClassRoutine[]
   exams              Exam[]
-  examRoutines       ExamRoutine[]
   digitalResources   DigitalResource[]
 }
 
@@ -25,6 +24,7 @@ model AcademicGroup {
   description   String?
   enrollments   StudentEnrollment[]
   classSubjects ClassSubject[]
+  examSubjects  ExamSubject[]
 }
 
 model SchoolClass {
@@ -48,6 +48,7 @@ model Section {
   enrollments        StudentEnrollment[]
   teacherAssignments TeacherAssignment[]
   classRoutines      ClassRoutine[]
+  examRoutines       ExamRoutine[]
 
   @@unique([classId, name])
   @@unique([id, classId])
@@ -194,7 +195,6 @@ model TeacherAssignment {
   section       Section        @relation(fields: [sectionId], references: [id], onDelete: Restrict)
   classSubject  ClassSubject   @relation(fields: [classSubjectId], references: [id], onDelete: Restrict)
   classRoutines ClassRoutine[]
-  examRoutines  ExamRoutine[]
 
   @@index([staffId, academicYearId])
   @@index([classId, sectionId, academicYearId])
