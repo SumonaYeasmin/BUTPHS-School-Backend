@@ -1,0 +1,18 @@
+-- AlterTable: SchoolClass
+ALTER TABLE "SchoolClass"
+ADD COLUMN IF NOT EXISTS "isActive" BOOLEAN NOT NULL DEFAULT true,
+ADD COLUMN IF NOT EXISTS "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN IF NOT EXISTS "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+-- CreateIndex
+CREATE INDEX IF NOT EXISTS "SchoolClass_isActive_idx" ON "SchoolClass"("isActive");
+CREATE INDEX IF NOT EXISTS "SchoolClass_numericValue_idx" ON "SchoolClass"("numericValue");
+
+-- AlterTable: Section
+ALTER TABLE "Section"
+ADD COLUMN IF NOT EXISTS "isActive" BOOLEAN NOT NULL DEFAULT true,
+ADD COLUMN IF NOT EXISTS "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN IF NOT EXISTS "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+-- CreateIndex
+CREATE INDEX IF NOT EXISTS "Section_classId_isActive_idx" ON "Section"("classId", "isActive");
