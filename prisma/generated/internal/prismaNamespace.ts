@@ -5089,8 +5089,11 @@ export const StudentPromotionScalarFieldEnum = {
   studentId: 'studentId',
   fromEnrollmentId: 'fromEnrollmentId',
   toEnrollmentId: 'toEnrollmentId',
+  resultSummaryId: 'resultSummaryId',
   promotionDate: 'promotionDate',
-  remarks: 'remarks'
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type StudentPromotionScalarFieldEnum = (typeof StudentPromotionScalarFieldEnum)[keyof typeof StudentPromotionScalarFieldEnum]

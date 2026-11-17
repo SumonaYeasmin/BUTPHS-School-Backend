@@ -201,15 +201,20 @@ model StudentPromotion {
   studentId        String   @db.Uuid
   fromEnrollmentId String   @db.Uuid
   toEnrollmentId   String   @db.Uuid
+  resultSummaryId  String?  @db.Uuid
   promotionDate    DateTime @db.Date
   remarks          String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   student        Student           @relation(fields: [studentId], references: [id], onDelete: Restrict)
   fromEnrollment StudentEnrollment @relation("PromotionFrom", fields: [fromEnrollmentId], references: [id], onDelete: Restrict)
   toEnrollment   StudentEnrollment @relation("PromotionTo", fields: [toEnrollmentId], references: [id], onDelete: Restrict)
+  resultSummary  ResultSummary?    @relation(fields: [resultSummaryId], references: [id], onDelete: SetNull)
 
   @@unique([fromEnrollmentId])
   @@unique([toEnrollmentId])
+  @@index([studentId, promotionDate])
 }
 
 model Parent {
