@@ -153,6 +153,14 @@ export class CreateStudentDto {
   @IsUUID()
   groupId?: string;
 
+  @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440004',
+    description: 'Optional 4th Subject UUID (for Class 9 and 10)',
+  })
+  @IsOptional()
+  @IsUUID()
+  optionalSubjectId?: string;
+
   @ApiProperty({
     example: 1,
     description: 'Roll number in the class and section',

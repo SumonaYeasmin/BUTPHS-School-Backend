@@ -5105,8 +5105,11 @@ export const ParentScalarFieldEnum = {
   name: 'name',
   phone: 'phone',
   email: 'email',
+  nid: 'nid',
   occupation: 'occupation',
-  address: 'address'
+  address: 'address',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ParentScalarFieldEnum = (typeof ParentScalarFieldEnum)[keyof typeof ParentScalarFieldEnum]
@@ -5117,7 +5120,8 @@ export const ParentStudentScalarFieldEnum = {
   parentId: 'parentId',
   studentId: 'studentId',
   relationship: 'relationship',
-  isPrimary: 'isPrimary'
+  isPrimary: 'isPrimary',
+  createdAt: 'createdAt'
 } as const
 
 export type ParentStudentScalarFieldEnum = (typeof ParentStudentScalarFieldEnum)[keyof typeof ParentStudentScalarFieldEnum]

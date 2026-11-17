@@ -35,7 +35,7 @@ export class BookController {
   @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Add a new prescribed book for a class & subject (Admin only)',
+    summary: 'Add a new book for a specific class and subject. (Admin only)',
     description:
       'Creates a textbook, supplementary reader, or grammar book for a specific class and subject.',
   })
@@ -54,7 +54,7 @@ export class BookController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get all prescribed books (filterable by class, subject, type, search)',
+    summary: 'Get all books with class, subject, type and search filters.',
     description:
       'Returns a list of books sorted by class numeric value and display order.',
   })
@@ -66,7 +66,7 @@ export class BookController {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get book details by ID' })
+  @ApiOperation({ summary: 'Get details of a specific book.' })
   @ApiParam({ name: 'id', description: 'Book UUID' })
   @ApiResponse({ status: 200, description: 'Book details retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Book not found' })
@@ -79,7 +79,7 @@ export class BookController {
   @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Update book details (Admin only)',
+    summary: 'Update book information. (Admin only)',
     description: 'Update book name, code, type, display order, or active status.',
   })
   @ApiParam({ name: 'id', description: 'Book UUID' })
@@ -98,7 +98,9 @@ export class BookController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete a prescribed book by ID (Admin only)' })
+  @ApiOperation({
+    summary: 'Remove a book from the prescribed book list. (Admin only)',
+  })
   @ApiParam({ name: 'id', description: 'Book UUID' })
   @ApiResponse({ status: 200, description: 'Book deleted successfully' })
   @ApiResponse({ status: 404, description: 'Book not found' })

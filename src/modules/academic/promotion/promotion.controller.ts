@@ -35,7 +35,7 @@ export class PromotionController {
   @ApiBearerAuth()
   @ApiOperation({
     summary:
-      'Preview student promotion or graduation eligibility and suggested roll numbers',
+      "Preview students' promotion eligibility based on published annual exam results.",
     description:
       'Fetches all active students in a given class and optional section, integrates their published annual examination results, and provides suggested promotions, rolls, repeater flags, or graduation status for Class 10.',
   })
@@ -55,19 +55,19 @@ export class PromotionController {
     return this.promotionService.previewPromotion(dto);
   }
 
-  @Post('bulk')
+  @Post('execute')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({
     summary:
-      'Execute bulk promotion or graduation for an entire section (Admin only)',
+      'Promote all eligible students in a selected class or section based on published results. (Admin only)',
     description:
-      'Unified execution endpoint: If Source Class is Terminal (Class 10), marks enrollments as COMPLETED and students as GRADUATED. If Source Class is Class 6-9, promotes passed students to the target class with sequential merit rolls and re-enrolls failed students as repeaters.',
+      'Promote all eligible students in a selected class or section based on published results (or complete graduation for Class 10 terminal students).',
   })
   @ApiResponse({
     status: 201,
-    description: 'Bulk promotion or graduation processed successfully',
+    description: 'Promotion/Graduation executed successfully',
   })
   @ApiResponse({
     status: 400,
@@ -83,7 +83,7 @@ export class PromotionController {
     description:
       'Conflict detected (students already enrolled in target year, already promoted, or target roll collision)',
   })
-  async promoteBulk(@Body() dto: BulkPromotionDto) {
+  async executePromotion(@Body() dto: BulkPromotionDto) {
     return this.promotionService.promoteBulkStudents(dto);
   }
 
@@ -92,7 +92,8 @@ export class PromotionController {
   @Roles('ADMIN', 'TEACHER')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get paginated promotion records with filters (Admin & Teacher)',
+    summary:
+      'Get the list of previous student promotions with filters and pagination.',
     description:
       'Filter promotions by source/target academic year, source/target class, section, and search by student name or student ID.',
   })
@@ -109,7 +110,7 @@ export class PromotionController {
   @Roles('ADMIN', 'TEACHER')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get full academic progression journey of a single student',
+    summary: "Get a student's complete promotion and academic history.",
     description:
       'Returns the chronological timeline of all promotions, previous vs new classes/sections/rolls, and annual exam results for a specific student.',
   })

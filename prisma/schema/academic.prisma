@@ -218,17 +218,23 @@ model StudentPromotion {
 }
 
 model Parent {
-  id         String  @id @default(uuid()) @db.Uuid
-  userId     String? @unique @db.Uuid
-  name       String  @db.VarChar(150)
-  phone      String  @db.VarChar(20)
-  email      String? @db.VarChar(150)
-  occupation String? @db.VarChar(100)
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String?  @unique @db.Uuid
+  name       String   @db.VarChar(150)
+  phone      String   @db.VarChar(20)
+  email      String?  @db.VarChar(150)
+  nid        String?  @db.VarChar(20)
+  occupation String?  @db.VarChar(100)
   address    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   user     User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
   students ParentStudent[]
   smsLogs  AttendanceSmsLog[]
+
+  @@index([phone])
+  @@index([name])
 }
 
 model ParentStudent {
@@ -237,6 +243,7 @@ model ParentStudent {
   studentId    String           @db.Uuid
   relationship RelationshipType
   isPrimary    Boolean          @default(false)
+  createdAt    DateTime         @default(now())
 
   parent  Parent  @relation(fields: [parentId], references: [id], onDelete: Cascade)
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)

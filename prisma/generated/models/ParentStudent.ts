@@ -30,6 +30,7 @@ export type ParentStudentMinAggregateOutputType = {
   studentId: string | null
   relationship: $Enums.RelationshipType | null
   isPrimary: boolean | null
+  createdAt: Date | null
 }
 
 export type ParentStudentMaxAggregateOutputType = {
@@ -38,6 +39,7 @@ export type ParentStudentMaxAggregateOutputType = {
   studentId: string | null
   relationship: $Enums.RelationshipType | null
   isPrimary: boolean | null
+  createdAt: Date | null
 }
 
 export type ParentStudentCountAggregateOutputType = {
@@ -46,6 +48,7 @@ export type ParentStudentCountAggregateOutputType = {
   studentId: number
   relationship: number
   isPrimary: number
+  createdAt: number
   _all: number
 }
 
@@ -56,6 +59,7 @@ export type ParentStudentMinAggregateInputType = {
   studentId?: true
   relationship?: true
   isPrimary?: true
+  createdAt?: true
 }
 
 export type ParentStudentMaxAggregateInputType = {
@@ -64,6 +68,7 @@ export type ParentStudentMaxAggregateInputType = {
   studentId?: true
   relationship?: true
   isPrimary?: true
+  createdAt?: true
 }
 
 export type ParentStudentCountAggregateInputType = {
@@ -72,6 +77,7 @@ export type ParentStudentCountAggregateInputType = {
   studentId?: true
   relationship?: true
   isPrimary?: true
+  createdAt?: true
   _all?: true
 }
 
@@ -153,6 +159,7 @@ export type ParentStudentGroupByOutputType = {
   studentId: string
   relationship: $Enums.RelationshipType
   isPrimary: boolean
+  createdAt: Date
   _count: ParentStudentCountAggregateOutputType | null
   _min: ParentStudentMinAggregateOutputType | null
   _max: ParentStudentMaxAggregateOutputType | null
@@ -182,6 +189,7 @@ export type ParentStudentWhereInput = {
   studentId?: Prisma.UuidFilter<"ParentStudent"> | string
   relationship?: Prisma.EnumRelationshipTypeFilter<"ParentStudent"> | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFilter<"ParentStudent"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"ParentStudent"> | Date | string
   parent?: Prisma.XOR<Prisma.ParentScalarRelationFilter, Prisma.ParentWhereInput>
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
 }
@@ -192,6 +200,7 @@ export type ParentStudentOrderByWithRelationInput = {
   studentId?: Prisma.SortOrder
   relationship?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   parent?: Prisma.ParentOrderByWithRelationInput
   student?: Prisma.StudentOrderByWithRelationInput
 }
@@ -206,6 +215,7 @@ export type ParentStudentWhereUniqueInput = Prisma.AtLeast<{
   studentId?: Prisma.UuidFilter<"ParentStudent"> | string
   relationship?: Prisma.EnumRelationshipTypeFilter<"ParentStudent"> | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFilter<"ParentStudent"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"ParentStudent"> | Date | string
   parent?: Prisma.XOR<Prisma.ParentScalarRelationFilter, Prisma.ParentWhereInput>
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
 }, "id" | "parentId_studentId">
@@ -216,6 +226,7 @@ export type ParentStudentOrderByWithAggregationInput = {
   studentId?: Prisma.SortOrder
   relationship?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   _count?: Prisma.ParentStudentCountOrderByAggregateInput
   _max?: Prisma.ParentStudentMaxOrderByAggregateInput
   _min?: Prisma.ParentStudentMinOrderByAggregateInput
@@ -230,12 +241,14 @@ export type ParentStudentScalarWhereWithAggregatesInput = {
   studentId?: Prisma.UuidWithAggregatesFilter<"ParentStudent"> | string
   relationship?: Prisma.EnumRelationshipTypeWithAggregatesFilter<"ParentStudent"> | $Enums.RelationshipType
   isPrimary?: Prisma.BoolWithAggregatesFilter<"ParentStudent"> | boolean
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"ParentStudent"> | Date | string
 }
 
 export type ParentStudentCreateInput = {
   id?: string
   relationship: $Enums.RelationshipType
   isPrimary?: boolean
+  createdAt?: Date | string
   parent: Prisma.ParentCreateNestedOneWithoutStudentsInput
   student: Prisma.StudentCreateNestedOneWithoutParentsInput
 }
@@ -246,12 +259,14 @@ export type ParentStudentUncheckedCreateInput = {
   studentId: string
   relationship: $Enums.RelationshipType
   isPrimary?: boolean
+  createdAt?: Date | string
 }
 
 export type ParentStudentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parent?: Prisma.ParentUpdateOneRequiredWithoutStudentsNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutParentsNestedInput
 }
@@ -262,6 +277,7 @@ export type ParentStudentUncheckedUpdateInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ParentStudentCreateManyInput = {
@@ -270,12 +286,14 @@ export type ParentStudentCreateManyInput = {
   studentId: string
   relationship: $Enums.RelationshipType
   isPrimary?: boolean
+  createdAt?: Date | string
 }
 
 export type ParentStudentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ParentStudentUncheckedUpdateManyInput = {
@@ -284,6 +302,7 @@ export type ParentStudentUncheckedUpdateManyInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ParentStudentListRelationFilter = {
@@ -307,6 +326,7 @@ export type ParentStudentCountOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   relationship?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type ParentStudentMaxOrderByAggregateInput = {
@@ -315,6 +335,7 @@ export type ParentStudentMaxOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   relationship?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type ParentStudentMinOrderByAggregateInput = {
@@ -323,6 +344,7 @@ export type ParentStudentMinOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   relationship?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type ParentStudentCreateNestedManyWithoutStudentInput = {
@@ -417,6 +439,7 @@ export type ParentStudentCreateWithoutStudentInput = {
   id?: string
   relationship: $Enums.RelationshipType
   isPrimary?: boolean
+  createdAt?: Date | string
   parent: Prisma.ParentCreateNestedOneWithoutStudentsInput
 }
 
@@ -425,6 +448,7 @@ export type ParentStudentUncheckedCreateWithoutStudentInput = {
   parentId: string
   relationship: $Enums.RelationshipType
   isPrimary?: boolean
+  createdAt?: Date | string
 }
 
 export type ParentStudentCreateOrConnectWithoutStudentInput = {
@@ -462,12 +486,14 @@ export type ParentStudentScalarWhereInput = {
   studentId?: Prisma.UuidFilter<"ParentStudent"> | string
   relationship?: Prisma.EnumRelationshipTypeFilter<"ParentStudent"> | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFilter<"ParentStudent"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"ParentStudent"> | Date | string
 }
 
 export type ParentStudentCreateWithoutParentInput = {
   id?: string
   relationship: $Enums.RelationshipType
   isPrimary?: boolean
+  createdAt?: Date | string
   student: Prisma.StudentCreateNestedOneWithoutParentsInput
 }
 
@@ -476,6 +502,7 @@ export type ParentStudentUncheckedCreateWithoutParentInput = {
   studentId: string
   relationship: $Enums.RelationshipType
   isPrimary?: boolean
+  createdAt?: Date | string
 }
 
 export type ParentStudentCreateOrConnectWithoutParentInput = {
@@ -509,12 +536,14 @@ export type ParentStudentCreateManyStudentInput = {
   parentId: string
   relationship: $Enums.RelationshipType
   isPrimary?: boolean
+  createdAt?: Date | string
 }
 
 export type ParentStudentUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parent?: Prisma.ParentUpdateOneRequiredWithoutStudentsNestedInput
 }
 
@@ -523,6 +552,7 @@ export type ParentStudentUncheckedUpdateWithoutStudentInput = {
   parentId?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ParentStudentUncheckedUpdateManyWithoutStudentInput = {
@@ -530,6 +560,7 @@ export type ParentStudentUncheckedUpdateManyWithoutStudentInput = {
   parentId?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ParentStudentCreateManyParentInput = {
@@ -537,12 +568,14 @@ export type ParentStudentCreateManyParentInput = {
   studentId: string
   relationship: $Enums.RelationshipType
   isPrimary?: boolean
+  createdAt?: Date | string
 }
 
 export type ParentStudentUpdateWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.StudentUpdateOneRequiredWithoutParentsNestedInput
 }
 
@@ -551,6 +584,7 @@ export type ParentStudentUncheckedUpdateWithoutParentInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ParentStudentUncheckedUpdateManyWithoutParentInput = {
@@ -558,6 +592,7 @@ export type ParentStudentUncheckedUpdateManyWithoutParentInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   relationship?: Prisma.EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -568,6 +603,7 @@ export type ParentStudentSelect<ExtArgs extends runtime.Types.Extensions.Interna
   studentId?: boolean
   relationship?: boolean
   isPrimary?: boolean
+  createdAt?: boolean
   parent?: boolean | Prisma.ParentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["parentStudent"]>
@@ -578,6 +614,7 @@ export type ParentStudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   studentId?: boolean
   relationship?: boolean
   isPrimary?: boolean
+  createdAt?: boolean
   parent?: boolean | Prisma.ParentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["parentStudent"]>
@@ -588,6 +625,7 @@ export type ParentStudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   studentId?: boolean
   relationship?: boolean
   isPrimary?: boolean
+  createdAt?: boolean
   parent?: boolean | Prisma.ParentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["parentStudent"]>
@@ -598,9 +636,10 @@ export type ParentStudentSelectScalar = {
   studentId?: boolean
   relationship?: boolean
   isPrimary?: boolean
+  createdAt?: boolean
 }
 
-export type ParentStudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "parentId" | "studentId" | "relationship" | "isPrimary", ExtArgs["result"]["parentStudent"]>
+export type ParentStudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "parentId" | "studentId" | "relationship" | "isPrimary" | "createdAt", ExtArgs["result"]["parentStudent"]>
 export type ParentStudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.ParentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
@@ -626,6 +665,7 @@ export type $ParentStudentPayload<ExtArgs extends runtime.Types.Extensions.Inter
     studentId: string
     relationship: $Enums.RelationshipType
     isPrimary: boolean
+    createdAt: Date
   }, ExtArgs["result"]["parentStudent"]>
   composites: {}
 }
@@ -1056,6 +1096,7 @@ export interface ParentStudentFieldRefs {
   readonly studentId: Prisma.FieldRef<"ParentStudent", 'String'>
   readonly relationship: Prisma.FieldRef<"ParentStudent", 'RelationshipType'>
   readonly isPrimary: Prisma.FieldRef<"ParentStudent", 'Boolean'>
+  readonly createdAt: Prisma.FieldRef<"ParentStudent", 'DateTime'>
 }
     
 

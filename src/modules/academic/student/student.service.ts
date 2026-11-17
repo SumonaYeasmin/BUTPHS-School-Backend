@@ -169,6 +169,7 @@ export class StudentService {
           classId: dto.classId,
           sectionId: dto.sectionId,
           groupId: dto.groupId || null,
+          optionalSubjectId: dto.optionalSubjectId || null,
           roll: dto.roll,
           enrollmentDate: admissionDate,
           status: 'ACTIVE',
@@ -180,6 +181,7 @@ export class StudentService {
           },
           section: { select: { id: true, name: true } },
           group: { select: { id: true, name: true } },
+          optionalSubject: { select: { id: true, name: true, officialCode: true } },
         },
       });
 
@@ -439,6 +441,25 @@ export class StudentService {
           enrollmentUpdateData.group = { connect: { id: dto.groupId } };
         } else {
           enrollmentUpdateData.group = { disconnect: true };
+        }
+      }
+
+      if (
+        dto.optionalSubjectId !== undefined &&
+        dto.optionalSubjectId !== currentEnrollment.optionalSubjectId
+      ) {
+        if (dto.optionalSubjectId) {
+          const optSubject = await this.prisma.subject.findUnique({
+            where: { id: dto.optionalSubjectId },
+          });
+          if (!optSubject) {
+            throw new NotFoundException('Optional Subject');
+          }
+          enrollmentUpdateData.optionalSubject = {
+            connect: { id: dto.optionalSubjectId },
+          };
+        } else {
+          enrollmentUpdateData.optionalSubject = { disconnect: true };
         }
       }
 
