@@ -68,10 +68,11 @@ model Subject {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 
-  books            Book[]
-  classSubjects    ClassSubject[]
-  examSubjects     ExamSubject[]
-  digitalResources DigitalResource[]
+  books               Book[]
+  classSubjects       ClassSubject[]
+  examSubjects        ExamSubject[]
+  digitalResources    DigitalResource[]
+  optionalEnrollments StudentEnrollment[] @relation("StudentOptionalSubject")
 
   @@index([isActive, displayOrder])
   @@index([category])
@@ -161,21 +162,26 @@ model StudentRFIDcard {
 }
 
 model StudentEnrollment {
-  id             String           @id @default(uuid()) @db.Uuid
-  studentId      String           @db.Uuid
-  academicYearId String           @db.Uuid
-  classId        String           @db.Uuid
-  sectionId      String           @db.Uuid
-  groupId        String?          @db.Uuid
-  roll           Int
-  enrollmentDate DateTime         @db.Date
-  status         EnrollmentStatus @default(ACTIVE)
+  id                String           @id @default(uuid()) @db.Uuid
+  studentId         String           @db.Uuid
+  academicYearId    String           @db.Uuid
+  classId           String           @db.Uuid
+  sectionId         String           @db.Uuid
+  groupId           String?          @db.Uuid
+  optionalSubjectId String?          @db.Uuid
+  roll              Int
+  enrollmentDate    DateTime         @db.Date
+  isRepeater        Boolean          @default(false)
+  status            EnrollmentStatus @default(ACTIVE)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 
   student         Student                @relation(fields: [studentId], references: [id], onDelete: Restrict)
   academicYear    AcademicYear           @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
   schoolClass     SchoolClass            @relation(fields: [classId], references: [id], onDelete: Restrict)
   section         Section                @relation(fields: [sectionId, classId], references: [id, classId], onDelete: Restrict)
   group           AcademicGroup?         @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  optionalSubject Subject?               @relation("StudentOptionalSubject", fields: [optionalSubjectId], references: [id], onDelete: SetNull)
   promotionsFrom  StudentPromotion[]     @relation("PromotionFrom")
   promotionsTo    StudentPromotion[]     @relation("PromotionTo")
   attendances     Attendance[]
@@ -187,6 +193,7 @@ model StudentEnrollment {
   @@unique([academicYearId, classId, sectionId, roll])
   @@unique([id, studentId])
   @@index([classId, sectionId, academicYearId])
+  @@index([academicYearId, status])
 }
 
 model StudentPromotion {

@@ -5072,9 +5072,13 @@ export const StudentEnrollmentScalarFieldEnum = {
   classId: 'classId',
   sectionId: 'sectionId',
   groupId: 'groupId',
+  optionalSubjectId: 'optionalSubjectId',
   roll: 'roll',
   enrollmentDate: 'enrollmentDate',
-  status: 'status'
+  isRepeater: 'isRepeater',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type StudentEnrollmentScalarFieldEnum = (typeof StudentEnrollmentScalarFieldEnum)[keyof typeof StudentEnrollmentScalarFieldEnum]
