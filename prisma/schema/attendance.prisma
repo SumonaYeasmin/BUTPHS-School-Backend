@@ -19,6 +19,7 @@ model Attendance {
 
   @@unique([studentEnrollmentId, date])
   @@index([date, status])
+  @@index([date, studentEnrollmentId])
 }
 
 model AttendanceSmsLog {

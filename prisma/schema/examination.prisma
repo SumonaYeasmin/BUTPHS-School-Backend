@@ -84,6 +84,7 @@ model ExamSubject {
   hasContinuousAssessment       Boolean  @default(false)
   continuousAssessmentFullMarks Decimal? @db.Decimal(7, 2)
   continuousAssessmentPassMarks Decimal? @db.Decimal(7, 2)
+  isOptional                    Boolean  @default(false) /// ঐচ্ছিক / ৪র্থ বিষয় হিসেবে নেওয়া সম্ভব কিনা
 
   exam           Exam                   @relation(fields: [examId], references: [id], onDelete: Cascade)
   subject        Subject                @relation(fields: [subjectId], references: [id], onDelete: Restrict)
@@ -144,7 +145,7 @@ model Mark {
   creator     User              @relation("MarksEnteredBy", fields: [enteredBy], references: [id], onDelete: Restrict)
 
   @@unique([studentEnrollmentId, examSubjectId])
-  @@index([examSubjectId])
+  @@index([examSubjectId, studentEnrollmentId])
 }
 
 model StudentSubjectResult {
@@ -156,6 +157,8 @@ model StudentSubjectResult {
   letterGrade         String?  @db.VarChar(5) /// লেটার গ্রেড (A+, A, B ইত্যাদি)
   gradePoint          Decimal? @db.Decimal(3, 2) /// গ্রেড পয়েন্ট (৫.০০, ৪.০০ ইত্যাদি)
   isPassed            Boolean /// এই বিষয়ে পাস করেছে কিনা
+  isOptional          Boolean  @default(false) /// এই শিক্ষার্থীর জন্য এটি ৪র্থ/ঐচ্ছিক বিষয় ছিল কিনা
+  bonusGradePoint     Decimal? @default(0) @db.Decimal(3, 2) /// ৪র্থ বিষয়ের অতিরিক্ত পয়েন্ট যা মূল জিপিএ-তে যুক্ত হয়েছে (পয়েন্ট - ২.০০)
   isAbsent            Boolean  @default(false)
   calculatedAt        DateTime @default(now())
 
@@ -173,7 +176,8 @@ model ResultSummary {
   examId               String       @db.Uuid
   totalFullMarks       Decimal      @db.Decimal(9, 2) /// সব বিষয়ের সর্বমোট পূর্ণমান (যেমন: ৯০০ বা ১০০০)
   totalMarks           Decimal      @db.Decimal(9, 2) /// সব বিষয় মিলিয়ে মোট প্রাপ্ত নম্বর (যেমন: ৭২০)
-  gpa                  Decimal?     @db.Decimal(3, 2) /// অর্জিত মোট জিপিএ (GPA)
+  gpa                  Decimal?     @db.Decimal(3, 2) /// অর্জিত মোট জিপিএ (GPA - ৪র্থ বিষয় সহ)
+  gpaWithoutOptional   Decimal?     @db.Decimal(3, 2) /// ৪র্থ বিষয় ছাড়া জিপিএ (GPA without 4th subject)
   letterGrade          String?      @db.VarChar(5) /// সামগ্রিক গ্রেড (A+, A, F ইত্যাদি)
   meritPosition        Int? /// পুরো ক্লাসের মেধা স্থান (১ম, ২য়, ৩য় ইত্যাদি)
   sectionMeritPosition Int? /// নিজ সেকশনের মেধা স্থান
