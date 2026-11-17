@@ -208,8 +208,8 @@ model StudentPromotion {
   updatedAt        DateTime @updatedAt
 
   student        Student           @relation(fields: [studentId], references: [id], onDelete: Restrict)
-  fromEnrollment StudentEnrollment @relation("PromotionFrom", fields: [fromEnrollmentId], references: [id], onDelete: Restrict)
-  toEnrollment   StudentEnrollment @relation("PromotionTo", fields: [toEnrollmentId], references: [id], onDelete: Restrict)
+  fromEnrollment StudentEnrollment @relation("PromotionFrom", fields: [fromEnrollmentId, studentId], references: [id, studentId], onDelete: Restrict)
+  toEnrollment   StudentEnrollment @relation("PromotionTo", fields: [toEnrollmentId, studentId], references: [id, studentId], onDelete: Restrict)
   resultSummary  ResultSummary?    @relation(fields: [resultSummaryId], references: [id], onDelete: SetNull)
 
   @@unique([fromEnrollmentId])
