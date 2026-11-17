@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsDateString,
   IsEnum,
   IsInt,
@@ -10,8 +11,10 @@ import {
   IsUUID,
   MaxLength,
   Min,
+  ValidateNested,
 } from 'class-validator';
 import { Gender } from '../../../../../prisma/generated/client';
+import { AssignParentDto } from './assign-parent.dto';
 
 export class CreateStudentDto {
   // --- Personal Info ---
@@ -170,4 +173,16 @@ export class CreateStudentDto {
   @Min(1)
   @IsNotEmpty()
   roll: number;
+
+  // --- Optional Parents/Guardians linked or created during admission ---
+  @ApiPropertyOptional({
+    type: [AssignParentDto],
+    description:
+      'Optional list of parents/guardians to create or link to this student during admission (Atomic Transaction)',
+  })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => AssignParentDto)
+  parents?: AssignParentDto[];
 }

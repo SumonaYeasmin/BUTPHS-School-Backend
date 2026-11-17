@@ -74,11 +74,11 @@ export class ParentService {
   }
 
   /**
-   * Live lookup parent by phone or NID with their linked enrolled children (for live admission suggestions)
+   * Check if parent already exists by phone or NID with their linked enrolled children (for live admission suggestions)
    */
-  async lookup(phone?: string, nid?: string) {
+  async checkExisting(phone?: string, nid?: string) {
     if (!phone?.trim() && !nid?.trim()) {
-      throw new BadRequestException('Either phone or nid must be provided for lookup');
+      throw new BadRequestException('Either phone or nid must be provided to check existing parent');
     }
 
     const where: Prisma.ParentWhereInput = {};
@@ -253,6 +253,37 @@ export class ParentService {
     return ResponseHelper.success(
       updated,
       `Parent '${updated.name}' updated successfully`,
+    );
+  }
+
+  /**
+   * Delete a parent profile from directory (only allowed if 0 linked children)
+   */
+  async remove(id: string) {
+    const parent = await this.prisma.parent.findUnique({
+      where: { id },
+      include: {
+        _count: { select: { students: true } },
+      },
+    });
+
+    if (!parent) {
+      throw new NotFoundException(`Parent with ID '${id}' not found`);
+    }
+
+    if (parent._count.students > 0) {
+      throw new BadRequestException(
+        `Cannot delete parent '${parent.name}'. This parent is linked to ${parent._count.students} student(s). Unlink all students before deleting.`,
+      );
+    }
+
+    await this.prisma.parent.delete({
+      where: { id },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Parent profile '${parent.name}' deleted successfully`,
     );
   }
 }

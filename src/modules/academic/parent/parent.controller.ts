@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -28,22 +29,22 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 export class ParentController {
   constructor(private readonly parentService: ParentService) {}
 
-  @Get('lookup')
+  @Get('check-existing')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Live lookup parent by phone or NID (for instant suggestion during admission)',
+    summary: 'Check if parent already exists by phone or NID (for instant suggestion during admission)',
     description:
       'Checks if a parent already exists by phone or NID, and returns their profile with existing enrolled children for 1-click sibling linking.',
   })
   @ApiQuery({ name: 'phone', required: false, description: 'Parent phone number' })
   @ApiQuery({ name: 'nid', required: false, description: 'Parent National ID' })
-  @ApiResponse({ status: 200, description: 'Lookup result returned' })
-  async lookup(
+  @ApiResponse({ status: 200, description: 'Check existing parent result returned' })
+  async checkExisting(
     @Query('phone') phone?: string,
     @Query('nid') nid?: string,
   ) {
-    return this.parentService.lookup(phone, nid);
+    return this.parentService.checkExisting(phone, nid);
   }
 
   @Get()
@@ -90,5 +91,25 @@ export class ParentController {
     @Body() dto: UpdateParentDto,
   ) {
     return this.parentService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete a parent profile (Admin only)',
+    description:
+      'Permanently deletes a parent from directory. Only allowed if the parent currently has 0 linked students.',
+  })
+  @ApiParam({ name: 'id', description: 'Parent UUID' })
+  @ApiResponse({ status: 200, description: 'Parent deleted successfully' })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot delete parent with linked students',
+  })
+  @ApiResponse({ status: 404, description: 'Parent not found' })
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.parentService.remove(id);
   }
 }
