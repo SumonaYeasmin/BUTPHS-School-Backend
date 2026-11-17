@@ -4,6 +4,7 @@ import { PreviewPromotionDto } from './dto/preview-promotion.dto';
 import { BulkPromotionDto } from './dto/bulk-promotion.dto';
 import { QueryPromotionDto } from './dto/query-promotion.dto';
 import { GraduateBatchDto } from './dto/graduate-batch.dto';
+import { RollbackBatchDto } from './dto/rollback-promotion.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import { Prisma } from '../../../../prisma/generated/client';
 import {
@@ -1129,6 +1130,154 @@ export class PromotionService {
     return ResponseHelper.success(
       responseData,
       `Successfully graduated ${activeEnrollments.length} student(s) from ${schoolClass.name}`,
+    );
+  }
+
+  /**
+   * Rollback / undo a batch promotion atomically.
+   *
+   * Safety rules:
+   * - Ensures none of the target enrollments have attendance, marks, result summaries, or subsequent promotions.
+   * - Deletes the StudentPromotion audit records.
+   * - Deletes the target StudentEnrollment records.
+   * - Reactivates the source StudentEnrollment records back to ACTIVE status.
+   */
+  async rollbackBatch(dto: RollbackBatchDto) {
+    // 1. Find matching promotion records
+    const whereClause: Prisma.StudentPromotionWhereInput = {
+      fromEnrollment: {
+        academicYearId: dto.sourceAcademicYearId,
+        classId: dto.sourceClassId,
+        sectionId: dto.sourceSectionId,
+      },
+      toEnrollment: {
+        academicYearId: dto.targetAcademicYearId,
+      },
+    };
+
+    if (dto.promotionIds && dto.promotionIds.length > 0) {
+      whereClause.id = { in: dto.promotionIds };
+    }
+
+    const promotions = await this.prisma.studentPromotion.findMany({
+      where: whereClause,
+      include: {
+        student: {
+          select: {
+            id: true,
+            studentId: true,
+            name: true,
+          },
+        },
+        fromEnrollment: {
+          include: {
+            schoolClass: { select: { name: true } },
+            section: { select: { name: true } },
+          },
+        },
+        toEnrollment: {
+          include: {
+            schoolClass: { select: { name: true } },
+            section: { select: { name: true } },
+            _count: {
+              select: {
+                attendances: true,
+                marks: true,
+                resultSummaries: true,
+                promotionsFrom: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (promotions.length === 0) {
+      throw new NotFoundException(
+        'No matching promotion records found to rollback for the specified criteria.',
+      );
+    }
+
+    // 2. Safety Pre-check: Ensure no academic activity exists in target enrollments
+    const conflictReasons: string[] = [];
+
+    for (const p of promotions) {
+      const counts = p.toEnrollment._count;
+      if (counts.attendances > 0) {
+        conflictReasons.push(
+          `Student '${p.student.name}' already has ${counts.attendances} attendance record(s) in target class '${p.toEnrollment.schoolClass.name}'`,
+        );
+      }
+      if (counts.marks > 0) {
+        conflictReasons.push(
+          `Student '${p.student.name}' already has marks entered in target class '${p.toEnrollment.schoolClass.name}'`,
+        );
+      }
+      if (counts.resultSummaries > 0) {
+        conflictReasons.push(
+          `Student '${p.student.name}' already has exam result summaries in target class '${p.toEnrollment.schoolClass.name}'`,
+        );
+      }
+      if (counts.promotionsFrom > 0) {
+        conflictReasons.push(
+          `Student '${p.student.name}' has already been further promoted from target class '${p.toEnrollment.schoolClass.name}'`,
+        );
+      }
+    }
+
+    if (conflictReasons.length > 0) {
+      throw new BadRequestException(
+        `Cannot rollback promotion due to existing academic activity in the target class: ${conflictReasons.join(
+          '; ',
+        )}`,
+      );
+    }
+
+    // 3. Extract IDs for atomic deletion and reactivation
+    const promotionIdsToDelete = promotions.map((p) => p.id);
+    const toEnrollmentIdsToDelete = promotions.map((p) => p.toEnrollmentId);
+    const fromEnrollmentIdsToReactivate = promotions.map(
+      (p) => p.fromEnrollmentId,
+    );
+
+    // 4. Execute Atomic Database Transaction
+    await this.prisma.$transaction(async (tx) => {
+      // a. Delete StudentPromotion records first (due to FK restrict constraint)
+      await tx.studentPromotion.deleteMany({
+        where: { id: { in: promotionIdsToDelete } },
+      });
+
+      // b. Delete target StudentEnrollment records
+      await tx.studentEnrollment.deleteMany({
+        where: { id: { in: toEnrollmentIdsToDelete } },
+      });
+
+      // c. Reactivate source StudentEnrollment records back to ACTIVE
+      await tx.studentEnrollment.updateMany({
+        where: { id: { in: fromEnrollmentIdsToReactivate } },
+        data: { status: 'ACTIVE' },
+      });
+    });
+
+    const rolledBackStudents = promotions.map((p) => ({
+      studentId: p.student.id,
+      studentCustomId: p.student.studentId,
+      name: p.student.name,
+      restoredClass: p.fromEnrollment.schoolClass.name,
+      restoredSection: p.fromEnrollment.section.name,
+      restoredRoll: p.fromEnrollment.roll,
+      restoredStatus: 'ACTIVE',
+    }));
+
+    const responseData = {
+      totalRolledBack: promotions.length,
+      reason: dto.reason || 'Promotion rollback executed by administrator',
+      students: rolledBackStudents,
+    };
+
+    return ResponseHelper.success(
+      responseData,
+      `Successfully rolled back promotion for ${promotions.length} student(s). Source enrollments have been restored to ACTIVE status.`,
     );
   }
 }

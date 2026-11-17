@@ -20,6 +20,7 @@ import { PreviewPromotionDto } from './dto/preview-promotion.dto';
 import { BulkPromotionDto } from './dto/bulk-promotion.dto';
 import { QueryPromotionDto } from './dto/query-promotion.dto';
 import { GraduateBatchDto } from './dto/graduate-batch.dto';
+import { RollbackBatchDto } from './dto/rollback-promotion.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -146,5 +147,31 @@ export class PromotionController {
   })
   async graduateBatch(@Body() dto: GraduateBatchDto) {
     return this.promotionService.graduateBatch(dto);
+  }
+
+  @Post('rollback-batch')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Rollback / undo a batch promotion (Admin only)',
+    description:
+      'Reverts a batch promotion if no academic activity (attendance, marks, results) has taken place in the target class: deletes new enrollments, deletes promotion records, and restores source enrollments back to ACTIVE status.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Promotion rollback executed successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Rollback blocked because students already have attendance or marks in target class',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No matching promotion records found',
+  })
+  async rollbackBatch(@Body() dto: RollbackBatchDto) {
+    return this.promotionService.rollbackBatch(dto);
   }
 }
