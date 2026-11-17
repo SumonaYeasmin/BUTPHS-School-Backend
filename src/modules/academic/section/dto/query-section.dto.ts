@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsUUID } from 'class-validator';
+import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class QuerySectionDto {
   @ApiPropertyOptional({
@@ -9,4 +10,13 @@ export class QuerySectionDto {
   @IsOptional()
   @IsUUID()
   classId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter sections by active status (true/false)',
+    example: true,
+  })
+  @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  isActive?: boolean;
 }

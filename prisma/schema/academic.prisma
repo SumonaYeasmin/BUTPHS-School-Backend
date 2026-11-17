@@ -33,6 +33,9 @@ model SchoolClass {
   id                    String                 @id @default(uuid()) @db.Uuid
   name                  String                 @unique @db.VarChar(50)
   numericValue          Int                    @unique
+  isActive              Boolean                @default(true)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
   sections              Section[]
   classSubjects         ClassSubject[]
   enrollments           StudentEnrollment[]
@@ -41,12 +44,18 @@ model SchoolClass {
   digitalResources      DigitalResource[]
   admissionApplications AdmissionApplication[]
   books                 Book[]
+
+  @@index([isActive])
+  @@index([numericValue])
 }
 
 model Section {
   id                 String              @id @default(uuid()) @db.Uuid
   classId            String              @db.Uuid
   name               String              @db.VarChar(50)
+  isActive           Boolean             @default(true)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
   schoolClass        SchoolClass         @relation(fields: [classId], references: [id], onDelete: Restrict)
   enrollments        StudentEnrollment[]
   teacherAssignments TeacherAssignment[]
@@ -55,7 +64,7 @@ model Section {
 
   @@unique([classId, name])
   @@unique([id, classId])
-  @@index([classId])
+  @@index([classId, isActive])
 }
 
 model Subject {
