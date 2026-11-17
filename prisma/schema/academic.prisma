@@ -16,6 +16,8 @@ model AcademicYear {
   classRoutines      ClassRoutine[]
   exams              Exam[]
   digitalResources   DigitalResource[]
+
+  @@index([isActive])
 }
 
 model AcademicGroup {
