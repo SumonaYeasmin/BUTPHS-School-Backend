@@ -19,6 +19,7 @@ import { PromotionService } from './promotion.service';
 import { PreviewPromotionDto } from './dto/preview-promotion.dto';
 import { BulkPromotionDto } from './dto/bulk-promotion.dto';
 import { QueryPromotionDto } from './dto/query-promotion.dto';
+import { GraduateBatchDto } from './dto/graduate-batch.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -119,5 +120,31 @@ export class PromotionController {
   @ApiResponse({ status: 404, description: 'Student not found' })
   async getStudentHistory(@Param('studentId', ParseUUIDPipe) studentId: string) {
     return this.promotionService.getStudentPromotionHistory(studentId);
+  }
+
+  @Post('graduate-batch')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Graduate / complete an entire Class 10 batch (Admin only)',
+    description:
+      'Marks active Class 10 enrollments as COMPLETED and permanent student profiles as GRADUATED in an atomic transaction upon completion of school.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Class 10 batch graduated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Validation failed or class is not a terminal graduating class',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Academic year, class, or section not found',
+  })
+  async graduateBatch(@Body() dto: GraduateBatchDto) {
+    return this.promotionService.graduateBatch(dto);
   }
 }

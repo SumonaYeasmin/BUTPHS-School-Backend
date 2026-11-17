@@ -3,6 +3,7 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { PreviewPromotionDto } from './dto/preview-promotion.dto';
 import { BulkPromotionDto } from './dto/bulk-promotion.dto';
 import { QueryPromotionDto } from './dto/query-promotion.dto';
+import { GraduateBatchDto } from './dto/graduate-batch.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import { Prisma } from '../../../../prisma/generated/client';
 import {
@@ -991,6 +992,143 @@ export class PromotionService {
         timeline,
       },
       `Promotion history for student '${student.name}' retrieved successfully`,
+    );
+  }
+
+  /**
+   * Graduate/Complete an entire batch of Class 10 students atomically.
+   *
+   * - Validates that the class is the terminal graduating class (no higher class)
+   * - Marks their StudentEnrollment status as COMPLETED
+   * - Marks their permanent Student profile status as GRADUATED
+   */
+  async graduateBatch(dto: GraduateBatchDto) {
+    // 1. Verify Academic Year exists
+    const academicYear = await this.prisma.academicYear.findUnique({
+      where: { id: dto.academicYearId },
+      select: { id: true, name: true },
+    });
+    if (!academicYear) {
+      throw new NotFoundException(
+        `Academic Year with ID '${dto.academicYearId}' not found`,
+      );
+    }
+
+    // 2. Verify Class exists and is terminal (Class 10 / highest class)
+    const schoolClass = await this.prisma.schoolClass.findUnique({
+      where: { id: dto.classId },
+      select: { id: true, name: true, numericValue: true },
+    });
+    if (!schoolClass) {
+      throw new NotFoundException(`Class with ID '${dto.classId}' not found`);
+    }
+
+    // Check if there is any higher class in the school
+    const higherClass = await this.prisma.schoolClass.findFirst({
+      where: { numericValue: { gt: schoolClass.numericValue } },
+      select: { id: true, name: true },
+    });
+
+    if (higherClass) {
+      throw new BadRequestException(
+        `Class '${schoolClass.name}' is not a graduating terminal class. Higher class '${higherClass.name}' exists. Use promotion instead.`,
+      );
+    }
+
+    // 3. Verify section if provided
+    let section: { id: string; name: string } | null = null;
+    if (dto.sectionId) {
+      section = await this.prisma.section.findFirst({
+        where: { id: dto.sectionId, classId: dto.classId },
+        select: { id: true, name: true },
+      });
+      if (!section) {
+        throw new BadRequestException(
+          `Section with ID '${dto.sectionId}' does not belong to Class '${schoolClass.name}'`,
+        );
+      }
+    }
+
+    // 4. Find all active enrollments in this class/section
+    const activeEnrollments = await this.prisma.studentEnrollment.findMany({
+      where: {
+        academicYearId: dto.academicYearId,
+        classId: dto.classId,
+        ...(dto.sectionId ? { sectionId: dto.sectionId } : {}),
+        status: 'ACTIVE',
+      },
+      include: {
+        student: {
+          select: {
+            id: true,
+            studentId: true,
+            name: true,
+            gender: true,
+          },
+        },
+        section: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: [{ section: { name: 'asc' } }, { roll: 'asc' }],
+    });
+
+    if (activeEnrollments.length === 0) {
+      throw new NotFoundException(
+        `No active students found in Class '${schoolClass.name}'${
+          section ? ` (Section ${section.name})` : ''
+        } for academic year '${academicYear.name}'`,
+      );
+    }
+
+    const enrollmentIds = activeEnrollments.map((e) => e.id);
+    const studentIds = activeEnrollments.map((e) => e.studentId);
+
+    // 5. Execute Atomic Database Transaction
+    await this.prisma.$transaction(async (tx) => {
+      // a. Mark all active enrollments as COMPLETED
+      await tx.studentEnrollment.updateMany({
+        where: { id: { in: enrollmentIds } },
+        data: { status: 'COMPLETED' },
+      });
+
+      // b. Mark all permanent student profiles as GRADUATED
+      await tx.student.updateMany({
+        where: { id: { in: studentIds } },
+        data: { status: 'GRADUATED' },
+      });
+    });
+
+    const studentList = activeEnrollments.map((enr) => ({
+      studentId: enr.student.id,
+      studentCustomId: enr.student.studentId,
+      name: enr.student.name,
+      gender: enr.student.gender,
+      section: enr.section.name,
+      roll: enr.roll,
+      enrollmentStatus: 'COMPLETED',
+      studentStatus: 'GRADUATED',
+    }));
+
+    const responseData = {
+      academicYear: academicYear.name,
+      class: schoolClass.name,
+      section: section ? section.name : 'All Sections',
+      totalGraduated: activeEnrollments.length,
+      completionDate:
+        dto.completionDate || new Date().toISOString().split('T')[0],
+      remarks:
+        dto.remarks ||
+        `${schoolClass.name} batch graduated successfully from high school`,
+      students: studentList,
+    };
+
+    return ResponseHelper.success(
+      responseData,
+      `Successfully graduated ${activeEnrollments.length} student(s) from ${schoolClass.name}`,
     );
   }
 }
