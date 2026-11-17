@@ -5072,9 +5072,13 @@ export const StudentEnrollmentScalarFieldEnum = {
   classId: 'classId',
   sectionId: 'sectionId',
   groupId: 'groupId',
+  optionalSubjectId: 'optionalSubjectId',
   roll: 'roll',
   enrollmentDate: 'enrollmentDate',
-  status: 'status'
+  isRepeater: 'isRepeater',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type StudentEnrollmentScalarFieldEnum = (typeof StudentEnrollmentScalarFieldEnum)[keyof typeof StudentEnrollmentScalarFieldEnum]
@@ -5085,8 +5089,11 @@ export const StudentPromotionScalarFieldEnum = {
   studentId: 'studentId',
   fromEnrollmentId: 'fromEnrollmentId',
   toEnrollmentId: 'toEnrollmentId',
+  resultSummaryId: 'resultSummaryId',
   promotionDate: 'promotionDate',
-  remarks: 'remarks'
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type StudentPromotionScalarFieldEnum = (typeof StudentPromotionScalarFieldEnum)[keyof typeof StudentPromotionScalarFieldEnum]
@@ -5098,8 +5105,11 @@ export const ParentScalarFieldEnum = {
   name: 'name',
   phone: 'phone',
   email: 'email',
+  nid: 'nid',
   occupation: 'occupation',
-  address: 'address'
+  address: 'address',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ParentScalarFieldEnum = (typeof ParentScalarFieldEnum)[keyof typeof ParentScalarFieldEnum]
@@ -5110,7 +5120,8 @@ export const ParentStudentScalarFieldEnum = {
   parentId: 'parentId',
   studentId: 'studentId',
   relationship: 'relationship',
-  isPrimary: 'isPrimary'
+  isPrimary: 'isPrimary',
+  createdAt: 'createdAt'
 } as const
 
 export type ParentStudentScalarFieldEnum = (typeof ParentStudentScalarFieldEnum)[keyof typeof ParentStudentScalarFieldEnum]

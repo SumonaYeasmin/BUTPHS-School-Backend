@@ -29,8 +29,11 @@ export type StudentPromotionMinAggregateOutputType = {
   studentId: string | null
   fromEnrollmentId: string | null
   toEnrollmentId: string | null
+  resultSummaryId: string | null
   promotionDate: Date | null
   remarks: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type StudentPromotionMaxAggregateOutputType = {
@@ -38,8 +41,11 @@ export type StudentPromotionMaxAggregateOutputType = {
   studentId: string | null
   fromEnrollmentId: string | null
   toEnrollmentId: string | null
+  resultSummaryId: string | null
   promotionDate: Date | null
   remarks: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type StudentPromotionCountAggregateOutputType = {
@@ -47,8 +53,11 @@ export type StudentPromotionCountAggregateOutputType = {
   studentId: number
   fromEnrollmentId: number
   toEnrollmentId: number
+  resultSummaryId: number
   promotionDate: number
   remarks: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -58,8 +67,11 @@ export type StudentPromotionMinAggregateInputType = {
   studentId?: true
   fromEnrollmentId?: true
   toEnrollmentId?: true
+  resultSummaryId?: true
   promotionDate?: true
   remarks?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type StudentPromotionMaxAggregateInputType = {
@@ -67,8 +79,11 @@ export type StudentPromotionMaxAggregateInputType = {
   studentId?: true
   fromEnrollmentId?: true
   toEnrollmentId?: true
+  resultSummaryId?: true
   promotionDate?: true
   remarks?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type StudentPromotionCountAggregateInputType = {
@@ -76,8 +91,11 @@ export type StudentPromotionCountAggregateInputType = {
   studentId?: true
   fromEnrollmentId?: true
   toEnrollmentId?: true
+  resultSummaryId?: true
   promotionDate?: true
   remarks?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -158,8 +176,11 @@ export type StudentPromotionGroupByOutputType = {
   studentId: string
   fromEnrollmentId: string
   toEnrollmentId: string
+  resultSummaryId: string | null
   promotionDate: Date
   remarks: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: StudentPromotionCountAggregateOutputType | null
   _min: StudentPromotionMinAggregateOutputType | null
   _max: StudentPromotionMaxAggregateOutputType | null
@@ -188,11 +209,15 @@ export type StudentPromotionWhereInput = {
   studentId?: Prisma.UuidFilter<"StudentPromotion"> | string
   fromEnrollmentId?: Prisma.UuidFilter<"StudentPromotion"> | string
   toEnrollmentId?: Prisma.UuidFilter<"StudentPromotion"> | string
+  resultSummaryId?: Prisma.UuidNullableFilter<"StudentPromotion"> | string | null
   promotionDate?: Prisma.DateTimeFilter<"StudentPromotion"> | Date | string
   remarks?: Prisma.StringNullableFilter<"StudentPromotion"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"StudentPromotion"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"StudentPromotion"> | Date | string
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
   fromEnrollment?: Prisma.XOR<Prisma.StudentEnrollmentScalarRelationFilter, Prisma.StudentEnrollmentWhereInput>
   toEnrollment?: Prisma.XOR<Prisma.StudentEnrollmentScalarRelationFilter, Prisma.StudentEnrollmentWhereInput>
+  resultSummary?: Prisma.XOR<Prisma.ResultSummaryNullableScalarRelationFilter, Prisma.ResultSummaryWhereInput> | null
 }
 
 export type StudentPromotionOrderByWithRelationInput = {
@@ -200,11 +225,15 @@ export type StudentPromotionOrderByWithRelationInput = {
   studentId?: Prisma.SortOrder
   fromEnrollmentId?: Prisma.SortOrder
   toEnrollmentId?: Prisma.SortOrder
+  resultSummaryId?: Prisma.SortOrderInput | Prisma.SortOrder
   promotionDate?: Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   student?: Prisma.StudentOrderByWithRelationInput
   fromEnrollment?: Prisma.StudentEnrollmentOrderByWithRelationInput
   toEnrollment?: Prisma.StudentEnrollmentOrderByWithRelationInput
+  resultSummary?: Prisma.ResultSummaryOrderByWithRelationInput
 }
 
 export type StudentPromotionWhereUniqueInput = Prisma.AtLeast<{
@@ -215,11 +244,15 @@ export type StudentPromotionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.StudentPromotionWhereInput[]
   NOT?: Prisma.StudentPromotionWhereInput | Prisma.StudentPromotionWhereInput[]
   studentId?: Prisma.UuidFilter<"StudentPromotion"> | string
+  resultSummaryId?: Prisma.UuidNullableFilter<"StudentPromotion"> | string | null
   promotionDate?: Prisma.DateTimeFilter<"StudentPromotion"> | Date | string
   remarks?: Prisma.StringNullableFilter<"StudentPromotion"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"StudentPromotion"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"StudentPromotion"> | Date | string
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
   fromEnrollment?: Prisma.XOR<Prisma.StudentEnrollmentScalarRelationFilter, Prisma.StudentEnrollmentWhereInput>
   toEnrollment?: Prisma.XOR<Prisma.StudentEnrollmentScalarRelationFilter, Prisma.StudentEnrollmentWhereInput>
+  resultSummary?: Prisma.XOR<Prisma.ResultSummaryNullableScalarRelationFilter, Prisma.ResultSummaryWhereInput> | null
 }, "id" | "fromEnrollmentId" | "toEnrollmentId">
 
 export type StudentPromotionOrderByWithAggregationInput = {
@@ -227,8 +260,11 @@ export type StudentPromotionOrderByWithAggregationInput = {
   studentId?: Prisma.SortOrder
   fromEnrollmentId?: Prisma.SortOrder
   toEnrollmentId?: Prisma.SortOrder
+  resultSummaryId?: Prisma.SortOrderInput | Prisma.SortOrder
   promotionDate?: Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.StudentPromotionCountOrderByAggregateInput
   _max?: Prisma.StudentPromotionMaxOrderByAggregateInput
   _min?: Prisma.StudentPromotionMinOrderByAggregateInput
@@ -242,17 +278,23 @@ export type StudentPromotionScalarWhereWithAggregatesInput = {
   studentId?: Prisma.UuidWithAggregatesFilter<"StudentPromotion"> | string
   fromEnrollmentId?: Prisma.UuidWithAggregatesFilter<"StudentPromotion"> | string
   toEnrollmentId?: Prisma.UuidWithAggregatesFilter<"StudentPromotion"> | string
+  resultSummaryId?: Prisma.UuidNullableWithAggregatesFilter<"StudentPromotion"> | string | null
   promotionDate?: Prisma.DateTimeWithAggregatesFilter<"StudentPromotion"> | Date | string
   remarks?: Prisma.StringNullableWithAggregatesFilter<"StudentPromotion"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"StudentPromotion"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"StudentPromotion"> | Date | string
 }
 
 export type StudentPromotionCreateInput = {
   id?: string
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   student: Prisma.StudentCreateNestedOneWithoutPromotionsInput
   fromEnrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutPromotionsFromInput
   toEnrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutPromotionsToInput
+  resultSummary?: Prisma.ResultSummaryCreateNestedOneWithoutPromotionsInput
 }
 
 export type StudentPromotionUncheckedCreateInput = {
@@ -260,17 +302,23 @@ export type StudentPromotionUncheckedCreateInput = {
   studentId: string
   fromEnrollmentId: string
   toEnrollmentId: string
+  resultSummaryId?: string | null
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentPromotionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.StudentUpdateOneRequiredWithoutPromotionsNestedInput
   fromEnrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutPromotionsFromNestedInput
   toEnrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutPromotionsToNestedInput
+  resultSummary?: Prisma.ResultSummaryUpdateOneWithoutPromotionsNestedInput
 }
 
 export type StudentPromotionUncheckedUpdateInput = {
@@ -278,8 +326,11 @@ export type StudentPromotionUncheckedUpdateInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   fromEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
   toEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  resultSummaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentPromotionCreateManyInput = {
@@ -287,14 +338,19 @@ export type StudentPromotionCreateManyInput = {
   studentId: string
   fromEnrollmentId: string
   toEnrollmentId: string
+  resultSummaryId?: string | null
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentPromotionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentPromotionUncheckedUpdateManyInput = {
@@ -302,8 +358,11 @@ export type StudentPromotionUncheckedUpdateManyInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   fromEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
   toEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  resultSummaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentPromotionListRelationFilter = {
@@ -321,8 +380,11 @@ export type StudentPromotionCountOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   fromEnrollmentId?: Prisma.SortOrder
   toEnrollmentId?: Prisma.SortOrder
+  resultSummaryId?: Prisma.SortOrder
   promotionDate?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type StudentPromotionMaxOrderByAggregateInput = {
@@ -330,8 +392,11 @@ export type StudentPromotionMaxOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   fromEnrollmentId?: Prisma.SortOrder
   toEnrollmentId?: Prisma.SortOrder
+  resultSummaryId?: Prisma.SortOrder
   promotionDate?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type StudentPromotionMinOrderByAggregateInput = {
@@ -339,8 +404,11 @@ export type StudentPromotionMinOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   fromEnrollmentId?: Prisma.SortOrder
   toEnrollmentId?: Prisma.SortOrder
+  resultSummaryId?: Prisma.SortOrder
   promotionDate?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type StudentPromotionCreateNestedManyWithoutStudentInput = {
@@ -469,20 +537,68 @@ export type StudentPromotionUncheckedUpdateManyWithoutToEnrollmentNestedInput = 
   deleteMany?: Prisma.StudentPromotionScalarWhereInput | Prisma.StudentPromotionScalarWhereInput[]
 }
 
+export type StudentPromotionCreateNestedManyWithoutResultSummaryInput = {
+  create?: Prisma.XOR<Prisma.StudentPromotionCreateWithoutResultSummaryInput, Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput> | Prisma.StudentPromotionCreateWithoutResultSummaryInput[] | Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput[]
+  connectOrCreate?: Prisma.StudentPromotionCreateOrConnectWithoutResultSummaryInput | Prisma.StudentPromotionCreateOrConnectWithoutResultSummaryInput[]
+  createMany?: Prisma.StudentPromotionCreateManyResultSummaryInputEnvelope
+  connect?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+}
+
+export type StudentPromotionUncheckedCreateNestedManyWithoutResultSummaryInput = {
+  create?: Prisma.XOR<Prisma.StudentPromotionCreateWithoutResultSummaryInput, Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput> | Prisma.StudentPromotionCreateWithoutResultSummaryInput[] | Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput[]
+  connectOrCreate?: Prisma.StudentPromotionCreateOrConnectWithoutResultSummaryInput | Prisma.StudentPromotionCreateOrConnectWithoutResultSummaryInput[]
+  createMany?: Prisma.StudentPromotionCreateManyResultSummaryInputEnvelope
+  connect?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+}
+
+export type StudentPromotionUpdateManyWithoutResultSummaryNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentPromotionCreateWithoutResultSummaryInput, Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput> | Prisma.StudentPromotionCreateWithoutResultSummaryInput[] | Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput[]
+  connectOrCreate?: Prisma.StudentPromotionCreateOrConnectWithoutResultSummaryInput | Prisma.StudentPromotionCreateOrConnectWithoutResultSummaryInput[]
+  upsert?: Prisma.StudentPromotionUpsertWithWhereUniqueWithoutResultSummaryInput | Prisma.StudentPromotionUpsertWithWhereUniqueWithoutResultSummaryInput[]
+  createMany?: Prisma.StudentPromotionCreateManyResultSummaryInputEnvelope
+  set?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+  disconnect?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+  delete?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+  connect?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+  update?: Prisma.StudentPromotionUpdateWithWhereUniqueWithoutResultSummaryInput | Prisma.StudentPromotionUpdateWithWhereUniqueWithoutResultSummaryInput[]
+  updateMany?: Prisma.StudentPromotionUpdateManyWithWhereWithoutResultSummaryInput | Prisma.StudentPromotionUpdateManyWithWhereWithoutResultSummaryInput[]
+  deleteMany?: Prisma.StudentPromotionScalarWhereInput | Prisma.StudentPromotionScalarWhereInput[]
+}
+
+export type StudentPromotionUncheckedUpdateManyWithoutResultSummaryNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentPromotionCreateWithoutResultSummaryInput, Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput> | Prisma.StudentPromotionCreateWithoutResultSummaryInput[] | Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput[]
+  connectOrCreate?: Prisma.StudentPromotionCreateOrConnectWithoutResultSummaryInput | Prisma.StudentPromotionCreateOrConnectWithoutResultSummaryInput[]
+  upsert?: Prisma.StudentPromotionUpsertWithWhereUniqueWithoutResultSummaryInput | Prisma.StudentPromotionUpsertWithWhereUniqueWithoutResultSummaryInput[]
+  createMany?: Prisma.StudentPromotionCreateManyResultSummaryInputEnvelope
+  set?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+  disconnect?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+  delete?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+  connect?: Prisma.StudentPromotionWhereUniqueInput | Prisma.StudentPromotionWhereUniqueInput[]
+  update?: Prisma.StudentPromotionUpdateWithWhereUniqueWithoutResultSummaryInput | Prisma.StudentPromotionUpdateWithWhereUniqueWithoutResultSummaryInput[]
+  updateMany?: Prisma.StudentPromotionUpdateManyWithWhereWithoutResultSummaryInput | Prisma.StudentPromotionUpdateManyWithWhereWithoutResultSummaryInput[]
+  deleteMany?: Prisma.StudentPromotionScalarWhereInput | Prisma.StudentPromotionScalarWhereInput[]
+}
+
 export type StudentPromotionCreateWithoutStudentInput = {
   id?: string
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   fromEnrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutPromotionsFromInput
   toEnrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutPromotionsToInput
+  resultSummary?: Prisma.ResultSummaryCreateNestedOneWithoutPromotionsInput
 }
 
 export type StudentPromotionUncheckedCreateWithoutStudentInput = {
   id?: string
   fromEnrollmentId: string
   toEnrollmentId: string
+  resultSummaryId?: string | null
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentPromotionCreateOrConnectWithoutStudentInput = {
@@ -519,24 +635,33 @@ export type StudentPromotionScalarWhereInput = {
   studentId?: Prisma.UuidFilter<"StudentPromotion"> | string
   fromEnrollmentId?: Prisma.UuidFilter<"StudentPromotion"> | string
   toEnrollmentId?: Prisma.UuidFilter<"StudentPromotion"> | string
+  resultSummaryId?: Prisma.UuidNullableFilter<"StudentPromotion"> | string | null
   promotionDate?: Prisma.DateTimeFilter<"StudentPromotion"> | Date | string
   remarks?: Prisma.StringNullableFilter<"StudentPromotion"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"StudentPromotion"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"StudentPromotion"> | Date | string
 }
 
 export type StudentPromotionCreateWithoutFromEnrollmentInput = {
   id?: string
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   student: Prisma.StudentCreateNestedOneWithoutPromotionsInput
   toEnrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutPromotionsToInput
+  resultSummary?: Prisma.ResultSummaryCreateNestedOneWithoutPromotionsInput
 }
 
 export type StudentPromotionUncheckedCreateWithoutFromEnrollmentInput = {
   id?: string
   studentId: string
   toEnrollmentId: string
+  resultSummaryId?: string | null
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentPromotionCreateOrConnectWithoutFromEnrollmentInput = {
@@ -553,16 +678,22 @@ export type StudentPromotionCreateWithoutToEnrollmentInput = {
   id?: string
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   student: Prisma.StudentCreateNestedOneWithoutPromotionsInput
   fromEnrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutPromotionsFromInput
+  resultSummary?: Prisma.ResultSummaryCreateNestedOneWithoutPromotionsInput
 }
 
 export type StudentPromotionUncheckedCreateWithoutToEnrollmentInput = {
   id?: string
   studentId: string
   fromEnrollmentId: string
+  resultSummaryId?: string | null
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentPromotionCreateOrConnectWithoutToEnrollmentInput = {
@@ -607,100 +738,228 @@ export type StudentPromotionUpdateManyWithWhereWithoutToEnrollmentInput = {
   data: Prisma.XOR<Prisma.StudentPromotionUpdateManyMutationInput, Prisma.StudentPromotionUncheckedUpdateManyWithoutToEnrollmentInput>
 }
 
-export type StudentPromotionCreateManyStudentInput = {
+export type StudentPromotionCreateWithoutResultSummaryInput = {
   id?: string
+  promotionDate: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  student: Prisma.StudentCreateNestedOneWithoutPromotionsInput
+  fromEnrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutPromotionsFromInput
+  toEnrollment: Prisma.StudentEnrollmentCreateNestedOneWithoutPromotionsToInput
+}
+
+export type StudentPromotionUncheckedCreateWithoutResultSummaryInput = {
+  id?: string
+  studentId: string
   fromEnrollmentId: string
   toEnrollmentId: string
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type StudentPromotionCreateOrConnectWithoutResultSummaryInput = {
+  where: Prisma.StudentPromotionWhereUniqueInput
+  create: Prisma.XOR<Prisma.StudentPromotionCreateWithoutResultSummaryInput, Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput>
+}
+
+export type StudentPromotionCreateManyResultSummaryInputEnvelope = {
+  data: Prisma.StudentPromotionCreateManyResultSummaryInput | Prisma.StudentPromotionCreateManyResultSummaryInput[]
+  skipDuplicates?: boolean
+}
+
+export type StudentPromotionUpsertWithWhereUniqueWithoutResultSummaryInput = {
+  where: Prisma.StudentPromotionWhereUniqueInput
+  update: Prisma.XOR<Prisma.StudentPromotionUpdateWithoutResultSummaryInput, Prisma.StudentPromotionUncheckedUpdateWithoutResultSummaryInput>
+  create: Prisma.XOR<Prisma.StudentPromotionCreateWithoutResultSummaryInput, Prisma.StudentPromotionUncheckedCreateWithoutResultSummaryInput>
+}
+
+export type StudentPromotionUpdateWithWhereUniqueWithoutResultSummaryInput = {
+  where: Prisma.StudentPromotionWhereUniqueInput
+  data: Prisma.XOR<Prisma.StudentPromotionUpdateWithoutResultSummaryInput, Prisma.StudentPromotionUncheckedUpdateWithoutResultSummaryInput>
+}
+
+export type StudentPromotionUpdateManyWithWhereWithoutResultSummaryInput = {
+  where: Prisma.StudentPromotionScalarWhereInput
+  data: Prisma.XOR<Prisma.StudentPromotionUpdateManyMutationInput, Prisma.StudentPromotionUncheckedUpdateManyWithoutResultSummaryInput>
+}
+
+export type StudentPromotionCreateManyStudentInput = {
+  id?: string
+  fromEnrollmentId: string
+  toEnrollmentId: string
+  resultSummaryId?: string | null
+  promotionDate: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentPromotionUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fromEnrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutPromotionsFromNestedInput
   toEnrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutPromotionsToNestedInput
+  resultSummary?: Prisma.ResultSummaryUpdateOneWithoutPromotionsNestedInput
 }
 
 export type StudentPromotionUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fromEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
   toEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  resultSummaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentPromotionUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fromEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
   toEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  resultSummaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentPromotionCreateManyFromEnrollmentInput = {
   id?: string
   studentId: string
   toEnrollmentId: string
+  resultSummaryId?: string | null
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentPromotionCreateManyToEnrollmentInput = {
   id?: string
   studentId: string
   fromEnrollmentId: string
+  resultSummaryId?: string | null
   promotionDate: Date | string
   remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StudentPromotionUpdateWithoutFromEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.StudentUpdateOneRequiredWithoutPromotionsNestedInput
   toEnrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutPromotionsToNestedInput
+  resultSummary?: Prisma.ResultSummaryUpdateOneWithoutPromotionsNestedInput
 }
 
 export type StudentPromotionUncheckedUpdateWithoutFromEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   toEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  resultSummaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentPromotionUncheckedUpdateManyWithoutFromEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   toEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  resultSummaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentPromotionUpdateWithoutToEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.StudentUpdateOneRequiredWithoutPromotionsNestedInput
   fromEnrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutPromotionsFromNestedInput
+  resultSummary?: Prisma.ResultSummaryUpdateOneWithoutPromotionsNestedInput
 }
 
 export type StudentPromotionUncheckedUpdateWithoutToEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   fromEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  resultSummaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentPromotionUncheckedUpdateManyWithoutToEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   fromEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  resultSummaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StudentPromotionCreateManyResultSummaryInput = {
+  id?: string
+  studentId: string
+  fromEnrollmentId: string
+  toEnrollmentId: string
+  promotionDate: Date | string
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type StudentPromotionUpdateWithoutResultSummaryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  student?: Prisma.StudentUpdateOneRequiredWithoutPromotionsNestedInput
+  fromEnrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutPromotionsFromNestedInput
+  toEnrollment?: Prisma.StudentEnrollmentUpdateOneRequiredWithoutPromotionsToNestedInput
+}
+
+export type StudentPromotionUncheckedUpdateWithoutResultSummaryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  fromEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  toEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StudentPromotionUncheckedUpdateManyWithoutResultSummaryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  fromEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  toEnrollmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  promotionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -710,11 +969,15 @@ export type StudentPromotionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   studentId?: boolean
   fromEnrollmentId?: boolean
   toEnrollmentId?: boolean
+  resultSummaryId?: boolean
   promotionDate?: boolean
   remarks?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   fromEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   toEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
+  resultSummary?: boolean | Prisma.StudentPromotion$resultSummaryArgs<ExtArgs>
 }, ExtArgs["result"]["studentPromotion"]>
 
 export type StudentPromotionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -722,11 +985,15 @@ export type StudentPromotionSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   studentId?: boolean
   fromEnrollmentId?: boolean
   toEnrollmentId?: boolean
+  resultSummaryId?: boolean
   promotionDate?: boolean
   remarks?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   fromEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   toEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
+  resultSummary?: boolean | Prisma.StudentPromotion$resultSummaryArgs<ExtArgs>
 }, ExtArgs["result"]["studentPromotion"]>
 
 export type StudentPromotionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -734,11 +1001,15 @@ export type StudentPromotionSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   studentId?: boolean
   fromEnrollmentId?: boolean
   toEnrollmentId?: boolean
+  resultSummaryId?: boolean
   promotionDate?: boolean
   remarks?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   fromEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   toEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
+  resultSummary?: boolean | Prisma.StudentPromotion$resultSummaryArgs<ExtArgs>
 }, ExtArgs["result"]["studentPromotion"]>
 
 export type StudentPromotionSelectScalar = {
@@ -746,25 +1017,31 @@ export type StudentPromotionSelectScalar = {
   studentId?: boolean
   fromEnrollmentId?: boolean
   toEnrollmentId?: boolean
+  resultSummaryId?: boolean
   promotionDate?: boolean
   remarks?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type StudentPromotionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "fromEnrollmentId" | "toEnrollmentId" | "promotionDate" | "remarks", ExtArgs["result"]["studentPromotion"]>
+export type StudentPromotionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "fromEnrollmentId" | "toEnrollmentId" | "resultSummaryId" | "promotionDate" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["studentPromotion"]>
 export type StudentPromotionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   fromEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   toEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
+  resultSummary?: boolean | Prisma.StudentPromotion$resultSummaryArgs<ExtArgs>
 }
 export type StudentPromotionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   fromEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   toEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
+  resultSummary?: boolean | Prisma.StudentPromotion$resultSummaryArgs<ExtArgs>
 }
 export type StudentPromotionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   fromEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
   toEnrollment?: boolean | Prisma.StudentEnrollmentDefaultArgs<ExtArgs>
+  resultSummary?: boolean | Prisma.StudentPromotion$resultSummaryArgs<ExtArgs>
 }
 
 export type $StudentPromotionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -773,14 +1050,18 @@ export type $StudentPromotionPayload<ExtArgs extends runtime.Types.Extensions.In
     student: Prisma.$StudentPayload<ExtArgs>
     fromEnrollment: Prisma.$StudentEnrollmentPayload<ExtArgs>
     toEnrollment: Prisma.$StudentEnrollmentPayload<ExtArgs>
+    resultSummary: Prisma.$ResultSummaryPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     studentId: string
     fromEnrollmentId: string
     toEnrollmentId: string
+    resultSummaryId: string | null
     promotionDate: Date
     remarks: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["studentPromotion"]>
   composites: {}
 }
@@ -1178,6 +1459,7 @@ export interface Prisma__StudentPromotionClient<T, Null = never, ExtArgs extends
   student<T extends Prisma.StudentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentDefaultArgs<ExtArgs>>): Prisma.Prisma__StudentClient<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   fromEnrollment<T extends Prisma.StudentEnrollmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentEnrollmentDefaultArgs<ExtArgs>>): Prisma.Prisma__StudentEnrollmentClient<runtime.Types.Result.GetResult<Prisma.$StudentEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   toEnrollment<T extends Prisma.StudentEnrollmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentEnrollmentDefaultArgs<ExtArgs>>): Prisma.Prisma__StudentEnrollmentClient<runtime.Types.Result.GetResult<Prisma.$StudentEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  resultSummary<T extends Prisma.StudentPromotion$resultSummaryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentPromotion$resultSummaryArgs<ExtArgs>>): Prisma.Prisma__ResultSummaryClient<runtime.Types.Result.GetResult<Prisma.$ResultSummaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1211,8 +1493,11 @@ export interface StudentPromotionFieldRefs {
   readonly studentId: Prisma.FieldRef<"StudentPromotion", 'String'>
   readonly fromEnrollmentId: Prisma.FieldRef<"StudentPromotion", 'String'>
   readonly toEnrollmentId: Prisma.FieldRef<"StudentPromotion", 'String'>
+  readonly resultSummaryId: Prisma.FieldRef<"StudentPromotion", 'String'>
   readonly promotionDate: Prisma.FieldRef<"StudentPromotion", 'DateTime'>
   readonly remarks: Prisma.FieldRef<"StudentPromotion", 'String'>
+  readonly createdAt: Prisma.FieldRef<"StudentPromotion", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"StudentPromotion", 'DateTime'>
 }
     
 
@@ -1606,6 +1891,25 @@ export type StudentPromotionDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many StudentPromotions to delete.
    */
   limit?: number
+}
+
+/**
+ * StudentPromotion.resultSummary
+ */
+export type StudentPromotion$resultSummaryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ResultSummary
+   */
+  select?: Prisma.ResultSummarySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ResultSummary
+   */
+  omit?: Prisma.ResultSummaryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResultSummaryInclude<ExtArgs> | null
+  where?: Prisma.ResultSummaryWhereInput
 }
 
 /**

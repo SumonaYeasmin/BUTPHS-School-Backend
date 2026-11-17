@@ -129,6 +129,14 @@ export class UpdateStudentDto {
   groupId?: string;
 
   @ApiPropertyOptional({
+    example: '550e8400-e29b-41d4-a716-446655440004',
+    description: 'Update optional 4th subject in current active enrollment',
+  })
+  @IsOptional()
+  @IsUUID()
+  optionalSubjectId?: string;
+
+  @ApiPropertyOptional({
     example: 5,
     description: 'Update roll number in current active enrollment',
   })

@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Prisma, SubjectCategory } from '../../../../prisma/generated/client';
 import { AssignClassSubjectDto } from './dto/assign-class-subject.dto';
+import { UpdateClassSubjectDto } from './dto/update-class-subject.dto';
 import { RolloverClassSubjectDto } from './dto/rollover-class-subject.dto';
 import { QueryClassSubjectDto } from './dto/query-class-subject.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
@@ -12,7 +13,7 @@ import {
 
 @Injectable()
 export class ClassSubjectService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   /**
    * 1. Assign a master subject to a specific class & academic year
@@ -148,7 +149,125 @@ export class ClassSubjectService {
   }
 
   /**
-   * 4. Yearly Rollover: Copy all active class subjects from one academic year to the next
+   * 4. Get class subject details by ID
+   */
+  async findOne(id: string) {
+    const classSubject = await this.prisma.classSubject.findUnique({
+      where: { id },
+      include: {
+        academicYear: true,
+        schoolClass: true,
+        subject: true,
+        group: true,
+        teacherAssignments: {
+          include: {
+            staff: { select: { id: true, name: true, designation: true } },
+            section: { select: { id: true, name: true } },
+          },
+        },
+      },
+    });
+
+    if (!classSubject) throw new NotFoundException('Class Subject');
+
+    return ResponseHelper.success(
+      classSubject,
+      'Class subject details retrieved successfully',
+    );
+  }
+
+  /**
+   * 5. Update class subject (group, optional status, or displayOrder)
+   */
+  async update(id: string, dto: UpdateClassSubjectDto) {
+    const existing = await this.prisma.classSubject.findUnique({
+      where: { id },
+    });
+    if (!existing) throw new NotFoundException('Class Subject');
+
+    const updateData: Prisma.ClassSubjectUpdateInput = {};
+
+    if (dto.groupId !== undefined) {
+      if (dto.groupId) {
+        const group = await this.prisma.academicGroup.findUnique({
+          where: { id: dto.groupId },
+        });
+        if (!group) throw new NotFoundException('Academic Group');
+      }
+
+      // Check if moving to this group creates a duplicate
+      const duplicate = await this.prisma.classSubject.findFirst({
+        where: {
+          academicYearId: existing.academicYearId,
+          classId: existing.classId,
+          subjectId: existing.subjectId,
+          groupId: dto.groupId ?? null,
+          id: { not: id },
+        },
+      });
+
+      if (duplicate) {
+        throw new ConflictException(
+          'This subject is already assigned to this class and group for this academic year',
+        );
+      }
+
+      updateData.group = dto.groupId
+        ? { connect: { id: dto.groupId } }
+        : { disconnect: true };
+    }
+
+    if (dto.isOptional !== undefined) updateData.isOptional = dto.isOptional;
+    if (dto.displayOrder !== undefined) updateData.displayOrder = dto.displayOrder;
+
+    const updated = await this.prisma.classSubject.update({
+      where: { id },
+      data: updateData,
+      include: {
+        schoolClass: { select: { id: true, name: true } },
+        subject: { select: { id: true, name: true, officialCode: true } },
+        group: { select: { id: true, name: true } },
+      },
+    });
+
+    return ResponseHelper.success(
+      updated,
+      'Class subject updated successfully',
+    );
+  }
+
+  /**
+   * 6. Safe delete a class subject
+   */
+  async remove(id: string) {
+    const existing = await this.prisma.classSubject.findUnique({
+      where: { id },
+      include: {
+        teacherAssignments: true,
+        subject: { select: { name: true } },
+        schoolClass: { select: { name: true } },
+      },
+    });
+    if (!existing) throw new NotFoundException('Class Subject');
+
+    if (existing.teacherAssignments.length > 0) {
+      throw new BadRequestException(
+        `Cannot remove '${existing.subject.name}' from ${existing.schoolClass.name} because it is actively assigned to ${existing.teacherAssignments.length} teacher(s). Please unassign the teacher(s) first.`,
+      );
+    }
+
+    await this.prisma.classSubject.delete({
+      where: { id },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Subject '${existing.subject.name}' has been safely removed from ${existing.schoolClass.name}`,
+    );
+  }
+
+  /**
+   * 7. Yearly Rollover: Copy all active class subjects from one academic year to the next
    */
   async rollover(dto: RolloverClassSubjectDto) {
     if (dto.fromAcademicYearId === dto.toAcademicYearId) {

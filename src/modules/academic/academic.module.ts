@@ -4,8 +4,11 @@ import { ClassModule } from './class/class.module';
 import { SectionModule } from './section/section.module';
 import { AcademicGroupModule } from './academic-group/academic-group.module';
 import { StudentModule } from './student/student.module';
+import { ParentModule } from './parent/parent.module';
 import { SubjectModule } from './subject/subject.module';
 import { ClassSubjectModule } from './class-subject/class-subject.module';
+import { BookModule } from './book/book.module';
+import { PromotionModule } from './promotion/promotion.module';
 
 @Module({
   imports: [
@@ -14,8 +17,11 @@ import { ClassSubjectModule } from './class-subject/class-subject.module';
     SectionModule,
     AcademicGroupModule,
     StudentModule,
+    ParentModule,
     SubjectModule,
     ClassSubjectModule,
+    BookModule,
+    PromotionModule,
   ],
   exports: [
     AcademicYearModule,
@@ -23,8 +29,11 @@ import { ClassSubjectModule } from './class-subject/class-subject.module';
     SectionModule,
     AcademicGroupModule,
     StudentModule,
+    ParentModule,
     SubjectModule,
     ClassSubjectModule,
+    BookModule,
+    PromotionModule,
   ],
 })
 export class AcademicModule {}

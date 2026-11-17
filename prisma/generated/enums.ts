@@ -58,8 +58,7 @@ export type EnrollmentStatus = (typeof EnrollmentStatus)[keyof typeof Enrollment
 export const RelationshipType = {
   FATHER: 'FATHER',
   MOTHER: 'MOTHER',
-  GUARDIAN: 'GUARDIAN',
-  OTHER: 'OTHER'
+  GUARDIAN: 'GUARDIAN'
 } as const
 
 export type RelationshipType = (typeof RelationshipType)[keyof typeof RelationshipType]
