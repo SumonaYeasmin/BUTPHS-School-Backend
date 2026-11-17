@@ -2,7 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { PreviewPromotionDto } from './dto/preview-promotion.dto';
 import { BulkPromotionDto } from './dto/bulk-promotion.dto';
+import { QueryPromotionDto } from './dto/query-promotion.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
+import { Prisma } from '../../../../prisma/generated/client';
 import {
   ConflictException,
   NotFoundException,
@@ -758,6 +760,237 @@ export class PromotionService {
     return ResponseHelper.created(
       responseData,
       `Successfully processed bulk promotion for ${enrollments.length} student(s): ${batchResult.promotedRecords.length} promoted to ${targetClass.name}, ${batchResult.repeaterRecords.length} repeating in ${sourceClass.name}`,
+    );
+  }
+
+  /**
+   * Get paginated promotion records with filtering by year, class, section, or student search
+   */
+  async getPromotionHistory(query: QueryPromotionDto) {
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.StudentPromotionWhereInput = {};
+
+    if (query.sourceAcademicYearId) {
+      where.fromEnrollment = {
+        ...(where.fromEnrollment as Prisma.StudentEnrollmentWhereInput),
+        academicYearId: query.sourceAcademicYearId,
+      };
+    }
+
+    if (query.targetAcademicYearId) {
+      where.toEnrollment = {
+        ...(where.toEnrollment as Prisma.StudentEnrollmentWhereInput),
+        academicYearId: query.targetAcademicYearId,
+      };
+    }
+
+    if (query.sourceClassId) {
+      where.fromEnrollment = {
+        ...(where.fromEnrollment as Prisma.StudentEnrollmentWhereInput),
+        classId: query.sourceClassId,
+      };
+    }
+
+    if (query.targetClassId) {
+      where.toEnrollment = {
+        ...(where.toEnrollment as Prisma.StudentEnrollmentWhereInput),
+        classId: query.targetClassId,
+      };
+    }
+
+    if (query.sectionId) {
+      where.OR = [
+        { fromEnrollment: { sectionId: query.sectionId } },
+        { toEnrollment: { sectionId: query.sectionId } },
+      ];
+    }
+
+    if (query.search) {
+      where.student = {
+        OR: [
+          { name: { contains: query.search, mode: 'insensitive' } },
+          { studentId: { contains: query.search, mode: 'insensitive' } },
+        ],
+      };
+    }
+
+    const [total, records] = await Promise.all([
+      this.prisma.studentPromotion.count({ where }),
+      this.prisma.studentPromotion.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: [{ promotionDate: 'desc' }, { createdAt: 'desc' }],
+        include: {
+          student: {
+            select: {
+              id: true,
+              studentId: true,
+              name: true,
+              gender: true,
+              photo: true,
+            },
+          },
+          fromEnrollment: {
+            include: {
+              academicYear: { select: { id: true, name: true } },
+              schoolClass: { select: { id: true, name: true, numericValue: true } },
+              section: { select: { id: true, name: true } },
+              group: { select: { id: true, name: true } },
+            },
+          },
+          toEnrollment: {
+            include: {
+              academicYear: { select: { id: true, name: true } },
+              schoolClass: { select: { id: true, name: true, numericValue: true } },
+              section: { select: { id: true, name: true } },
+              group: { select: { id: true, name: true } },
+            },
+          },
+          resultSummary: {
+            include: {
+              exam: { select: { id: true, name: true, examType: true } },
+            },
+          },
+        },
+      }),
+    ]);
+
+    const formatted = records.map((rec) => ({
+      id: rec.id,
+      promotionDate: rec.promotionDate,
+      remarks: rec.remarks,
+      student: rec.student,
+      from: {
+        enrollmentId: rec.fromEnrollment.id,
+        academicYear: rec.fromEnrollment.academicYear.name,
+        class: rec.fromEnrollment.schoolClass.name,
+        section: rec.fromEnrollment.section.name,
+        group: rec.fromEnrollment.group?.name || null,
+        roll: rec.fromEnrollment.roll,
+      },
+      to: {
+        enrollmentId: rec.toEnrollment.id,
+        academicYear: rec.toEnrollment.academicYear.name,
+        class: rec.toEnrollment.schoolClass.name,
+        section: rec.toEnrollment.section.name,
+        group: rec.toEnrollment.group?.name || null,
+        roll: rec.toEnrollment.roll,
+        isRepeater: rec.toEnrollment.isRepeater,
+      },
+      result: rec.resultSummary
+        ? {
+            examName: rec.resultSummary.exam.name,
+            totalMarks: Number(rec.resultSummary.totalMarks),
+            gpa: rec.resultSummary.gpa ? Number(rec.resultSummary.gpa) : null,
+            letterGrade: rec.resultSummary.letterGrade,
+            meritPosition:
+              rec.resultSummary.sectionMeritPosition ||
+              rec.resultSummary.meritPosition,
+            resultStatus: rec.resultSummary.resultStatus,
+          }
+        : null,
+      createdAt: rec.createdAt,
+    }));
+
+    const meta = ResponseHelper.buildPaginationMeta(total, page, limit);
+    return ResponseHelper.paginated(
+      formatted,
+      meta,
+      'Promotion history retrieved successfully',
+    );
+  }
+
+  /**
+   * Get the complete academic promotion journey/timeline of a single student
+   */
+  async getStudentPromotionHistory(studentId: string) {
+    const student = await this.prisma.student.findUnique({
+      where: { id: studentId },
+      select: {
+        id: true,
+        studentId: true,
+        name: true,
+        gender: true,
+        photo: true,
+      },
+    });
+
+    if (!student) {
+      throw new NotFoundException(`Student with ID '${studentId}' not found`);
+    }
+
+    const records = await this.prisma.studentPromotion.findMany({
+      where: { studentId },
+      orderBy: { promotionDate: 'asc' },
+      include: {
+        fromEnrollment: {
+          include: {
+            academicYear: { select: { id: true, name: true } },
+            schoolClass: { select: { id: true, name: true, numericValue: true } },
+            section: { select: { id: true, name: true } },
+            group: { select: { id: true, name: true } },
+          },
+        },
+        toEnrollment: {
+          include: {
+            academicYear: { select: { id: true, name: true } },
+            schoolClass: { select: { id: true, name: true, numericValue: true } },
+            section: { select: { id: true, name: true } },
+            group: { select: { id: true, name: true } },
+          },
+        },
+        resultSummary: {
+          include: {
+            exam: { select: { id: true, name: true, examType: true } },
+          },
+        },
+      },
+    });
+
+    const timeline = records.map((rec, index) => ({
+      step: index + 1,
+      promotionId: rec.id,
+      promotionDate: rec.promotionDate,
+      remarks: rec.remarks,
+      from: {
+        academicYear: rec.fromEnrollment.academicYear.name,
+        class: rec.fromEnrollment.schoolClass.name,
+        section: rec.fromEnrollment.section.name,
+        group: rec.fromEnrollment.group?.name || null,
+        roll: rec.fromEnrollment.roll,
+      },
+      to: {
+        academicYear: rec.toEnrollment.academicYear.name,
+        class: rec.toEnrollment.schoolClass.name,
+        section: rec.toEnrollment.section.name,
+        group: rec.toEnrollment.group?.name || null,
+        roll: rec.toEnrollment.roll,
+        isRepeater: rec.toEnrollment.isRepeater,
+      },
+      result: rec.resultSummary
+        ? {
+            examName: rec.resultSummary.exam.name,
+            gpa: rec.resultSummary.gpa ? Number(rec.resultSummary.gpa) : null,
+            letterGrade: rec.resultSummary.letterGrade,
+            meritPosition:
+              rec.resultSummary.sectionMeritPosition ||
+              rec.resultSummary.meritPosition,
+            resultStatus: rec.resultSummary.resultStatus,
+          }
+        : null,
+    }));
+
+    return ResponseHelper.success(
+      {
+        student,
+        totalPromotions: records.length,
+        timeline,
+      },
+      `Promotion history for student '${student.name}' retrieved successfully`,
     );
   }
 }

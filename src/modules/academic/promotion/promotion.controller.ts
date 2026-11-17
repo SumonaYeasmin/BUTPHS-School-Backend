@@ -1,13 +1,24 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { PromotionService } from './promotion.service';
 import { PreviewPromotionDto } from './dto/preview-promotion.dto';
 import { BulkPromotionDto } from './dto/bulk-promotion.dto';
+import { QueryPromotionDto } from './dto/query-promotion.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -72,5 +83,41 @@ export class PromotionController {
   })
   async promoteBulk(@Body() dto: BulkPromotionDto) {
     return this.promotionService.promoteBulkStudents(dto);
+  }
+
+  @Get('history')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN', 'TEACHER')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get paginated promotion records with filters (Admin & Teacher)',
+    description:
+      'Filter promotions by source/target academic year, source/target class, section, and search by student name or student ID.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Promotion history retrieved successfully',
+  })
+  async getHistory(@Query() query: QueryPromotionDto) {
+    return this.promotionService.getPromotionHistory(query);
+  }
+
+  @Get('student/:studentId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN', 'TEACHER')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get full academic progression journey of a single student',
+    description:
+      'Returns the chronological timeline of all promotions, previous vs new classes/sections/rolls, and annual exam results for a specific student.',
+  })
+  @ApiParam({ name: 'studentId', description: 'Student UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Student promotion history retrieved successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Student not found' })
+  async getStudentHistory(@Param('studentId', ParseUUIDPipe) studentId: string) {
+    return this.promotionService.getStudentPromotionHistory(studentId);
   }
 }
