@@ -258,7 +258,6 @@ export type StaffWhereInput = {
   administrator?: Prisma.XOR<Prisma.AdministratorNullableScalarRelationFilter, Prisma.AdministratorWhereInput> | null
   teacherAssignments?: Prisma.TeacherAssignmentListRelationFilter
   classRoutines?: Prisma.ClassRoutineListRelationFilter
-  examRoutines?: Prisma.ExamRoutineListRelationFilter
 }
 
 export type StaffOrderByWithRelationInput = {
@@ -280,7 +279,6 @@ export type StaffOrderByWithRelationInput = {
   administrator?: Prisma.AdministratorOrderByWithRelationInput
   teacherAssignments?: Prisma.TeacherAssignmentOrderByRelationAggregateInput
   classRoutines?: Prisma.ClassRoutineOrderByRelationAggregateInput
-  examRoutines?: Prisma.ExamRoutineOrderByRelationAggregateInput
 }
 
 export type StaffWhereUniqueInput = Prisma.AtLeast<{
@@ -305,7 +303,6 @@ export type StaffWhereUniqueInput = Prisma.AtLeast<{
   administrator?: Prisma.XOR<Prisma.AdministratorNullableScalarRelationFilter, Prisma.AdministratorWhereInput> | null
   teacherAssignments?: Prisma.TeacherAssignmentListRelationFilter
   classRoutines?: Prisma.ClassRoutineListRelationFilter
-  examRoutines?: Prisma.ExamRoutineListRelationFilter
 }, "id" | "userId">
 
 export type StaffOrderByWithAggregationInput = {
@@ -366,7 +363,6 @@ export type StaffCreateInput = {
   administrator?: Prisma.AdministratorCreateNestedOneWithoutStaffInput
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutStaffInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateInput = {
@@ -387,7 +383,6 @@ export type StaffUncheckedCreateInput = {
   administrator?: Prisma.AdministratorUncheckedCreateNestedOneWithoutStaffInput
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutStaffInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUpdateInput = {
@@ -408,7 +403,6 @@ export type StaffUpdateInput = {
   administrator?: Prisma.AdministratorUpdateOneWithoutStaffNestedInput
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutStaffNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateInput = {
@@ -429,7 +423,6 @@ export type StaffUncheckedUpdateInput = {
   administrator?: Prisma.AdministratorUncheckedUpdateOneWithoutStaffNestedInput
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutStaffNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateManyInput = {
@@ -603,22 +596,6 @@ export type StaffUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutUserInput, Prisma.StaffUpdateWithoutUserInput>, Prisma.StaffUncheckedUpdateWithoutUserInput>
 }
 
-export type StaffCreateNestedOneWithoutExamRoutinesInput = {
-  create?: Prisma.XOR<Prisma.StaffCreateWithoutExamRoutinesInput, Prisma.StaffUncheckedCreateWithoutExamRoutinesInput>
-  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutExamRoutinesInput
-  connect?: Prisma.StaffWhereUniqueInput
-}
-
-export type StaffUpdateOneWithoutExamRoutinesNestedInput = {
-  create?: Prisma.XOR<Prisma.StaffCreateWithoutExamRoutinesInput, Prisma.StaffUncheckedCreateWithoutExamRoutinesInput>
-  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutExamRoutinesInput
-  upsert?: Prisma.StaffUpsertWithoutExamRoutinesInput
-  disconnect?: Prisma.StaffWhereInput | boolean
-  delete?: Prisma.StaffWhereInput | boolean
-  connect?: Prisma.StaffWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutExamRoutinesInput, Prisma.StaffUpdateWithoutExamRoutinesInput>, Prisma.StaffUncheckedUpdateWithoutExamRoutinesInput>
-}
-
 export type StaffCreateNestedOneWithoutAdministratorInput = {
   create?: Prisma.XOR<Prisma.StaffCreateWithoutAdministratorInput, Prisma.StaffUncheckedCreateWithoutAdministratorInput>
   connectOrCreate?: Prisma.StaffCreateOrConnectWithoutAdministratorInput
@@ -660,7 +637,6 @@ export type StaffCreateWithoutTeacherAssignmentsInput = {
   user?: Prisma.UserCreateNestedOneWithoutStaffInput
   administrator?: Prisma.AdministratorCreateNestedOneWithoutStaffInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutTeacherAssignmentsInput = {
@@ -680,7 +656,6 @@ export type StaffUncheckedCreateWithoutTeacherAssignmentsInput = {
   updatedAt?: Date | string
   administrator?: Prisma.AdministratorUncheckedCreateNestedOneWithoutStaffInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutTeacherAssignmentsInput = {
@@ -716,7 +691,6 @@ export type StaffUpdateWithoutTeacherAssignmentsInput = {
   user?: Prisma.UserUpdateOneWithoutStaffNestedInput
   administrator?: Prisma.AdministratorUpdateOneWithoutStaffNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutTeacherAssignmentsInput = {
@@ -736,7 +710,6 @@ export type StaffUncheckedUpdateWithoutTeacherAssignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   administrator?: Prisma.AdministratorUncheckedUpdateOneWithoutStaffNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutClassRoutinesInput = {
@@ -756,7 +729,6 @@ export type StaffCreateWithoutClassRoutinesInput = {
   user?: Prisma.UserCreateNestedOneWithoutStaffInput
   administrator?: Prisma.AdministratorCreateNestedOneWithoutStaffInput
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutClassRoutinesInput = {
@@ -776,7 +748,6 @@ export type StaffUncheckedCreateWithoutClassRoutinesInput = {
   updatedAt?: Date | string
   administrator?: Prisma.AdministratorUncheckedCreateNestedOneWithoutStaffInput
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutClassRoutinesInput = {
@@ -812,7 +783,6 @@ export type StaffUpdateWithoutClassRoutinesInput = {
   user?: Prisma.UserUpdateOneWithoutStaffNestedInput
   administrator?: Prisma.AdministratorUpdateOneWithoutStaffNestedInput
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutClassRoutinesInput = {
@@ -832,7 +802,6 @@ export type StaffUncheckedUpdateWithoutClassRoutinesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   administrator?: Prisma.AdministratorUncheckedUpdateOneWithoutStaffNestedInput
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutUserInput = {
@@ -852,7 +821,6 @@ export type StaffCreateWithoutUserInput = {
   administrator?: Prisma.AdministratorCreateNestedOneWithoutStaffInput
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutStaffInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutUserInput = {
@@ -872,7 +840,6 @@ export type StaffUncheckedCreateWithoutUserInput = {
   administrator?: Prisma.AdministratorUncheckedCreateNestedOneWithoutStaffInput
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutStaffInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutUserInput = {
@@ -908,108 +875,10 @@ export type StaffUpdateWithoutUserInput = {
   administrator?: Prisma.AdministratorUpdateOneWithoutStaffNestedInput
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutStaffNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  designation?: Prisma.StringFieldUpdateOperationsInput | string
-  qualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffType?: Prisma.EnumStaffTypeFieldUpdateOperationsInput | $Enums.StaffType
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joiningDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  leavingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrator?: Prisma.AdministratorUncheckedUpdateOneWithoutStaffNestedInput
-  teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutStaffNestedInput
-  classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutStaffNestedInput
-}
-
-export type StaffCreateWithoutExamRoutinesInput = {
-  id?: string
-  name: string
-  photo?: string | null
-  designation: string
-  qualification?: string | null
-  staffType: $Enums.StaffType
-  phone?: string | null
-  email?: string | null
-  joiningDate?: Date | string | null
-  leavingDate?: Date | string | null
-  status?: $Enums.StaffStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutStaffInput
-  administrator?: Prisma.AdministratorCreateNestedOneWithoutStaffInput
-  teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutStaffInput
-  classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutStaffInput
-}
-
-export type StaffUncheckedCreateWithoutExamRoutinesInput = {
-  id?: string
-  userId?: string | null
-  name: string
-  photo?: string | null
-  designation: string
-  qualification?: string | null
-  staffType: $Enums.StaffType
-  phone?: string | null
-  email?: string | null
-  joiningDate?: Date | string | null
-  leavingDate?: Date | string | null
-  status?: $Enums.StaffStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  administrator?: Prisma.AdministratorUncheckedCreateNestedOneWithoutStaffInput
-  teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutStaffInput
-  classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutStaffInput
-}
-
-export type StaffCreateOrConnectWithoutExamRoutinesInput = {
-  where: Prisma.StaffWhereUniqueInput
-  create: Prisma.XOR<Prisma.StaffCreateWithoutExamRoutinesInput, Prisma.StaffUncheckedCreateWithoutExamRoutinesInput>
-}
-
-export type StaffUpsertWithoutExamRoutinesInput = {
-  update: Prisma.XOR<Prisma.StaffUpdateWithoutExamRoutinesInput, Prisma.StaffUncheckedUpdateWithoutExamRoutinesInput>
-  create: Prisma.XOR<Prisma.StaffCreateWithoutExamRoutinesInput, Prisma.StaffUncheckedCreateWithoutExamRoutinesInput>
-  where?: Prisma.StaffWhereInput
-}
-
-export type StaffUpdateToOneWithWhereWithoutExamRoutinesInput = {
-  where?: Prisma.StaffWhereInput
-  data: Prisma.XOR<Prisma.StaffUpdateWithoutExamRoutinesInput, Prisma.StaffUncheckedUpdateWithoutExamRoutinesInput>
-}
-
-export type StaffUpdateWithoutExamRoutinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  designation?: Prisma.StringFieldUpdateOperationsInput | string
-  qualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  staffType?: Prisma.EnumStaffTypeFieldUpdateOperationsInput | $Enums.StaffType
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joiningDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  leavingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutStaffNestedInput
-  administrator?: Prisma.AdministratorUpdateOneWithoutStaffNestedInput
-  teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutStaffNestedInput
-  classRoutines?: Prisma.ClassRoutineUpdateManyWithoutStaffNestedInput
-}
-
-export type StaffUncheckedUpdateWithoutExamRoutinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   designation?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1044,7 +913,6 @@ export type StaffCreateWithoutAdministratorInput = {
   user?: Prisma.UserCreateNestedOneWithoutStaffInput
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutStaffInput
   classRoutines?: Prisma.ClassRoutineCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutAdministratorInput = {
@@ -1064,7 +932,6 @@ export type StaffUncheckedCreateWithoutAdministratorInput = {
   updatedAt?: Date | string
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutStaffInput
   classRoutines?: Prisma.ClassRoutineUncheckedCreateNestedManyWithoutStaffInput
-  examRoutines?: Prisma.ExamRoutineUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutAdministratorInput = {
@@ -1100,7 +967,6 @@ export type StaffUpdateWithoutAdministratorInput = {
   user?: Prisma.UserUpdateOneWithoutStaffNestedInput
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutStaffNestedInput
   classRoutines?: Prisma.ClassRoutineUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutAdministratorInput = {
@@ -1120,7 +986,6 @@ export type StaffUncheckedUpdateWithoutAdministratorInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutStaffNestedInput
   classRoutines?: Prisma.ClassRoutineUncheckedUpdateManyWithoutStaffNestedInput
-  examRoutines?: Prisma.ExamRoutineUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 
@@ -1131,13 +996,11 @@ export type StaffUncheckedUpdateWithoutAdministratorInput = {
 export type StaffCountOutputType = {
   teacherAssignments: number
   classRoutines: number
-  examRoutines: number
 }
 
 export type StaffCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacherAssignments?: boolean | StaffCountOutputTypeCountTeacherAssignmentsArgs
   classRoutines?: boolean | StaffCountOutputTypeCountClassRoutinesArgs
-  examRoutines?: boolean | StaffCountOutputTypeCountExamRoutinesArgs
 }
 
 /**
@@ -1164,13 +1027,6 @@ export type StaffCountOutputTypeCountClassRoutinesArgs<ExtArgs extends runtime.T
   where?: Prisma.ClassRoutineWhereInput
 }
 
-/**
- * StaffCountOutputType without action
- */
-export type StaffCountOutputTypeCountExamRoutinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ExamRoutineWhereInput
-}
-
 
 export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1191,7 +1047,6 @@ export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   administrator?: boolean | Prisma.Staff$administratorArgs<ExtArgs>
   teacherAssignments?: boolean | Prisma.Staff$teacherAssignmentsArgs<ExtArgs>
   classRoutines?: boolean | Prisma.Staff$classRoutinesArgs<ExtArgs>
-  examRoutines?: boolean | Prisma.Staff$examRoutinesArgs<ExtArgs>
   _count?: boolean | Prisma.StaffCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["staff"]>
 
@@ -1254,7 +1109,6 @@ export type StaffInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   administrator?: boolean | Prisma.Staff$administratorArgs<ExtArgs>
   teacherAssignments?: boolean | Prisma.Staff$teacherAssignmentsArgs<ExtArgs>
   classRoutines?: boolean | Prisma.Staff$classRoutinesArgs<ExtArgs>
-  examRoutines?: boolean | Prisma.Staff$examRoutinesArgs<ExtArgs>
   _count?: boolean | Prisma.StaffCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StaffIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1271,7 +1125,6 @@ export type $StaffPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     administrator: Prisma.$AdministratorPayload<ExtArgs> | null
     teacherAssignments: Prisma.$TeacherAssignmentPayload<ExtArgs>[]
     classRoutines: Prisma.$ClassRoutinePayload<ExtArgs>[]
-    examRoutines: Prisma.$ExamRoutinePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1686,7 +1539,6 @@ export interface Prisma__StaffClient<T, Null = never, ExtArgs extends runtime.Ty
   administrator<T extends Prisma.Staff$administratorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$administratorArgs<ExtArgs>>): Prisma.Prisma__AdministratorClient<runtime.Types.Result.GetResult<Prisma.$AdministratorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   teacherAssignments<T extends Prisma.Staff$teacherAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$teacherAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeacherAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classRoutines<T extends Prisma.Staff$classRoutinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$classRoutinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassRoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  examRoutines<T extends Prisma.Staff$examRoutinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$examRoutinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamRoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2209,30 +2061,6 @@ export type Staff$classRoutinesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.ClassRoutineScalarFieldEnum | Prisma.ClassRoutineScalarFieldEnum[]
-}
-
-/**
- * Staff.examRoutines
- */
-export type Staff$examRoutinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ExamRoutine
-   */
-  select?: Prisma.ExamRoutineSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ExamRoutine
-   */
-  omit?: Prisma.ExamRoutineOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ExamRoutineInclude<ExtArgs> | null
-  where?: Prisma.ExamRoutineWhereInput
-  orderBy?: Prisma.ExamRoutineOrderByWithRelationInput | Prisma.ExamRoutineOrderByWithRelationInput[]
-  cursor?: Prisma.ExamRoutineWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ExamRoutineScalarFieldEnum | Prisma.ExamRoutineScalarFieldEnum[]
 }
 
 /**

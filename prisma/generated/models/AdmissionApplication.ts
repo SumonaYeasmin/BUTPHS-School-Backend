@@ -31,8 +31,8 @@ export type AdmissionApplicationMinAggregateOutputType = {
   studentName: string | null
   dateOfBirth: Date | null
   gender: $Enums.Gender | null
-  bloodGroup: string | null
-  religion: string | null
+  bloodGroup: $Enums.BloodGroup | null
+  religion: $Enums.Religion | null
   birthCertificate: string | null
   fatherName: string | null
   motherName: string | null
@@ -57,8 +57,8 @@ export type AdmissionApplicationMaxAggregateOutputType = {
   studentName: string | null
   dateOfBirth: Date | null
   gender: $Enums.Gender | null
-  bloodGroup: string | null
-  religion: string | null
+  bloodGroup: $Enums.BloodGroup | null
+  religion: $Enums.Religion | null
   birthCertificate: string | null
   fatherName: string | null
   motherName: string | null
@@ -262,8 +262,8 @@ export type AdmissionApplicationGroupByOutputType = {
   studentName: string
   dateOfBirth: Date
   gender: $Enums.Gender
-  bloodGroup: string | null
-  religion: string | null
+  bloodGroup: $Enums.BloodGroup | null
+  religion: $Enums.Religion | null
   birthCertificate: string | null
   fatherName: string
   motherName: string
@@ -309,8 +309,8 @@ export type AdmissionApplicationWhereInput = {
   studentName?: Prisma.StringFilter<"AdmissionApplication"> | string
   dateOfBirth?: Prisma.DateTimeFilter<"AdmissionApplication"> | Date | string
   gender?: Prisma.EnumGenderFilter<"AdmissionApplication"> | $Enums.Gender
-  bloodGroup?: Prisma.StringNullableFilter<"AdmissionApplication"> | string | null
-  religion?: Prisma.StringNullableFilter<"AdmissionApplication"> | string | null
+  bloodGroup?: Prisma.EnumBloodGroupNullableFilter<"AdmissionApplication"> | $Enums.BloodGroup | null
+  religion?: Prisma.EnumReligionNullableFilter<"AdmissionApplication"> | $Enums.Religion | null
   birthCertificate?: Prisma.StringNullableFilter<"AdmissionApplication"> | string | null
   fatherName?: Prisma.StringFilter<"AdmissionApplication"> | string
   motherName?: Prisma.StringFilter<"AdmissionApplication"> | string
@@ -366,8 +366,8 @@ export type AdmissionApplicationWhereUniqueInput = Prisma.AtLeast<{
   studentName?: Prisma.StringFilter<"AdmissionApplication"> | string
   dateOfBirth?: Prisma.DateTimeFilter<"AdmissionApplication"> | Date | string
   gender?: Prisma.EnumGenderFilter<"AdmissionApplication"> | $Enums.Gender
-  bloodGroup?: Prisma.StringNullableFilter<"AdmissionApplication"> | string | null
-  religion?: Prisma.StringNullableFilter<"AdmissionApplication"> | string | null
+  bloodGroup?: Prisma.EnumBloodGroupNullableFilter<"AdmissionApplication"> | $Enums.BloodGroup | null
+  religion?: Prisma.EnumReligionNullableFilter<"AdmissionApplication"> | $Enums.Religion | null
   birthCertificate?: Prisma.StringNullableFilter<"AdmissionApplication"> | string | null
   fatherName?: Prisma.StringFilter<"AdmissionApplication"> | string
   motherName?: Prisma.StringFilter<"AdmissionApplication"> | string
@@ -425,8 +425,8 @@ export type AdmissionApplicationScalarWhereWithAggregatesInput = {
   studentName?: Prisma.StringWithAggregatesFilter<"AdmissionApplication"> | string
   dateOfBirth?: Prisma.DateTimeWithAggregatesFilter<"AdmissionApplication"> | Date | string
   gender?: Prisma.EnumGenderWithAggregatesFilter<"AdmissionApplication"> | $Enums.Gender
-  bloodGroup?: Prisma.StringNullableWithAggregatesFilter<"AdmissionApplication"> | string | null
-  religion?: Prisma.StringNullableWithAggregatesFilter<"AdmissionApplication"> | string | null
+  bloodGroup?: Prisma.EnumBloodGroupNullableWithAggregatesFilter<"AdmissionApplication"> | $Enums.BloodGroup | null
+  religion?: Prisma.EnumReligionNullableWithAggregatesFilter<"AdmissionApplication"> | $Enums.Religion | null
   birthCertificate?: Prisma.StringNullableWithAggregatesFilter<"AdmissionApplication"> | string | null
   fatherName?: Prisma.StringWithAggregatesFilter<"AdmissionApplication"> | string
   motherName?: Prisma.StringWithAggregatesFilter<"AdmissionApplication"> | string
@@ -450,8 +450,8 @@ export type AdmissionApplicationCreateInput = {
   studentName: string
   dateOfBirth: Date | string
   gender: $Enums.Gender
-  bloodGroup?: string | null
-  religion?: string | null
+  bloodGroup?: $Enums.BloodGroup | null
+  religion?: $Enums.Religion | null
   birthCertificate?: string | null
   fatherName: string
   motherName: string
@@ -477,8 +477,8 @@ export type AdmissionApplicationUncheckedCreateInput = {
   studentName: string
   dateOfBirth: Date | string
   gender: $Enums.Gender
-  bloodGroup?: string | null
-  religion?: string | null
+  bloodGroup?: $Enums.BloodGroup | null
+  religion?: $Enums.Religion | null
   birthCertificate?: string | null
   fatherName: string
   motherName: string
@@ -502,8 +502,8 @@ export type AdmissionApplicationUpdateInput = {
   studentName?: Prisma.StringFieldUpdateOperationsInput | string
   dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-  bloodGroup?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  religion?: Prisma.NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
   birthCertificate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -529,8 +529,8 @@ export type AdmissionApplicationUncheckedUpdateInput = {
   studentName?: Prisma.StringFieldUpdateOperationsInput | string
   dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-  bloodGroup?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  religion?: Prisma.NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
   birthCertificate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -555,8 +555,8 @@ export type AdmissionApplicationCreateManyInput = {
   studentName: string
   dateOfBirth: Date | string
   gender: $Enums.Gender
-  bloodGroup?: string | null
-  religion?: string | null
+  bloodGroup?: $Enums.BloodGroup | null
+  religion?: $Enums.Religion | null
   birthCertificate?: string | null
   fatherName: string
   motherName: string
@@ -580,8 +580,8 @@ export type AdmissionApplicationUpdateManyMutationInput = {
   studentName?: Prisma.StringFieldUpdateOperationsInput | string
   dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-  bloodGroup?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  religion?: Prisma.NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
   birthCertificate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -606,8 +606,8 @@ export type AdmissionApplicationUncheckedUpdateManyInput = {
   studentName?: Prisma.StringFieldUpdateOperationsInput | string
   dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-  bloodGroup?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  religion?: Prisma.NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
   birthCertificate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -765,8 +765,8 @@ export type AdmissionApplicationCreateWithoutSchoolClassInput = {
   studentName: string
   dateOfBirth: Date | string
   gender: $Enums.Gender
-  bloodGroup?: string | null
-  religion?: string | null
+  bloodGroup?: $Enums.BloodGroup | null
+  religion?: $Enums.Religion | null
   birthCertificate?: string | null
   fatherName: string
   motherName: string
@@ -790,8 +790,8 @@ export type AdmissionApplicationUncheckedCreateWithoutSchoolClassInput = {
   studentName: string
   dateOfBirth: Date | string
   gender: $Enums.Gender
-  bloodGroup?: string | null
-  religion?: string | null
+  bloodGroup?: $Enums.BloodGroup | null
+  religion?: $Enums.Religion | null
   birthCertificate?: string | null
   fatherName: string
   motherName: string
@@ -845,8 +845,8 @@ export type AdmissionApplicationScalarWhereInput = {
   studentName?: Prisma.StringFilter<"AdmissionApplication"> | string
   dateOfBirth?: Prisma.DateTimeFilter<"AdmissionApplication"> | Date | string
   gender?: Prisma.EnumGenderFilter<"AdmissionApplication"> | $Enums.Gender
-  bloodGroup?: Prisma.StringNullableFilter<"AdmissionApplication"> | string | null
-  religion?: Prisma.StringNullableFilter<"AdmissionApplication"> | string | null
+  bloodGroup?: Prisma.EnumBloodGroupNullableFilter<"AdmissionApplication"> | $Enums.BloodGroup | null
+  religion?: Prisma.EnumReligionNullableFilter<"AdmissionApplication"> | $Enums.Religion | null
   birthCertificate?: Prisma.StringNullableFilter<"AdmissionApplication"> | string | null
   fatherName?: Prisma.StringFilter<"AdmissionApplication"> | string
   motherName?: Prisma.StringFilter<"AdmissionApplication"> | string
@@ -870,8 +870,8 @@ export type AdmissionApplicationCreateManySchoolClassInput = {
   studentName: string
   dateOfBirth: Date | string
   gender: $Enums.Gender
-  bloodGroup?: string | null
-  religion?: string | null
+  bloodGroup?: $Enums.BloodGroup | null
+  religion?: $Enums.Religion | null
   birthCertificate?: string | null
   fatherName: string
   motherName: string
@@ -895,8 +895,8 @@ export type AdmissionApplicationUpdateWithoutSchoolClassInput = {
   studentName?: Prisma.StringFieldUpdateOperationsInput | string
   dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-  bloodGroup?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  religion?: Prisma.NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
   birthCertificate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -920,8 +920,8 @@ export type AdmissionApplicationUncheckedUpdateWithoutSchoolClassInput = {
   studentName?: Prisma.StringFieldUpdateOperationsInput | string
   dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-  bloodGroup?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  religion?: Prisma.NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
   birthCertificate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -945,8 +945,8 @@ export type AdmissionApplicationUncheckedUpdateManyWithoutSchoolClassInput = {
   studentName?: Prisma.StringFieldUpdateOperationsInput | string
   dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-  bloodGroup?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  religion?: Prisma.NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
   birthCertificate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1096,8 +1096,8 @@ export type $AdmissionApplicationPayload<ExtArgs extends runtime.Types.Extension
     studentName: string
     dateOfBirth: Date
     gender: $Enums.Gender
-    bloodGroup: string | null
-    religion: string | null
+    bloodGroup: $Enums.BloodGroup | null
+    religion: $Enums.Religion | null
     birthCertificate: string | null
     fatherName: string
     motherName: string
@@ -1543,8 +1543,8 @@ export interface AdmissionApplicationFieldRefs {
   readonly studentName: Prisma.FieldRef<"AdmissionApplication", 'String'>
   readonly dateOfBirth: Prisma.FieldRef<"AdmissionApplication", 'DateTime'>
   readonly gender: Prisma.FieldRef<"AdmissionApplication", 'Gender'>
-  readonly bloodGroup: Prisma.FieldRef<"AdmissionApplication", 'String'>
-  readonly religion: Prisma.FieldRef<"AdmissionApplication", 'String'>
+  readonly bloodGroup: Prisma.FieldRef<"AdmissionApplication", 'BloodGroup'>
+  readonly religion: Prisma.FieldRef<"AdmissionApplication", 'Religion'>
   readonly birthCertificate: Prisma.FieldRef<"AdmissionApplication", 'String'>
   readonly fatherName: Prisma.FieldRef<"AdmissionApplication", 'String'>
   readonly motherName: Prisma.FieldRef<"AdmissionApplication", 'String'>

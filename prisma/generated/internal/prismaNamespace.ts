@@ -389,8 +389,10 @@ export const ModelName = {
   SchoolClass: 'SchoolClass',
   Section: 'Section',
   Subject: 'Subject',
+  Book: 'Book',
   ClassSubject: 'ClassSubject',
   Student: 'Student',
+  StudentRFIDcard: 'StudentRFIDcard',
   StudentEnrollment: 'StudentEnrollment',
   StudentPromotion: 'StudentPromotion',
   Parent: 'Parent',
@@ -457,7 +459,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "academicYear" | "academicGroup" | "schoolClass" | "section" | "subject" | "classSubject" | "student" | "studentEnrollment" | "studentPromotion" | "parent" | "parentStudent" | "teacherAssignment" | "academicDocument" | "academicEvent" | "classRoutine" | "admissionApplication" | "attendance" | "attendanceSmsLog" | "user" | "role" | "permission" | "userRole" | "rolePermission" | "auditLog" | "digitalClassroom" | "digitalResource" | "gradingScale" | "gradeRange" | "exam" | "examSubject" | "examRoutine" | "mark" | "studentSubjectResult" | "resultSummary" | "schoolProfile" | "institutionContent" | "schoolFacility" | "administrator" | "managingCommitteeMember" | "quickLink" | "libraryProfile" | "libraryBook" | "libraryDistributionInfo" | "notice" | "news" | "eventCategory" | "event" | "staff" | "staffStructure" | "websiteBanner" | "leadershipMessage" | "gallery" | "galleryMedia" | "admissionContent" | "contactInformation" | "attendancePublicSummary" | "publication" | "achievement"
+    modelProps: "academicYear" | "academicGroup" | "schoolClass" | "section" | "subject" | "book" | "classSubject" | "student" | "studentRFIDcard" | "studentEnrollment" | "studentPromotion" | "parent" | "parentStudent" | "teacherAssignment" | "academicDocument" | "academicEvent" | "classRoutine" | "admissionApplication" | "attendance" | "attendanceSmsLog" | "user" | "role" | "permission" | "userRole" | "rolePermission" | "auditLog" | "digitalClassroom" | "digitalResource" | "gradingScale" | "gradeRange" | "exam" | "examSubject" | "examRoutine" | "mark" | "studentSubjectResult" | "resultSummary" | "schoolProfile" | "institutionContent" | "schoolFacility" | "administrator" | "managingCommitteeMember" | "quickLink" | "libraryProfile" | "libraryBook" | "libraryDistributionInfo" | "notice" | "news" | "eventCategory" | "event" | "staff" | "staffStructure" | "websiteBanner" | "leadershipMessage" | "gallery" | "galleryMedia" | "admissionContent" | "contactInformation" | "attendancePublicSummary" | "publication" | "achievement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -831,6 +833,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Book: {
+      payload: Prisma.$BookPayload<ExtArgs>
+      fields: Prisma.BookFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BookFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BookFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload>
+        }
+        findFirst: {
+          args: Prisma.BookFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BookFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload>
+        }
+        findMany: {
+          args: Prisma.BookFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload>[]
+        }
+        create: {
+          args: Prisma.BookCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload>
+        }
+        createMany: {
+          args: Prisma.BookCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BookCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload>[]
+        }
+        delete: {
+          args: Prisma.BookDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload>
+        }
+        update: {
+          args: Prisma.BookUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload>
+        }
+        deleteMany: {
+          args: Prisma.BookDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BookUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BookUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload>[]
+        }
+        upsert: {
+          args: Prisma.BookUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookPayload>
+        }
+        aggregate: {
+          args: Prisma.BookAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBook>
+        }
+        groupBy: {
+          args: Prisma.BookGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BookCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookCountAggregateOutputType> | number
+        }
+      }
+    }
     ClassSubject: {
       payload: Prisma.$ClassSubjectPayload<ExtArgs>
       fields: Prisma.ClassSubjectFieldRefs
@@ -976,6 +1052,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.StudentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.StudentCountAggregateOutputType> | number
+        }
+      }
+    }
+    StudentRFIDcard: {
+      payload: Prisma.$StudentRFIDcardPayload<ExtArgs>
+      fields: Prisma.StudentRFIDcardFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StudentRFIDcardFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StudentRFIDcardFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload>
+        }
+        findFirst: {
+          args: Prisma.StudentRFIDcardFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StudentRFIDcardFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload>
+        }
+        findMany: {
+          args: Prisma.StudentRFIDcardFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload>[]
+        }
+        create: {
+          args: Prisma.StudentRFIDcardCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload>
+        }
+        createMany: {
+          args: Prisma.StudentRFIDcardCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StudentRFIDcardCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload>[]
+        }
+        delete: {
+          args: Prisma.StudentRFIDcardDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload>
+        }
+        update: {
+          args: Prisma.StudentRFIDcardUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload>
+        }
+        deleteMany: {
+          args: Prisma.StudentRFIDcardDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StudentRFIDcardUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StudentRFIDcardUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload>[]
+        }
+        upsert: {
+          args: Prisma.StudentRFIDcardUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentRFIDcardPayload>
+        }
+        aggregate: {
+          args: Prisma.StudentRFIDcardAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStudentRFIDcard>
+        }
+        groupBy: {
+          args: Prisma.StudentRFIDcardGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentRFIDcardGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StudentRFIDcardCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentRFIDcardCountAggregateOutputType> | number
         }
       }
     }
@@ -4835,11 +4985,33 @@ export type SectionScalarFieldEnum = (typeof SectionScalarFieldEnum)[keyof typeo
 export const SubjectScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  code: 'code',
-  description: 'description'
+  officialCode: 'officialCode',
+  category: 'category',
+  description: 'description',
+  displayOrder: 'displayOrder',
+  isSystemDefault: 'isSystemDefault',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
+
+
+export const BookScalarFieldEnum = {
+  id: 'id',
+  subjectId: 'subjectId',
+  classId: 'classId',
+  name: 'name',
+  bookCode: 'bookCode',
+  type: 'type',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookScalarFieldEnum = (typeof BookScalarFieldEnum)[keyof typeof BookScalarFieldEnum]
 
 
 export const ClassSubjectScalarFieldEnum = {
@@ -4848,7 +5020,11 @@ export const ClassSubjectScalarFieldEnum = {
   classId: 'classId',
   subjectId: 'subjectId',
   groupId: 'groupId',
-  isOptional: 'isOptional'
+  isOptional: 'isOptional',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ClassSubjectScalarFieldEnum = (typeof ClassSubjectScalarFieldEnum)[keyof typeof ClassSubjectScalarFieldEnum]
@@ -4857,7 +5033,6 @@ export type ClassSubjectScalarFieldEnum = (typeof ClassSubjectScalarFieldEnum)[k
 export const StudentScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
-  rfidCardNo: 'rfidCardNo',
   birthCertificateNo: 'birthCertificateNo',
   name: 'name',
   photo: 'photo',
@@ -4876,6 +5051,20 @@ export const StudentScalarFieldEnum = {
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
 
 
+export const StudentRFIDcardScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  cardNumber: 'cardNumber',
+  status: 'status',
+  issuedAt: 'issuedAt',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudentRFIDcardScalarFieldEnum = (typeof StudentRFIDcardScalarFieldEnum)[keyof typeof StudentRFIDcardScalarFieldEnum]
+
+
 export const StudentEnrollmentScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
@@ -4883,9 +5072,13 @@ export const StudentEnrollmentScalarFieldEnum = {
   classId: 'classId',
   sectionId: 'sectionId',
   groupId: 'groupId',
+  optionalSubjectId: 'optionalSubjectId',
   roll: 'roll',
   enrollmentDate: 'enrollmentDate',
-  status: 'status'
+  isRepeater: 'isRepeater',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type StudentEnrollmentScalarFieldEnum = (typeof StudentEnrollmentScalarFieldEnum)[keyof typeof StudentEnrollmentScalarFieldEnum]
@@ -4896,8 +5089,11 @@ export const StudentPromotionScalarFieldEnum = {
   studentId: 'studentId',
   fromEnrollmentId: 'fromEnrollmentId',
   toEnrollmentId: 'toEnrollmentId',
+  resultSummaryId: 'resultSummaryId',
   promotionDate: 'promotionDate',
-  remarks: 'remarks'
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type StudentPromotionScalarFieldEnum = (typeof StudentPromotionScalarFieldEnum)[keyof typeof StudentPromotionScalarFieldEnum]
@@ -4909,8 +5105,11 @@ export const ParentScalarFieldEnum = {
   name: 'name',
   phone: 'phone',
   email: 'email',
+  nid: 'nid',
   occupation: 'occupation',
-  address: 'address'
+  address: 'address',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ParentScalarFieldEnum = (typeof ParentScalarFieldEnum)[keyof typeof ParentScalarFieldEnum]
@@ -4921,7 +5120,8 @@ export const ParentStudentScalarFieldEnum = {
   parentId: 'parentId',
   studentId: 'studentId',
   relationship: 'relationship',
-  isPrimary: 'isPrimary'
+  isPrimary: 'isPrimary',
+  createdAt: 'createdAt'
 } as const
 
 export type ParentStudentScalarFieldEnum = (typeof ParentStudentScalarFieldEnum)[keyof typeof ParentStudentScalarFieldEnum]
@@ -5142,7 +5342,12 @@ export const GradingScaleScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  isActive: 'isActive'
+  maxGpa: 'maxGpa',
+  isDefault: 'isDefault',
+  isSystemDefault: 'isSystemDefault',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type GradingScaleScalarFieldEnum = (typeof GradingScaleScalarFieldEnum)[keyof typeof GradingScaleScalarFieldEnum]
@@ -5151,10 +5356,13 @@ export type GradingScaleScalarFieldEnum = (typeof GradingScaleScalarFieldEnum)[k
 export const GradeRangeScalarFieldEnum = {
   id: 'id',
   gradingScaleId: 'gradingScaleId',
-  minMarks: 'minMarks',
-  maxMarks: 'maxMarks',
+  minPercentage: 'minPercentage',
+  maxPercentage: 'maxPercentage',
   letterGrade: 'letterGrade',
-  gradePoint: 'gradePoint'
+  gradePoint: 'gradePoint',
+  remarks: 'remarks',
+  isFailGrade: 'isFailGrade',
+  displayOrder: 'displayOrder'
 } as const
 
 export type GradeRangeScalarFieldEnum = (typeof GradeRangeScalarFieldEnum)[keyof typeof GradeRangeScalarFieldEnum]
@@ -5169,7 +5377,15 @@ export const ExamScalarFieldEnum = {
   examType: 'examType',
   startDate: 'startDate',
   endDate: 'endDate',
+  status: 'status',
+  marksEntryDeadline: 'marksEntryDeadline',
+  allowCombinedPass: 'allowCombinedPass',
+  weightagePercentage: 'weightagePercentage',
   resultStatus: 'resultStatus',
+  publishedAt: 'publishedAt',
+  isLocked: 'isLocked',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -5181,14 +5397,21 @@ export const ExamSubjectScalarFieldEnum = {
   id: 'id',
   examId: 'examId',
   subjectId: 'subjectId',
+  groupId: 'groupId',
   fullMarks: 'fullMarks',
   passMarks: 'passMarks',
   hasWritten: 'hasWritten',
-  hasMcq: 'hasMcq',
-  hasPractical: 'hasPractical',
   writtenFullMarks: 'writtenFullMarks',
+  writtenPassMarks: 'writtenPassMarks',
+  hasMcq: 'hasMcq',
   mcqFullMarks: 'mcqFullMarks',
-  practicalFullMarks: 'practicalFullMarks'
+  mcqPassMarks: 'mcqPassMarks',
+  hasPractical: 'hasPractical',
+  practicalFullMarks: 'practicalFullMarks',
+  practicalPassMarks: 'practicalPassMarks',
+  hasContinuousAssessment: 'hasContinuousAssessment',
+  continuousAssessmentFullMarks: 'continuousAssessmentFullMarks',
+  continuousAssessmentPassMarks: 'continuousAssessmentPassMarks'
 } as const
 
 export type ExamSubjectScalarFieldEnum = (typeof ExamSubjectScalarFieldEnum)[keyof typeof ExamSubjectScalarFieldEnum]
@@ -5197,14 +5420,16 @@ export type ExamSubjectScalarFieldEnum = (typeof ExamSubjectScalarFieldEnum)[key
 export const ExamRoutineScalarFieldEnum = {
   id: 'id',
   examId: 'examId',
-  teacherAssignmentId: 'teacherAssignmentId',
-  staffId: 'staffId',
   examSubjectId: 'examSubjectId',
+  sectionId: 'sectionId',
   examDate: 'examDate',
   startTime: 'startTime',
   endTime: 'endTime',
-  room: 'room',
-  academicYearId: 'academicYearId'
+  roomNo: 'roomNo',
+  status: 'status',
+  instructions: 'instructions',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ExamRoutineScalarFieldEnum = (typeof ExamRoutineScalarFieldEnum)[keyof typeof ExamRoutineScalarFieldEnum]
@@ -5217,7 +5442,10 @@ export const MarkScalarFieldEnum = {
   writtenMarks: 'writtenMarks',
   mcqMarks: 'mcqMarks',
   practicalMarks: 'practicalMarks',
+  continuousAssessmentMarks: 'continuousAssessmentMarks',
   totalMarks: 'totalMarks',
+  isAbsent: 'isAbsent',
+  isLocked: 'isLocked',
   enteredBy: 'enteredBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -5235,6 +5463,7 @@ export const StudentSubjectResultScalarFieldEnum = {
   letterGrade: 'letterGrade',
   gradePoint: 'gradePoint',
   isPassed: 'isPassed',
+  isAbsent: 'isAbsent',
   calculatedAt: 'calculatedAt'
 } as const
 
@@ -5245,10 +5474,13 @@ export const ResultSummaryScalarFieldEnum = {
   id: 'id',
   studentEnrollmentId: 'studentEnrollmentId',
   examId: 'examId',
+  totalFullMarks: 'totalFullMarks',
   totalMarks: 'totalMarks',
   gpa: 'gpa',
   letterGrade: 'letterGrade',
   meritPosition: 'meritPosition',
+  sectionMeritPosition: 'sectionMeritPosition',
+  failedSubjectCount: 'failedSubjectCount',
   resultStatus: 'resultStatus',
   publishedAt: 'publishedAt',
   createdAt: 'createdAt',
@@ -5711,6 +5943,34 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'SubjectCategory'
+ */
+export type EnumSubjectCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubjectCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'SubjectCategory[]'
+ */
+export type ListEnumSubjectCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubjectCategory[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BookType'
+ */
+export type EnumBookTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BookType'>
+    
+
+
+/**
+ * Reference to a field of type 'BookType[]'
+ */
+export type ListEnumBookTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BookType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Gender'
  */
 export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
@@ -5725,6 +5985,34 @@ export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
 
 
 /**
+ * Reference to a field of type 'BloodGroup'
+ */
+export type EnumBloodGroupFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BloodGroup'>
+    
+
+
+/**
+ * Reference to a field of type 'BloodGroup[]'
+ */
+export type ListEnumBloodGroupFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BloodGroup[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Religion'
+ */
+export type EnumReligionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Religion'>
+    
+
+
+/**
+ * Reference to a field of type 'Religion[]'
+ */
+export type ListEnumReligionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Religion[]'>
+    
+
+
+/**
  * Reference to a field of type 'StudentStatus'
  */
 export type EnumStudentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentStatus'>
@@ -5735,6 +6023,20 @@ export type EnumStudentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'StudentStatus[]'
  */
 export type ListEnumStudentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CardStatus'
+ */
+export type EnumCardStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CardStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CardStatus[]'
+ */
+export type ListEnumCardStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CardStatus[]'>
     
 
 
@@ -5921,6 +6223,20 @@ export type ListEnumExamTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'ExamStatus'
+ */
+export type EnumExamStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExamStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ExamStatus[]'
+ */
+export type ListEnumExamStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExamStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'ResultPublicationStatus'
  */
 export type EnumResultPublicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResultPublicationStatus'>
@@ -5931,6 +6247,20 @@ export type EnumResultPublicationStatusFieldRefInput<$PrismaModel> = FieldRefInp
  * Reference to a field of type 'ResultPublicationStatus[]'
  */
 export type ListEnumResultPublicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResultPublicationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ExamRoutineStatus'
+ */
+export type EnumExamRoutineStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExamRoutineStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ExamRoutineStatus[]'
+ */
+export type ListEnumExamRoutineStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExamRoutineStatus[]'>
     
 
 
@@ -6229,8 +6559,10 @@ export type GlobalOmitConfig = {
   schoolClass?: Prisma.SchoolClassOmit
   section?: Prisma.SectionOmit
   subject?: Prisma.SubjectOmit
+  book?: Prisma.BookOmit
   classSubject?: Prisma.ClassSubjectOmit
   student?: Prisma.StudentOmit
+  studentRFIDcard?: Prisma.StudentRFIDcardOmit
   studentEnrollment?: Prisma.StudentEnrollmentOmit
   studentPromotion?: Prisma.StudentPromotionOmit
   parent?: Prisma.ParentOmit

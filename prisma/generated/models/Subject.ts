@@ -20,52 +20,106 @@ export type SubjectModel = runtime.Types.Result.DefaultSelection<Prisma.$Subject
 
 export type AggregateSubject = {
   _count: SubjectCountAggregateOutputType | null
+  _avg: SubjectAvgAggregateOutputType | null
+  _sum: SubjectSumAggregateOutputType | null
   _min: SubjectMinAggregateOutputType | null
   _max: SubjectMaxAggregateOutputType | null
+}
+
+export type SubjectAvgAggregateOutputType = {
+  displayOrder: number | null
+}
+
+export type SubjectSumAggregateOutputType = {
+  displayOrder: number | null
 }
 
 export type SubjectMinAggregateOutputType = {
   id: string | null
   name: string | null
-  code: string | null
+  officialCode: string | null
+  category: $Enums.SubjectCategory | null
   description: string | null
+  displayOrder: number | null
+  isSystemDefault: boolean | null
+  isActive: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type SubjectMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  code: string | null
+  officialCode: string | null
+  category: $Enums.SubjectCategory | null
   description: string | null
+  displayOrder: number | null
+  isSystemDefault: boolean | null
+  isActive: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type SubjectCountAggregateOutputType = {
   id: number
   name: number
-  code: number
+  officialCode: number
+  category: number
   description: number
+  displayOrder: number
+  isSystemDefault: number
+  isActive: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
+export type SubjectAvgAggregateInputType = {
+  displayOrder?: true
+}
+
+export type SubjectSumAggregateInputType = {
+  displayOrder?: true
+}
+
 export type SubjectMinAggregateInputType = {
   id?: true
   name?: true
-  code?: true
+  officialCode?: true
+  category?: true
   description?: true
+  displayOrder?: true
+  isSystemDefault?: true
+  isActive?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type SubjectMaxAggregateInputType = {
   id?: true
   name?: true
-  code?: true
+  officialCode?: true
+  category?: true
   description?: true
+  displayOrder?: true
+  isSystemDefault?: true
+  isActive?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type SubjectCountAggregateInputType = {
   id?: true
   name?: true
-  code?: true
+  officialCode?: true
+  category?: true
   description?: true
+  displayOrder?: true
+  isSystemDefault?: true
+  isActive?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -107,6 +161,18 @@ export type SubjectAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: SubjectAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: SubjectSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: SubjectMinAggregateInputType
@@ -137,6 +203,8 @@ export type SubjectGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: SubjectCountAggregateInputType | true
+  _avg?: SubjectAvgAggregateInputType
+  _sum?: SubjectSumAggregateInputType
   _min?: SubjectMinAggregateInputType
   _max?: SubjectMaxAggregateInputType
 }
@@ -144,9 +212,17 @@ export type SubjectGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type SubjectGroupByOutputType = {
   id: string
   name: string
-  code: string | null
+  officialCode: string | null
+  category: $Enums.SubjectCategory
   description: string | null
+  displayOrder: number
+  isSystemDefault: boolean
+  isActive: boolean
+  createdAt: Date
+  updatedAt: Date
   _count: SubjectCountAggregateOutputType | null
+  _avg: SubjectAvgAggregateOutputType | null
+  _sum: SubjectSumAggregateOutputType | null
   _min: SubjectMinAggregateOutputType | null
   _max: SubjectMaxAggregateOutputType | null
 }
@@ -172,44 +248,76 @@ export type SubjectWhereInput = {
   NOT?: Prisma.SubjectWhereInput | Prisma.SubjectWhereInput[]
   id?: Prisma.UuidFilter<"Subject"> | string
   name?: Prisma.StringFilter<"Subject"> | string
-  code?: Prisma.StringNullableFilter<"Subject"> | string | null
+  officialCode?: Prisma.StringNullableFilter<"Subject"> | string | null
+  category?: Prisma.EnumSubjectCategoryFilter<"Subject"> | $Enums.SubjectCategory
   description?: Prisma.StringNullableFilter<"Subject"> | string | null
+  displayOrder?: Prisma.IntFilter<"Subject"> | number
+  isSystemDefault?: Prisma.BoolFilter<"Subject"> | boolean
+  isActive?: Prisma.BoolFilter<"Subject"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
+  books?: Prisma.BookListRelationFilter
   classSubjects?: Prisma.ClassSubjectListRelationFilter
   examSubjects?: Prisma.ExamSubjectListRelationFilter
   digitalResources?: Prisma.DigitalResourceListRelationFilter
+  optionalEnrollments?: Prisma.StudentEnrollmentListRelationFilter
 }
 
 export type SubjectOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  code?: Prisma.SortOrderInput | Prisma.SortOrder
+  officialCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  books?: Prisma.BookOrderByRelationAggregateInput
   classSubjects?: Prisma.ClassSubjectOrderByRelationAggregateInput
   examSubjects?: Prisma.ExamSubjectOrderByRelationAggregateInput
   digitalResources?: Prisma.DigitalResourceOrderByRelationAggregateInput
+  optionalEnrollments?: Prisma.StudentEnrollmentOrderByRelationAggregateInput
 }
 
 export type SubjectWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   name?: string
-  code?: string
+  officialCode?: string
   AND?: Prisma.SubjectWhereInput | Prisma.SubjectWhereInput[]
   OR?: Prisma.SubjectWhereInput[]
   NOT?: Prisma.SubjectWhereInput | Prisma.SubjectWhereInput[]
+  category?: Prisma.EnumSubjectCategoryFilter<"Subject"> | $Enums.SubjectCategory
   description?: Prisma.StringNullableFilter<"Subject"> | string | null
+  displayOrder?: Prisma.IntFilter<"Subject"> | number
+  isSystemDefault?: Prisma.BoolFilter<"Subject"> | boolean
+  isActive?: Prisma.BoolFilter<"Subject"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
+  books?: Prisma.BookListRelationFilter
   classSubjects?: Prisma.ClassSubjectListRelationFilter
   examSubjects?: Prisma.ExamSubjectListRelationFilter
   digitalResources?: Prisma.DigitalResourceListRelationFilter
-}, "id" | "code" | "name">
+  optionalEnrollments?: Prisma.StudentEnrollmentListRelationFilter
+}, "id" | "name" | "officialCode">
 
 export type SubjectOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  code?: Prisma.SortOrderInput | Prisma.SortOrder
+  officialCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.SubjectCountOrderByAggregateInput
+  _avg?: Prisma.SubjectAvgOrderByAggregateInput
   _max?: Prisma.SubjectMaxOrderByAggregateInput
   _min?: Prisma.SubjectMinOrderByAggregateInput
+  _sum?: Prisma.SubjectSumOrderByAggregateInput
 }
 
 export type SubjectScalarWhereWithAggregatesInput = {
@@ -218,90 +326,172 @@ export type SubjectScalarWhereWithAggregatesInput = {
   NOT?: Prisma.SubjectScalarWhereWithAggregatesInput | Prisma.SubjectScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Subject"> | string
   name?: Prisma.StringWithAggregatesFilter<"Subject"> | string
-  code?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
+  officialCode?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
+  category?: Prisma.EnumSubjectCategoryWithAggregatesFilter<"Subject"> | $Enums.SubjectCategory
   description?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
+  displayOrder?: Prisma.IntWithAggregatesFilter<"Subject"> | number
+  isSystemDefault?: Prisma.BoolWithAggregatesFilter<"Subject"> | boolean
+  isActive?: Prisma.BoolWithAggregatesFilter<"Subject"> | boolean
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Subject"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Subject"> | Date | string
 }
 
 export type SubjectCreateInput = {
   id?: string
   name: string
-  code?: string | null
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
   description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookCreateNestedManyWithoutSubjectInput
   classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutSubjectInput
   examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutSubjectInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutOptionalSubjectInput
 }
 
 export type SubjectUncheckedCreateInput = {
   id?: string
   name: string
-  code?: string | null
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
   description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSubjectInput
   classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutSubjectInput
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutSubjectInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutOptionalSubjectInput
 }
 
 export type SubjectUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUpdateManyWithoutSubjectNestedInput
   classSubjects?: Prisma.ClassSubjectUpdateManyWithoutSubjectNestedInput
   examSubjects?: Prisma.ExamSubjectUpdateManyWithoutSubjectNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUpdateManyWithoutOptionalSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUncheckedUpdateManyWithoutSubjectNestedInput
   classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutSubjectNestedInput
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutOptionalSubjectNestedInput
 }
 
 export type SubjectCreateManyInput = {
   id?: string
   name: string
-  code?: string | null
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
   description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type SubjectUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubjectUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubjectCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  code?: Prisma.SortOrder
+  officialCode?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type SubjectAvgOrderByAggregateInput = {
+  displayOrder?: Prisma.SortOrder
 }
 
 export type SubjectMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  code?: Prisma.SortOrder
+  officialCode?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type SubjectMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  code?: Prisma.SortOrder
+  officialCode?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
+  isSystemDefault?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type SubjectSumOrderByAggregateInput = {
+  displayOrder?: Prisma.SortOrder
 }
 
 export type SubjectScalarRelationFilter = {
@@ -312,6 +502,24 @@ export type SubjectScalarRelationFilter = {
 export type SubjectNullableScalarRelationFilter = {
   is?: Prisma.SubjectWhereInput | null
   isNot?: Prisma.SubjectWhereInput | null
+}
+
+export type EnumSubjectCategoryFieldUpdateOperationsInput = {
+  set?: $Enums.SubjectCategory
+}
+
+export type SubjectCreateNestedOneWithoutBooksInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutBooksInput, Prisma.SubjectUncheckedCreateWithoutBooksInput>
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutBooksInput
+  connect?: Prisma.SubjectWhereUniqueInput
+}
+
+export type SubjectUpdateOneRequiredWithoutBooksNestedInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutBooksInput, Prisma.SubjectUncheckedCreateWithoutBooksInput>
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutBooksInput
+  upsert?: Prisma.SubjectUpsertWithoutBooksInput
+  connect?: Prisma.SubjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SubjectUpdateToOneWithWhereWithoutBooksInput, Prisma.SubjectUpdateWithoutBooksInput>, Prisma.SubjectUncheckedUpdateWithoutBooksInput>
 }
 
 export type SubjectCreateNestedOneWithoutClassSubjectsInput = {
@@ -326,6 +534,22 @@ export type SubjectUpdateOneRequiredWithoutClassSubjectsNestedInput = {
   upsert?: Prisma.SubjectUpsertWithoutClassSubjectsInput
   connect?: Prisma.SubjectWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.SubjectUpdateToOneWithWhereWithoutClassSubjectsInput, Prisma.SubjectUpdateWithoutClassSubjectsInput>, Prisma.SubjectUncheckedUpdateWithoutClassSubjectsInput>
+}
+
+export type SubjectCreateNestedOneWithoutOptionalEnrollmentsInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutOptionalEnrollmentsInput, Prisma.SubjectUncheckedCreateWithoutOptionalEnrollmentsInput>
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutOptionalEnrollmentsInput
+  connect?: Prisma.SubjectWhereUniqueInput
+}
+
+export type SubjectUpdateOneWithoutOptionalEnrollmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutOptionalEnrollmentsInput, Prisma.SubjectUncheckedCreateWithoutOptionalEnrollmentsInput>
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutOptionalEnrollmentsInput
+  upsert?: Prisma.SubjectUpsertWithoutOptionalEnrollmentsInput
+  disconnect?: Prisma.SubjectWhereInput | boolean
+  delete?: Prisma.SubjectWhereInput | boolean
+  connect?: Prisma.SubjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SubjectUpdateToOneWithWhereWithoutOptionalEnrollmentsInput, Prisma.SubjectUpdateWithoutOptionalEnrollmentsInput>, Prisma.SubjectUncheckedUpdateWithoutOptionalEnrollmentsInput>
 }
 
 export type SubjectCreateNestedOneWithoutDigitalResourcesInput = {
@@ -358,22 +582,122 @@ export type SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SubjectUpdateToOneWithWhereWithoutExamSubjectsInput, Prisma.SubjectUpdateWithoutExamSubjectsInput>, Prisma.SubjectUncheckedUpdateWithoutExamSubjectsInput>
 }
 
+export type SubjectCreateWithoutBooksInput = {
+  id?: string
+  name: string
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
+  description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutSubjectInput
+  digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutOptionalSubjectInput
+}
+
+export type SubjectUncheckedCreateWithoutBooksInput = {
+  id?: string
+  name: string
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
+  description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutSubjectInput
+  digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutOptionalSubjectInput
+}
+
+export type SubjectCreateOrConnectWithoutBooksInput = {
+  where: Prisma.SubjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutBooksInput, Prisma.SubjectUncheckedCreateWithoutBooksInput>
+}
+
+export type SubjectUpsertWithoutBooksInput = {
+  update: Prisma.XOR<Prisma.SubjectUpdateWithoutBooksInput, Prisma.SubjectUncheckedUpdateWithoutBooksInput>
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutBooksInput, Prisma.SubjectUncheckedCreateWithoutBooksInput>
+  where?: Prisma.SubjectWhereInput
+}
+
+export type SubjectUpdateToOneWithWhereWithoutBooksInput = {
+  where?: Prisma.SubjectWhereInput
+  data: Prisma.XOR<Prisma.SubjectUpdateWithoutBooksInput, Prisma.SubjectUncheckedUpdateWithoutBooksInput>
+}
+
+export type SubjectUpdateWithoutBooksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classSubjects?: Prisma.ClassSubjectUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutSubjectNestedInput
+  digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUpdateManyWithoutOptionalSubjectNestedInput
+}
+
+export type SubjectUncheckedUpdateWithoutBooksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+  digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutOptionalSubjectNestedInput
+}
+
 export type SubjectCreateWithoutClassSubjectsInput = {
   id?: string
   name: string
-  code?: string | null
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
   description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookCreateNestedManyWithoutSubjectInput
   examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutSubjectInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutOptionalSubjectInput
 }
 
 export type SubjectUncheckedCreateWithoutClassSubjectsInput = {
   id?: string
   name: string
-  code?: string | null
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
   description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSubjectInput
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutSubjectInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutOptionalSubjectInput
 }
 
 export type SubjectCreateOrConnectWithoutClassSubjectsInput = {
@@ -395,17 +719,117 @@ export type SubjectUpdateToOneWithWhereWithoutClassSubjectsInput = {
 export type SubjectUpdateWithoutClassSubjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUpdateManyWithoutSubjectNestedInput
   examSubjects?: Prisma.ExamSubjectUpdateManyWithoutSubjectNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUpdateManyWithoutOptionalSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateWithoutClassSubjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUncheckedUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+  digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutOptionalSubjectNestedInput
+}
+
+export type SubjectCreateWithoutOptionalEnrollmentsInput = {
+  id?: string
+  name: string
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
+  description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookCreateNestedManyWithoutSubjectInput
+  classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutSubjectInput
+  digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSubjectInput
+}
+
+export type SubjectUncheckedCreateWithoutOptionalEnrollmentsInput = {
+  id?: string
+  name: string
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
+  description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSubjectInput
+  classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutSubjectInput
+  digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSubjectInput
+}
+
+export type SubjectCreateOrConnectWithoutOptionalEnrollmentsInput = {
+  where: Prisma.SubjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutOptionalEnrollmentsInput, Prisma.SubjectUncheckedCreateWithoutOptionalEnrollmentsInput>
+}
+
+export type SubjectUpsertWithoutOptionalEnrollmentsInput = {
+  update: Prisma.XOR<Prisma.SubjectUpdateWithoutOptionalEnrollmentsInput, Prisma.SubjectUncheckedUpdateWithoutOptionalEnrollmentsInput>
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutOptionalEnrollmentsInput, Prisma.SubjectUncheckedCreateWithoutOptionalEnrollmentsInput>
+  where?: Prisma.SubjectWhereInput
+}
+
+export type SubjectUpdateToOneWithWhereWithoutOptionalEnrollmentsInput = {
+  where?: Prisma.SubjectWhereInput
+  data: Prisma.XOR<Prisma.SubjectUpdateWithoutOptionalEnrollmentsInput, Prisma.SubjectUncheckedUpdateWithoutOptionalEnrollmentsInput>
+}
+
+export type SubjectUpdateWithoutOptionalEnrollmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUpdateManyWithoutSubjectNestedInput
+  classSubjects?: Prisma.ClassSubjectUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutSubjectNestedInput
+  digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSubjectNestedInput
+}
+
+export type SubjectUncheckedUpdateWithoutOptionalEnrollmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUncheckedUpdateManyWithoutSubjectNestedInput
+  classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutSubjectNestedInput
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSubjectNestedInput
 }
@@ -413,19 +837,35 @@ export type SubjectUncheckedUpdateWithoutClassSubjectsInput = {
 export type SubjectCreateWithoutDigitalResourcesInput = {
   id?: string
   name: string
-  code?: string | null
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
   description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookCreateNestedManyWithoutSubjectInput
   classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutSubjectInput
   examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutOptionalSubjectInput
 }
 
 export type SubjectUncheckedCreateWithoutDigitalResourcesInput = {
   id?: string
   name: string
-  code?: string | null
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
   description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSubjectInput
   classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutSubjectInput
   examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutOptionalSubjectInput
 }
 
 export type SubjectCreateOrConnectWithoutDigitalResourcesInput = {
@@ -447,37 +887,69 @@ export type SubjectUpdateToOneWithWhereWithoutDigitalResourcesInput = {
 export type SubjectUpdateWithoutDigitalResourcesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUpdateManyWithoutSubjectNestedInput
   classSubjects?: Prisma.ClassSubjectUpdateManyWithoutSubjectNestedInput
   examSubjects?: Prisma.ExamSubjectUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUpdateManyWithoutOptionalSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateWithoutDigitalResourcesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUncheckedUpdateManyWithoutSubjectNestedInput
   classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutSubjectNestedInput
   examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutOptionalSubjectNestedInput
 }
 
 export type SubjectCreateWithoutExamSubjectsInput = {
   id?: string
   name: string
-  code?: string | null
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
   description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookCreateNestedManyWithoutSubjectInput
   classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutSubjectInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutOptionalSubjectInput
 }
 
 export type SubjectUncheckedCreateWithoutExamSubjectsInput = {
   id?: string
   name: string
-  code?: string | null
+  officialCode?: string | null
+  category?: $Enums.SubjectCategory
   description?: string | null
+  displayOrder?: number
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSubjectInput
   classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutSubjectInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSubjectInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutOptionalSubjectInput
 }
 
 export type SubjectCreateOrConnectWithoutExamSubjectsInput = {
@@ -499,19 +971,35 @@ export type SubjectUpdateToOneWithWhereWithoutExamSubjectsInput = {
 export type SubjectUpdateWithoutExamSubjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUpdateManyWithoutSubjectNestedInput
   classSubjects?: Prisma.ClassSubjectUpdateManyWithoutSubjectNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUpdateManyWithoutOptionalSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateWithoutExamSubjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officialCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumSubjectCategoryFieldUpdateOperationsInput | $Enums.SubjectCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isSystemDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  books?: Prisma.BookUncheckedUpdateManyWithoutSubjectNestedInput
   classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutSubjectNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSubjectNestedInput
+  optionalEnrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutOptionalSubjectNestedInput
 }
 
 
@@ -520,15 +1008,19 @@ export type SubjectUncheckedUpdateWithoutExamSubjectsInput = {
  */
 
 export type SubjectCountOutputType = {
+  books: number
   classSubjects: number
   examSubjects: number
   digitalResources: number
+  optionalEnrollments: number
 }
 
 export type SubjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  books?: boolean | SubjectCountOutputTypeCountBooksArgs
   classSubjects?: boolean | SubjectCountOutputTypeCountClassSubjectsArgs
   examSubjects?: boolean | SubjectCountOutputTypeCountExamSubjectsArgs
   digitalResources?: boolean | SubjectCountOutputTypeCountDigitalResourcesArgs
+  optionalEnrollments?: boolean | SubjectCountOutputTypeCountOptionalEnrollmentsArgs
 }
 
 /**
@@ -539,6 +1031,13 @@ export type SubjectCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
    * Select specific fields to fetch from the SubjectCountOutputType
    */
   select?: Prisma.SubjectCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * SubjectCountOutputType without action
+ */
+export type SubjectCountOutputTypeCountBooksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BookWhereInput
 }
 
 /**
@@ -562,44 +1061,79 @@ export type SubjectCountOutputTypeCountDigitalResourcesArgs<ExtArgs extends runt
   where?: Prisma.DigitalResourceWhereInput
 }
 
+/**
+ * SubjectCountOutputType without action
+ */
+export type SubjectCountOutputTypeCountOptionalEnrollmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StudentEnrollmentWhereInput
+}
+
 
 export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  code?: boolean
+  officialCode?: boolean
+  category?: boolean
   description?: boolean
+  displayOrder?: boolean
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  books?: boolean | Prisma.Subject$booksArgs<ExtArgs>
   classSubjects?: boolean | Prisma.Subject$classSubjectsArgs<ExtArgs>
   examSubjects?: boolean | Prisma.Subject$examSubjectsArgs<ExtArgs>
   digitalResources?: boolean | Prisma.Subject$digitalResourcesArgs<ExtArgs>
+  optionalEnrollments?: boolean | Prisma.Subject$optionalEnrollmentsArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  code?: boolean
+  officialCode?: boolean
+  category?: boolean
   description?: boolean
+  displayOrder?: boolean
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  code?: boolean
+  officialCode?: boolean
+  category?: boolean
   description?: boolean
+  displayOrder?: boolean
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectScalar = {
   id?: boolean
   name?: boolean
-  code?: boolean
+  officialCode?: boolean
+  category?: boolean
   description?: boolean
+  displayOrder?: boolean
+  isSystemDefault?: boolean
+  isActive?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "description", ExtArgs["result"]["subject"]>
+export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "officialCode" | "category" | "description" | "displayOrder" | "isSystemDefault" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["subject"]>
 export type SubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  books?: boolean | Prisma.Subject$booksArgs<ExtArgs>
   classSubjects?: boolean | Prisma.Subject$classSubjectsArgs<ExtArgs>
   examSubjects?: boolean | Prisma.Subject$examSubjectsArgs<ExtArgs>
   digitalResources?: boolean | Prisma.Subject$digitalResourcesArgs<ExtArgs>
+  optionalEnrollments?: boolean | Prisma.Subject$optionalEnrollmentsArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -608,15 +1142,23 @@ export type SubjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Subject"
   objects: {
+    books: Prisma.$BookPayload<ExtArgs>[]
     classSubjects: Prisma.$ClassSubjectPayload<ExtArgs>[]
     examSubjects: Prisma.$ExamSubjectPayload<ExtArgs>[]
     digitalResources: Prisma.$DigitalResourcePayload<ExtArgs>[]
+    optionalEnrollments: Prisma.$StudentEnrollmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    code: string | null
+    officialCode: string | null
+    category: $Enums.SubjectCategory
     description: string | null
+    displayOrder: number
+    isSystemDefault: boolean
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["subject"]>
   composites: {}
 }
@@ -1011,9 +1553,11 @@ readonly fields: SubjectFieldRefs;
  */
 export interface Prisma__SubjectClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  books<T extends Prisma.Subject$booksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$booksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classSubjects<T extends Prisma.Subject$classSubjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$classSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   examSubjects<T extends Prisma.Subject$examSubjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$examSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   digitalResources<T extends Prisma.Subject$digitalResourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$digitalResourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DigitalResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  optionalEnrollments<T extends Prisma.Subject$optionalEnrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$optionalEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1045,8 +1589,14 @@ export interface Prisma__SubjectClient<T, Null = never, ExtArgs extends runtime.
 export interface SubjectFieldRefs {
   readonly id: Prisma.FieldRef<"Subject", 'String'>
   readonly name: Prisma.FieldRef<"Subject", 'String'>
-  readonly code: Prisma.FieldRef<"Subject", 'String'>
+  readonly officialCode: Prisma.FieldRef<"Subject", 'String'>
+  readonly category: Prisma.FieldRef<"Subject", 'SubjectCategory'>
   readonly description: Prisma.FieldRef<"Subject", 'String'>
+  readonly displayOrder: Prisma.FieldRef<"Subject", 'Int'>
+  readonly isSystemDefault: Prisma.FieldRef<"Subject", 'Boolean'>
+  readonly isActive: Prisma.FieldRef<"Subject", 'Boolean'>
+  readonly createdAt: Prisma.FieldRef<"Subject", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Subject", 'DateTime'>
 }
     
 
@@ -1435,6 +1985,30 @@ export type SubjectDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Subject.books
+ */
+export type Subject$booksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Book
+   */
+  select?: Prisma.BookSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Book
+   */
+  omit?: Prisma.BookOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookInclude<ExtArgs> | null
+  where?: Prisma.BookWhereInput
+  orderBy?: Prisma.BookOrderByWithRelationInput | Prisma.BookOrderByWithRelationInput[]
+  cursor?: Prisma.BookWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BookScalarFieldEnum | Prisma.BookScalarFieldEnum[]
+}
+
+/**
  * Subject.classSubjects
  */
 export type Subject$classSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1504,6 +2078,30 @@ export type Subject$digitalResourcesArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.DigitalResourceScalarFieldEnum | Prisma.DigitalResourceScalarFieldEnum[]
+}
+
+/**
+ * Subject.optionalEnrollments
+ */
+export type Subject$optionalEnrollmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StudentEnrollment
+   */
+  select?: Prisma.StudentEnrollmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StudentEnrollment
+   */
+  omit?: Prisma.StudentEnrollmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudentEnrollmentInclude<ExtArgs> | null
+  where?: Prisma.StudentEnrollmentWhereInput
+  orderBy?: Prisma.StudentEnrollmentOrderByWithRelationInput | Prisma.StudentEnrollmentOrderByWithRelationInput[]
+  cursor?: Prisma.StudentEnrollmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StudentEnrollmentScalarFieldEnum | Prisma.StudentEnrollmentScalarFieldEnum[]
 }
 
 /**

@@ -207,6 +207,7 @@ export type SchoolClassWhereInput = {
   exams?: Prisma.ExamListRelationFilter
   digitalResources?: Prisma.DigitalResourceListRelationFilter
   admissionApplications?: Prisma.AdmissionApplicationListRelationFilter
+  books?: Prisma.BookListRelationFilter
 }
 
 export type SchoolClassOrderByWithRelationInput = {
@@ -220,6 +221,7 @@ export type SchoolClassOrderByWithRelationInput = {
   exams?: Prisma.ExamOrderByRelationAggregateInput
   digitalResources?: Prisma.DigitalResourceOrderByRelationAggregateInput
   admissionApplications?: Prisma.AdmissionApplicationOrderByRelationAggregateInput
+  books?: Prisma.BookOrderByRelationAggregateInput
 }
 
 export type SchoolClassWhereUniqueInput = Prisma.AtLeast<{
@@ -236,6 +238,7 @@ export type SchoolClassWhereUniqueInput = Prisma.AtLeast<{
   exams?: Prisma.ExamListRelationFilter
   digitalResources?: Prisma.DigitalResourceListRelationFilter
   admissionApplications?: Prisma.AdmissionApplicationListRelationFilter
+  books?: Prisma.BookListRelationFilter
 }, "id" | "name" | "numericValue">
 
 export type SchoolClassOrderByWithAggregationInput = {
@@ -269,6 +272,7 @@ export type SchoolClassCreateInput = {
   exams?: Prisma.ExamCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassUncheckedCreateInput = {
@@ -282,6 +286,7 @@ export type SchoolClassUncheckedCreateInput = {
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassUpdateInput = {
@@ -295,6 +300,7 @@ export type SchoolClassUpdateInput = {
   exams?: Prisma.ExamUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassUncheckedUpdateInput = {
@@ -308,6 +314,7 @@ export type SchoolClassUncheckedUpdateInput = {
   exams?: Prisma.ExamUncheckedUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUncheckedUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassCreateManyInput = {
@@ -384,6 +391,20 @@ export type SchoolClassUpdateOneRequiredWithoutSectionsNestedInput = {
   upsert?: Prisma.SchoolClassUpsertWithoutSectionsInput
   connect?: Prisma.SchoolClassWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.SchoolClassUpdateToOneWithWhereWithoutSectionsInput, Prisma.SchoolClassUpdateWithoutSectionsInput>, Prisma.SchoolClassUncheckedUpdateWithoutSectionsInput>
+}
+
+export type SchoolClassCreateNestedOneWithoutBooksInput = {
+  create?: Prisma.XOR<Prisma.SchoolClassCreateWithoutBooksInput, Prisma.SchoolClassUncheckedCreateWithoutBooksInput>
+  connectOrCreate?: Prisma.SchoolClassCreateOrConnectWithoutBooksInput
+  connect?: Prisma.SchoolClassWhereUniqueInput
+}
+
+export type SchoolClassUpdateOneRequiredWithoutBooksNestedInput = {
+  create?: Prisma.XOR<Prisma.SchoolClassCreateWithoutBooksInput, Prisma.SchoolClassUncheckedCreateWithoutBooksInput>
+  connectOrCreate?: Prisma.SchoolClassCreateOrConnectWithoutBooksInput
+  upsert?: Prisma.SchoolClassUpsertWithoutBooksInput
+  connect?: Prisma.SchoolClassWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SchoolClassUpdateToOneWithWhereWithoutBooksInput, Prisma.SchoolClassUpdateWithoutBooksInput>, Prisma.SchoolClassUncheckedUpdateWithoutBooksInput>
 }
 
 export type SchoolClassCreateNestedOneWithoutClassSubjectsInput = {
@@ -482,6 +503,7 @@ export type SchoolClassCreateWithoutSectionsInput = {
   exams?: Prisma.ExamCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassUncheckedCreateWithoutSectionsInput = {
@@ -494,6 +516,7 @@ export type SchoolClassUncheckedCreateWithoutSectionsInput = {
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassCreateOrConnectWithoutSectionsInput = {
@@ -522,12 +545,82 @@ export type SchoolClassUpdateWithoutSectionsInput = {
   exams?: Prisma.ExamUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassUncheckedUpdateWithoutSectionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   numericValue?: Prisma.IntFieldUpdateOperationsInput | number
+  classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutSchoolClassNestedInput
+  enrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutSchoolClassNestedInput
+  teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutSchoolClassNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutSchoolClassNestedInput
+  digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSchoolClassNestedInput
+  admissionApplications?: Prisma.AdmissionApplicationUncheckedUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUncheckedUpdateManyWithoutSchoolClassNestedInput
+}
+
+export type SchoolClassCreateWithoutBooksInput = {
+  id?: string
+  name: string
+  numericValue: number
+  sections?: Prisma.SectionCreateNestedManyWithoutSchoolClassInput
+  classSubjects?: Prisma.ClassSubjectCreateNestedManyWithoutSchoolClassInput
+  enrollments?: Prisma.StudentEnrollmentCreateNestedManyWithoutSchoolClassInput
+  teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutSchoolClassInput
+  exams?: Prisma.ExamCreateNestedManyWithoutSchoolClassInput
+  digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSchoolClassInput
+  admissionApplications?: Prisma.AdmissionApplicationCreateNestedManyWithoutSchoolClassInput
+}
+
+export type SchoolClassUncheckedCreateWithoutBooksInput = {
+  id?: string
+  name: string
+  numericValue: number
+  sections?: Prisma.SectionUncheckedCreateNestedManyWithoutSchoolClassInput
+  classSubjects?: Prisma.ClassSubjectUncheckedCreateNestedManyWithoutSchoolClassInput
+  enrollments?: Prisma.StudentEnrollmentUncheckedCreateNestedManyWithoutSchoolClassInput
+  teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutSchoolClassInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSchoolClassInput
+  digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSchoolClassInput
+  admissionApplications?: Prisma.AdmissionApplicationUncheckedCreateNestedManyWithoutSchoolClassInput
+}
+
+export type SchoolClassCreateOrConnectWithoutBooksInput = {
+  where: Prisma.SchoolClassWhereUniqueInput
+  create: Prisma.XOR<Prisma.SchoolClassCreateWithoutBooksInput, Prisma.SchoolClassUncheckedCreateWithoutBooksInput>
+}
+
+export type SchoolClassUpsertWithoutBooksInput = {
+  update: Prisma.XOR<Prisma.SchoolClassUpdateWithoutBooksInput, Prisma.SchoolClassUncheckedUpdateWithoutBooksInput>
+  create: Prisma.XOR<Prisma.SchoolClassCreateWithoutBooksInput, Prisma.SchoolClassUncheckedCreateWithoutBooksInput>
+  where?: Prisma.SchoolClassWhereInput
+}
+
+export type SchoolClassUpdateToOneWithWhereWithoutBooksInput = {
+  where?: Prisma.SchoolClassWhereInput
+  data: Prisma.XOR<Prisma.SchoolClassUpdateWithoutBooksInput, Prisma.SchoolClassUncheckedUpdateWithoutBooksInput>
+}
+
+export type SchoolClassUpdateWithoutBooksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  numericValue?: Prisma.IntFieldUpdateOperationsInput | number
+  sections?: Prisma.SectionUpdateManyWithoutSchoolClassNestedInput
+  classSubjects?: Prisma.ClassSubjectUpdateManyWithoutSchoolClassNestedInput
+  enrollments?: Prisma.StudentEnrollmentUpdateManyWithoutSchoolClassNestedInput
+  teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutSchoolClassNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutSchoolClassNestedInput
+  digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSchoolClassNestedInput
+  admissionApplications?: Prisma.AdmissionApplicationUpdateManyWithoutSchoolClassNestedInput
+}
+
+export type SchoolClassUncheckedUpdateWithoutBooksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  numericValue?: Prisma.IntFieldUpdateOperationsInput | number
+  sections?: Prisma.SectionUncheckedUpdateManyWithoutSchoolClassNestedInput
   classSubjects?: Prisma.ClassSubjectUncheckedUpdateManyWithoutSchoolClassNestedInput
   enrollments?: Prisma.StudentEnrollmentUncheckedUpdateManyWithoutSchoolClassNestedInput
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutSchoolClassNestedInput
@@ -546,6 +639,7 @@ export type SchoolClassCreateWithoutClassSubjectsInput = {
   exams?: Prisma.ExamCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassUncheckedCreateWithoutClassSubjectsInput = {
@@ -558,6 +652,7 @@ export type SchoolClassUncheckedCreateWithoutClassSubjectsInput = {
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassCreateOrConnectWithoutClassSubjectsInput = {
@@ -586,6 +681,7 @@ export type SchoolClassUpdateWithoutClassSubjectsInput = {
   exams?: Prisma.ExamUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassUncheckedUpdateWithoutClassSubjectsInput = {
@@ -598,6 +694,7 @@ export type SchoolClassUncheckedUpdateWithoutClassSubjectsInput = {
   exams?: Prisma.ExamUncheckedUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUncheckedUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassCreateWithoutEnrollmentsInput = {
@@ -610,6 +707,7 @@ export type SchoolClassCreateWithoutEnrollmentsInput = {
   exams?: Prisma.ExamCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassUncheckedCreateWithoutEnrollmentsInput = {
@@ -622,6 +720,7 @@ export type SchoolClassUncheckedCreateWithoutEnrollmentsInput = {
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassCreateOrConnectWithoutEnrollmentsInput = {
@@ -650,6 +749,7 @@ export type SchoolClassUpdateWithoutEnrollmentsInput = {
   exams?: Prisma.ExamUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassUncheckedUpdateWithoutEnrollmentsInput = {
@@ -662,6 +762,7 @@ export type SchoolClassUncheckedUpdateWithoutEnrollmentsInput = {
   exams?: Prisma.ExamUncheckedUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUncheckedUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassCreateWithoutTeacherAssignmentsInput = {
@@ -674,6 +775,7 @@ export type SchoolClassCreateWithoutTeacherAssignmentsInput = {
   exams?: Prisma.ExamCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassUncheckedCreateWithoutTeacherAssignmentsInput = {
@@ -686,6 +788,7 @@ export type SchoolClassUncheckedCreateWithoutTeacherAssignmentsInput = {
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassCreateOrConnectWithoutTeacherAssignmentsInput = {
@@ -714,6 +817,7 @@ export type SchoolClassUpdateWithoutTeacherAssignmentsInput = {
   exams?: Prisma.ExamUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassUncheckedUpdateWithoutTeacherAssignmentsInput = {
@@ -726,6 +830,7 @@ export type SchoolClassUncheckedUpdateWithoutTeacherAssignmentsInput = {
   exams?: Prisma.ExamUncheckedUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUncheckedUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassCreateWithoutAdmissionApplicationsInput = {
@@ -738,6 +843,7 @@ export type SchoolClassCreateWithoutAdmissionApplicationsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutSchoolClassInput
   exams?: Prisma.ExamCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassUncheckedCreateWithoutAdmissionApplicationsInput = {
@@ -750,6 +856,7 @@ export type SchoolClassUncheckedCreateWithoutAdmissionApplicationsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutSchoolClassInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassCreateOrConnectWithoutAdmissionApplicationsInput = {
@@ -778,6 +885,7 @@ export type SchoolClassUpdateWithoutAdmissionApplicationsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutSchoolClassNestedInput
   exams?: Prisma.ExamUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassUncheckedUpdateWithoutAdmissionApplicationsInput = {
@@ -790,6 +898,7 @@ export type SchoolClassUncheckedUpdateWithoutAdmissionApplicationsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutSchoolClassNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUncheckedUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassCreateWithoutDigitalResourcesInput = {
@@ -802,6 +911,7 @@ export type SchoolClassCreateWithoutDigitalResourcesInput = {
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutSchoolClassInput
   exams?: Prisma.ExamCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassUncheckedCreateWithoutDigitalResourcesInput = {
@@ -814,6 +924,7 @@ export type SchoolClassUncheckedCreateWithoutDigitalResourcesInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutSchoolClassInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassCreateOrConnectWithoutDigitalResourcesInput = {
@@ -842,6 +953,7 @@ export type SchoolClassUpdateWithoutDigitalResourcesInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutSchoolClassNestedInput
   exams?: Prisma.ExamUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassUncheckedUpdateWithoutDigitalResourcesInput = {
@@ -854,6 +966,7 @@ export type SchoolClassUncheckedUpdateWithoutDigitalResourcesInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutSchoolClassNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUncheckedUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassCreateWithoutExamsInput = {
@@ -866,6 +979,7 @@ export type SchoolClassCreateWithoutExamsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassUncheckedCreateWithoutExamsInput = {
@@ -878,6 +992,7 @@ export type SchoolClassUncheckedCreateWithoutExamsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedCreateNestedManyWithoutSchoolClassInput
   digitalResources?: Prisma.DigitalResourceUncheckedCreateNestedManyWithoutSchoolClassInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedCreateNestedManyWithoutSchoolClassInput
+  books?: Prisma.BookUncheckedCreateNestedManyWithoutSchoolClassInput
 }
 
 export type SchoolClassCreateOrConnectWithoutExamsInput = {
@@ -906,6 +1021,7 @@ export type SchoolClassUpdateWithoutExamsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUpdateManyWithoutSchoolClassNestedInput
 }
 
 export type SchoolClassUncheckedUpdateWithoutExamsInput = {
@@ -918,6 +1034,7 @@ export type SchoolClassUncheckedUpdateWithoutExamsInput = {
   teacherAssignments?: Prisma.TeacherAssignmentUncheckedUpdateManyWithoutSchoolClassNestedInput
   digitalResources?: Prisma.DigitalResourceUncheckedUpdateManyWithoutSchoolClassNestedInput
   admissionApplications?: Prisma.AdmissionApplicationUncheckedUpdateManyWithoutSchoolClassNestedInput
+  books?: Prisma.BookUncheckedUpdateManyWithoutSchoolClassNestedInput
 }
 
 
@@ -933,6 +1050,7 @@ export type SchoolClassCountOutputType = {
   exams: number
   digitalResources: number
   admissionApplications: number
+  books: number
 }
 
 export type SchoolClassCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -943,6 +1061,7 @@ export type SchoolClassCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   exams?: boolean | SchoolClassCountOutputTypeCountExamsArgs
   digitalResources?: boolean | SchoolClassCountOutputTypeCountDigitalResourcesArgs
   admissionApplications?: boolean | SchoolClassCountOutputTypeCountAdmissionApplicationsArgs
+  books?: boolean | SchoolClassCountOutputTypeCountBooksArgs
 }
 
 /**
@@ -1004,6 +1123,13 @@ export type SchoolClassCountOutputTypeCountAdmissionApplicationsArgs<ExtArgs ext
   where?: Prisma.AdmissionApplicationWhereInput
 }
 
+/**
+ * SchoolClassCountOutputType without action
+ */
+export type SchoolClassCountOutputTypeCountBooksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BookWhereInput
+}
+
 
 export type SchoolClassSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1016,6 +1142,7 @@ export type SchoolClassSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   exams?: boolean | Prisma.SchoolClass$examsArgs<ExtArgs>
   digitalResources?: boolean | Prisma.SchoolClass$digitalResourcesArgs<ExtArgs>
   admissionApplications?: boolean | Prisma.SchoolClass$admissionApplicationsArgs<ExtArgs>
+  books?: boolean | Prisma.SchoolClass$booksArgs<ExtArgs>
   _count?: boolean | Prisma.SchoolClassCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schoolClass"]>
 
@@ -1046,6 +1173,7 @@ export type SchoolClassInclude<ExtArgs extends runtime.Types.Extensions.Internal
   exams?: boolean | Prisma.SchoolClass$examsArgs<ExtArgs>
   digitalResources?: boolean | Prisma.SchoolClass$digitalResourcesArgs<ExtArgs>
   admissionApplications?: boolean | Prisma.SchoolClass$admissionApplicationsArgs<ExtArgs>
+  books?: boolean | Prisma.SchoolClass$booksArgs<ExtArgs>
   _count?: boolean | Prisma.SchoolClassCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SchoolClassIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1061,6 +1189,7 @@ export type $SchoolClassPayload<ExtArgs extends runtime.Types.Extensions.Interna
     exams: Prisma.$ExamPayload<ExtArgs>[]
     digitalResources: Prisma.$DigitalResourcePayload<ExtArgs>[]
     admissionApplications: Prisma.$AdmissionApplicationPayload<ExtArgs>[]
+    books: Prisma.$BookPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1467,6 +1596,7 @@ export interface Prisma__SchoolClassClient<T, Null = never, ExtArgs extends runt
   exams<T extends Prisma.SchoolClass$examsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolClass$examsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   digitalResources<T extends Prisma.SchoolClass$digitalResourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolClass$digitalResourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DigitalResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   admissionApplications<T extends Prisma.SchoolClass$admissionApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolClass$admissionApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdmissionApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  books<T extends Prisma.SchoolClass$booksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SchoolClass$booksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2052,6 +2182,30 @@ export type SchoolClass$admissionApplicationsArgs<ExtArgs extends runtime.Types.
   take?: number
   skip?: number
   distinct?: Prisma.AdmissionApplicationScalarFieldEnum | Prisma.AdmissionApplicationScalarFieldEnum[]
+}
+
+/**
+ * SchoolClass.books
+ */
+export type SchoolClass$booksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Book
+   */
+  select?: Prisma.BookSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Book
+   */
+  omit?: Prisma.BookOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookInclude<ExtArgs> | null
+  where?: Prisma.BookWhereInput
+  orderBy?: Prisma.BookOrderByWithRelationInput | Prisma.BookOrderByWithRelationInput[]
+  cursor?: Prisma.BookWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BookScalarFieldEnum | Prisma.BookScalarFieldEnum[]
 }
 
 /**

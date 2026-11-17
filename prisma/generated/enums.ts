@@ -58,8 +58,7 @@ export type EnrollmentStatus = (typeof EnrollmentStatus)[keyof typeof Enrollment
 export const RelationshipType = {
   FATHER: 'FATHER',
   MOTHER: 'MOTHER',
-  GUARDIAN: 'GUARDIAN',
-  OTHER: 'OTHER'
+  GUARDIAN: 'GUARDIAN'
 } as const
 
 export type RelationshipType = (typeof RelationshipType)[keyof typeof RelationshipType]
@@ -120,16 +119,37 @@ export type SmsStatus = (typeof SmsStatus)[keyof typeof SmsStatus]
 export const ExamType = {
   HALF_YEARLY: 'HALF_YEARLY',
   ANNUAL: 'ANNUAL',
-  SELECTION: 'SELECTION',
-  OTHER: 'OTHER'
+  MODEL_TEST: 'MODEL_TEST',
+  SELECTION: 'SELECTION'
 } as const
 
 export type ExamType = (typeof ExamType)[keyof typeof ExamType]
 
 
+export const ExamStatus = {
+  UPCOMING: 'UPCOMING',
+  ONGOING: 'ONGOING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ExamStatus = (typeof ExamStatus)[keyof typeof ExamStatus]
+
+
+export const ExamRoutineStatus = {
+  SCHEDULED: 'SCHEDULED',
+  POSTPONED: 'POSTPONED',
+  CANCELLED: 'CANCELLED',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type ExamRoutineStatus = (typeof ExamRoutineStatus)[keyof typeof ExamRoutineStatus]
+
+
 export const ResultPublicationStatus = {
   DRAFT: 'DRAFT',
-  PUBLISHED: 'PUBLISHED'
+  PUBLISHED: 'PUBLISHED',
+  WITHHELD: 'WITHHELD'
 } as const
 
 export type ResultPublicationStatus = (typeof ResultPublicationStatus)[keyof typeof ResultPublicationStatus]
@@ -269,3 +289,62 @@ export const AchievementType = {
 } as const
 
 export type AchievementType = (typeof AchievementType)[keyof typeof AchievementType]
+
+
+export const BookType = {
+  TEXTBOOK: 'TEXTBOOK',
+  SUPPLEMENTARY: 'SUPPLEMENTARY',
+  GRAMMAR: 'GRAMMAR',
+  REFERENCE: 'REFERENCE'
+} as const
+
+export type BookType = (typeof BookType)[keyof typeof BookType]
+
+
+export const SubjectCategory = {
+  GENERAL: 'GENERAL',
+  LANGUAGE: 'LANGUAGE',
+  MATHEMATICS: 'MATHEMATICS',
+  SCIENCE: 'SCIENCE',
+  SOCIAL_SCIENCE: 'SOCIAL_SCIENCE',
+  RELIGION: 'RELIGION',
+  COMMERCE: 'COMMERCE',
+  TECHNICAL: 'TECHNICAL'
+} as const
+
+export type SubjectCategory = (typeof SubjectCategory)[keyof typeof SubjectCategory]
+
+
+export const Religion = {
+  ISLAM: 'ISLAM',
+  HINDUISM: 'HINDUISM',
+  BUDDHISM: 'BUDDHISM',
+  CHRISTIANITY: 'CHRISTIANITY',
+  OTHER: 'OTHER'
+} as const
+
+export type Religion = (typeof Religion)[keyof typeof Religion]
+
+
+export const BloodGroup = {
+  A_POSITIVE: 'A_POSITIVE',
+  A_NEGATIVE: 'A_NEGATIVE',
+  B_POSITIVE: 'B_POSITIVE',
+  B_NEGATIVE: 'B_NEGATIVE',
+  O_POSITIVE: 'O_POSITIVE',
+  O_NEGATIVE: 'O_NEGATIVE',
+  AB_POSITIVE: 'AB_POSITIVE',
+  AB_NEGATIVE: 'AB_NEGATIVE'
+} as const
+
+export type BloodGroup = (typeof BloodGroup)[keyof typeof BloodGroup]
+
+
+export const CardStatus = {
+  ACTIVE: 'ACTIVE',
+  LOST: 'LOST',
+  DAMAGED: 'DAMAGED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type CardStatus = (typeof CardStatus)[keyof typeof CardStatus]
