@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Prisma, BookType } from '../../../../prisma/generated/client';
 import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 import { QueryBookDto } from './dto/query-book.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
@@ -136,5 +137,81 @@ export class BookService {
     if (!book) throw new NotFoundException('Book');
 
     return ResponseHelper.success(book, 'Book details retrieved successfully');
+  }
+
+  /**
+   * Update book details by ID
+   */
+  async update(id: string, dto: UpdateBookDto) {
+    const existing = await this.prisma.book.findUnique({
+      where: { id },
+    });
+    if (!existing) throw new NotFoundException('Book');
+
+    const updateData: Prisma.BookUpdateInput = {};
+
+    if (dto.name !== undefined) {
+      const trimmedName = dto.name.trim();
+      if (trimmedName !== existing.name) {
+        const duplicate = await this.prisma.book.findUnique({
+          where: {
+            classId_subjectId_name: {
+              classId: existing.classId,
+              subjectId: existing.subjectId,
+              name: trimmedName,
+            },
+          },
+        });
+
+        if (duplicate) {
+          throw new ConflictException(
+            `A book named '${trimmedName}' already exists for this class and subject`,
+          );
+        }
+
+        updateData.name = trimmedName;
+      }
+    }
+
+    if (dto.bookCode !== undefined) {
+      updateData.bookCode = dto.bookCode?.trim() || null;
+    }
+
+    if (dto.type !== undefined) updateData.type = dto.type;
+    if (dto.displayOrder !== undefined) updateData.displayOrder = dto.displayOrder;
+    if (dto.isActive !== undefined) updateData.isActive = dto.isActive;
+
+    const updated = await this.prisma.book.update({
+      where: { id },
+      data: updateData,
+      include: {
+        schoolClass: { select: { id: true, name: true, numericValue: true } },
+        subject: { select: { id: true, name: true, officialCode: true, category: true } },
+      },
+    });
+
+    return ResponseHelper.success(updated, 'Book updated successfully');
+  }
+
+  /**
+   * Safe delete a book by ID
+   */
+  async remove(id: string) {
+    const existing = await this.prisma.book.findUnique({
+      where: { id },
+      include: {
+        schoolClass: { select: { name: true } },
+      },
+    });
+    if (!existing) throw new NotFoundException('Book');
+
+    await this.prisma.book.delete({
+      where: { id },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Book '${existing.name}' for ${existing.schoolClass.name} has been deleted successfully`,
+    );
   }
 }

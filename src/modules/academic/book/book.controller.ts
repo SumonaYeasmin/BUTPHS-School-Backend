@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -17,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 import { QueryBookDto } from './dto/query-book.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -69,6 +72,38 @@ export class BookController {
   @ApiResponse({ status: 404, description: 'Book not found' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.bookService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update book details (Admin only)',
+    description: 'Update book name, code, type, display order, or active status.',
+  })
+  @ApiParam({ name: 'id', description: 'Book UUID' })
+  @ApiResponse({ status: 200, description: 'Book updated successfully' })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 404, description: 'Book not found' })
+  @ApiResponse({ status: 409, description: 'Book with this name already exists' })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateBookDto,
+  ) {
+    return this.bookService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a prescribed book by ID (Admin only)' })
+  @ApiParam({ name: 'id', description: 'Book UUID' })
+  @ApiResponse({ status: 200, description: 'Book deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Book not found' })
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.bookService.remove(id);
   }
 }
 
