@@ -6,6 +6,7 @@ import { AcademicGroupModule } from './academic-group/academic-group.module';
 import { StudentModule } from './student/student.module';
 import { SubjectModule } from './subject/subject.module';
 import { ClassSubjectModule } from './class-subject/class-subject.module';
+import { BookModule } from './book/book.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ClassSubjectModule } from './class-subject/class-subject.module';
     StudentModule,
     SubjectModule,
     ClassSubjectModule,
+    BookModule,
   ],
   exports: [
     AcademicYearModule,
@@ -25,6 +27,7 @@ import { ClassSubjectModule } from './class-subject/class-subject.module';
     StudentModule,
     SubjectModule,
     ClassSubjectModule,
+    BookModule,
   ],
 })
 export class AcademicModule {}
