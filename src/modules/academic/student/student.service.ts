@@ -4,6 +4,7 @@ import { Prisma, BloodGroup, Religion } from '../../../../prisma/generated/clien
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { QueryStudentDto } from './dto/query-student.dto';
+import { AssignParentDto } from './dto/assign-parent.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
   ConflictException,
@@ -665,6 +666,152 @@ export class StudentService {
     return ResponseHelper.success(
       null,
       `Student '${student.name}' (${student.studentId}) marked as INACTIVE (soft deleted) successfully`,
+    );
+  }
+
+  /**
+   * Assign or link a parent/guardian to a student.
+   * - If parentId is provided, links the existing parent.
+   * - If parentId is omitted, creates a new Parent record and links it.
+   * - If isPrimary is true, resets previous primary parents for this student.
+   */
+  async assignParent(studentId: string, dto: AssignParentDto) {
+    // 1. Verify student exists
+    const student = await this.prisma.student.findUnique({
+      where: { id: studentId },
+      select: { id: true, name: true, studentId: true },
+    });
+
+    if (!student) {
+      throw new NotFoundException(`Student with ID '${studentId}' not found`);
+    }
+
+    // 2. Validate input
+    if (dto.parentId) {
+      const existingParent = await this.prisma.parent.findUnique({
+        where: { id: dto.parentId },
+      });
+      if (!existingParent) {
+        throw new NotFoundException(
+          `Parent with ID '${dto.parentId}' not found`,
+        );
+      }
+
+      // Check if already linked
+      const alreadyLinked = await this.prisma.parentStudent.findUnique({
+        where: {
+          parentId_studentId: {
+            parentId: dto.parentId,
+            studentId,
+          },
+        },
+      });
+      if (alreadyLinked) {
+        throw new ConflictException(
+          `Parent '${existingParent.name}' is already linked to student '${student.name}' (${alreadyLinked.relationship})`,
+        );
+      }
+    } else {
+      if (!dto.name?.trim() || !dto.phone?.trim()) {
+        throw new BadRequestException(
+          'name and phone are required when creating a new parent profile',
+        );
+      }
+    }
+
+    // 3. Execute in atomic transaction
+    const linkResult = await this.prisma.$transaction(async (tx) => {
+      let resolvedParentId = dto.parentId;
+
+      // Create new Parent profile if parentId wasn't provided
+      if (!resolvedParentId) {
+        const newParent = await tx.parent.create({
+          data: {
+            name: dto.name!.trim(),
+            phone: dto.phone!.trim(),
+            email: dto.email?.trim() || null,
+            nid: dto.nid?.trim() || null,
+            occupation: dto.occupation?.trim() || null,
+            address: dto.address?.trim() || null,
+          },
+        });
+        resolvedParentId = newParent.id;
+      }
+
+      // If this parent is marked as primary, reset any previous primary parents for this student
+      if (dto.isPrimary) {
+        await tx.parentStudent.updateMany({
+          where: { studentId },
+          data: { isPrimary: false },
+        });
+      }
+
+      // Create ParentStudent relationship link
+      const parentStudent = await tx.parentStudent.create({
+        data: {
+          parentId: resolvedParentId,
+          studentId,
+          relationship: dto.relationship,
+          isPrimary: dto.isPrimary || false,
+        },
+        include: {
+          parent: true,
+        },
+      });
+
+      return parentStudent;
+    });
+
+    return ResponseHelper.created(
+      linkResult,
+      `Parent '${linkResult.parent.name}' successfully linked to student '${student.name}' as ${linkResult.relationship}`,
+    );
+  }
+
+  /**
+   * Get all parents/guardians assigned to a student
+   */
+  async getStudentParents(studentId: string) {
+    const student = await this.prisma.student.findUnique({
+      where: { id: studentId },
+      select: { id: true, name: true, studentId: true },
+    });
+
+    if (!student) {
+      throw new NotFoundException(`Student with ID '${studentId}' not found`);
+    }
+
+    const links = await this.prisma.parentStudent.findMany({
+      where: { studentId },
+      include: {
+        parent: true,
+      },
+      orderBy: [{ isPrimary: 'desc' }, { createdAt: 'asc' }],
+    });
+
+    const parentsList = links.map((link) => ({
+      mappingId: link.id,
+      relationship: link.relationship,
+      isPrimary: link.isPrimary,
+      createdAt: link.createdAt,
+      parent: {
+        id: link.parent.id,
+        name: link.parent.name,
+        phone: link.parent.phone,
+        email: link.parent.email,
+        nid: link.parent.nid,
+        occupation: link.parent.occupation,
+        address: link.parent.address,
+      },
+    }));
+
+    return ResponseHelper.success(
+      {
+        student,
+        totalParents: links.length,
+        parents: parentsList,
+      },
+      `Parents/guardians for student '${student.name}' retrieved successfully`,
     );
   }
 }

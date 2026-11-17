@@ -22,6 +22,7 @@ import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { QueryStudentDto } from './dto/query-student.dto';
+import { AssignParentDto } from './dto/assign-parent.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -158,5 +159,56 @@ export class StudentController {
   ) {
     const isPermanent = permanent === 'true';
     return this.studentService.remove(id, isPermanent);
+  }
+
+  @Post(':id/parents')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Link or add a parent/guardian to a student (Admin only)',
+    description:
+      'Associates a parent with a student. Can link an existing parent by parentId (for siblings) or create a new parent profile in one request.',
+  })
+  @ApiParam({ name: 'id', description: 'Student UUID' })
+  @ApiResponse({
+    status: 201,
+    description: 'Parent linked to student successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation failed or missing required fields',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Student or Parent not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'This parent is already linked to the student',
+  })
+  async assignParent(
+    @Param('id', ParseUUIDPipe) studentId: string,
+    @Body() dto: AssignParentDto,
+  ) {
+    return this.studentService.assignParent(studentId, dto);
+  }
+
+  @Get(':id/parents')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get all parents/guardians of a student',
+    description:
+      'Returns list of all linked parents/guardians, their relationship (FATHER, MOTHER, GUARDIAN), contact details, and primary contact status.',
+  })
+  @ApiParam({ name: 'id', description: 'Student UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Student parents retrieved successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Student not found' })
+  async getStudentParents(@Param('id', ParseUUIDPipe) studentId: string) {
+    return this.studentService.getStudentParents(studentId);
   }
 }
