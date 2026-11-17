@@ -16,7 +16,25 @@ export class UpdateStudentDto {
   // --- Personal Info ---
   @ApiPropertyOptional({
     example: 'Md. Rahat Hossain',
-    description: 'Full name of the student',
+    description: 'English full name of the student',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  nameEn?: string;
+
+  @ApiPropertyOptional({
+    example: 'মোঃ রাহাত হোসেন',
+    description: 'Bengali full name of the student',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  nameBn?: string;
+
+  @ApiPropertyOptional({
+    example: 'Md. Rahat Hossain',
+    description: 'Legacy full name (maps to nameEn)',
   })
   @IsOptional()
   @IsString()

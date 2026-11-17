@@ -27,14 +27,32 @@ export class CreateStudentDto {
   @MaxLength(50)
   studentId?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'Md. Rahat Hossain',
-    description: 'Full name of the student',
+    description: 'English full name of the student (for admit card, certificate, and board registration)',
   })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @MaxLength(150)
-  name: string;
+  nameEn?: string;
+
+  @ApiPropertyOptional({
+    example: 'মোঃ রাহাত হোসেন',
+    description: 'Bengali full name of the student (for local certificates and reports)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  nameBn?: string;
+
+  @ApiPropertyOptional({
+    example: 'Md. Rahat Hossain',
+    description: 'Full name of the student (legacy alias; mapped to nameEn if nameEn is omitted)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  name?: string;
 
   @ApiProperty({
     enum: Gender,

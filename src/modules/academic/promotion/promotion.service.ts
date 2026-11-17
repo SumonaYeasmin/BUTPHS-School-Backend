@@ -141,7 +141,8 @@ export class PromotionService {
           select: {
             id: true,
             studentId: true,
-            name: true,
+            nameEn: true,
+            nameBn: true,
             gender: true,
             photo: true,
           },
@@ -237,7 +238,8 @@ export class PromotionService {
         enrollmentId: enr.id,
         studentId: enr.student.id,
         studentCustomId: enr.student.studentId,
-        studentName: enr.student.name,
+        studentName: enr.student.nameEn,
+        studentNameBn: enr.student.nameBn,
         gender: enr.student.gender,
         photo: enr.student.photo,
         currentSection: enr.section,
@@ -380,7 +382,7 @@ export class PromotionService {
         },
         include: {
           student: {
-            select: { id: true, studentId: true, name: true, gender: true },
+            select: { id: true, studentId: true, nameEn: true, nameBn: true, gender: true },
           },
           section: { select: { id: true, name: true } },
         },
@@ -414,7 +416,9 @@ export class PromotionService {
       const studentList = activeEnrollments.map((enr) => ({
         studentId: enr.student.id,
         studentCustomId: enr.student.studentId,
-        name: enr.student.name,
+        name: enr.student.nameEn,
+        nameEn: enr.student.nameEn,
+        nameBn: enr.student.nameBn,
         gender: enr.student.gender,
         section: enr.section.name,
         roll: enr.roll,
@@ -593,13 +597,13 @@ export class PromotionService {
           studentId: { in: studentIds },
         },
         include: {
-          student: { select: { name: true, studentId: true } },
+          student: { select: { nameEn: true, studentId: true } },
         },
       });
 
     if (existingTargetEnrollments.length > 0) {
       const conflictNames = existingTargetEnrollments
-        .map((e) => `${e.student.name} (${e.student.studentId})`)
+        .map((e) => `${e.student.nameEn} (${e.student.studentId})`)
         .join(', ');
       throw new ConflictException(
         `The following students already have an enrollment in target academic year '${targetYear.name}': ${conflictNames}`,
@@ -610,11 +614,11 @@ export class PromotionService {
     const fromEnrollmentIds = enrollments.map((e) => e.id);
     const existingPromotions = await this.prisma.studentPromotion.findMany({
       where: { fromEnrollmentId: { in: fromEnrollmentIds } },
-      include: { student: { select: { name: true } } },
+      include: { student: { select: { nameEn: true } } },
     });
     if (existingPromotions.length > 0) {
       const alreadyPromotedNames = existingPromotions
-        .map((p) => p.student.name)
+        .map((p) => p.student.nameEn)
         .join(', ');
       throw new ConflictException(
         `The following students have already been promoted from this section: ${alreadyPromotedNames}`,
@@ -633,7 +637,7 @@ export class PromotionService {
 
       if (!summary) {
         throw new BadRequestException(
-          `Student '${enr.student.name}' (Roll ${enr.roll}) has no result summary for exam '${exam.name}'. All students must have results before bulk promotion.`,
+          `Student '${enr.student.nameEn}' (Roll ${enr.roll}) has no result summary for exam '${exam.name}'. All students must have results before bulk promotion.`,
         );
       }
 
@@ -643,7 +647,7 @@ export class PromotionService {
         failedList.push(enr);
       } else {
         throw new BadRequestException(
-          `Student '${enr.student.name}' (Roll ${enr.roll}) has an incomplete result status (${summary.resultStatus}). Please resolve results before bulk promotion.`,
+          `Student '${enr.student.nameEn}' (Roll ${enr.roll}) has an incomplete result status (${summary.resultStatus}). Please resolve results before bulk promotion.`,
         );
       }
     }
@@ -776,7 +780,9 @@ export class PromotionService {
         promotedRecords.push({
           studentId: item.student.id,
           studentCustomId: item.student.studentId,
-          name: item.student.name,
+          name: item.student.nameEn,
+          nameEn: item.student.nameEn,
+          nameBn: item.student.nameBn,
           oldRoll: item.roll,
           newRoll,
           gpa: summary.gpa ? Number(summary.gpa) : null,
@@ -828,7 +834,9 @@ export class PromotionService {
         repeaterRecords.push({
           studentId: item.student.id,
           studentCustomId: item.student.studentId,
-          name: item.student.name,
+          name: item.student.nameEn,
+          nameEn: item.student.nameEn,
+          nameBn: item.student.nameBn,
           oldRoll: item.roll,
           newRoll: repeaterRoll,
           failedSubjectCount: summary.failedSubjectCount,
@@ -937,7 +945,8 @@ export class PromotionService {
             select: {
               id: true,
               studentId: true,
-              name: true,
+              nameEn: true,
+              nameBn: true,
               gender: true,
               photo: true,
             },
@@ -1021,7 +1030,8 @@ export class PromotionService {
       select: {
         id: true,
         studentId: true,
-        name: true,
+        nameEn: true,
+        nameBn: true,
         gender: true,
         photo: true,
       },
@@ -1098,7 +1108,7 @@ export class PromotionService {
         totalPromotions: records.length,
         timeline,
       },
-      `Promotion history for student '${student.name}' retrieved successfully`,
+      `Promotion history for student '${student.nameEn}' retrieved successfully`,
     );
   }
 
@@ -1135,7 +1145,8 @@ export class PromotionService {
           select: {
             id: true,
             studentId: true,
-            name: true,
+            nameEn: true,
+            nameBn: true,
           },
         },
         fromEnrollment: {
@@ -1174,22 +1185,22 @@ export class PromotionService {
       const counts = p.toEnrollment._count;
       if (counts.attendances > 0) {
         conflictReasons.push(
-          `Student '${p.student.name}' already has ${counts.attendances} attendance record(s) in target class '${p.toEnrollment.schoolClass.name}'`,
+          `Student '${p.student.nameEn}' already has ${counts.attendances} attendance record(s) in target class '${p.toEnrollment.schoolClass.name}'`,
         );
       }
       if (counts.marks > 0) {
         conflictReasons.push(
-          `Student '${p.student.name}' already has marks entered in target class '${p.toEnrollment.schoolClass.name}'`,
+          `Student '${p.student.nameEn}' already has marks entered in target class '${p.toEnrollment.schoolClass.name}'`,
         );
       }
       if (counts.resultSummaries > 0) {
         conflictReasons.push(
-          `Student '${p.student.name}' already has exam result summaries in target class '${p.toEnrollment.schoolClass.name}'`,
+          `Student '${p.student.nameEn}' already has exam result summaries in target class '${p.toEnrollment.schoolClass.name}'`,
         );
       }
       if (counts.promotionsFrom > 0) {
         conflictReasons.push(
-          `Student '${p.student.name}' has already been further promoted from target class '${p.toEnrollment.schoolClass.name}'`,
+          `Student '${p.student.nameEn}' has already been further promoted from target class '${p.toEnrollment.schoolClass.name}'`,
         );
       }
     }
@@ -1231,7 +1242,9 @@ export class PromotionService {
     const rolledBackStudents = promotions.map((p) => ({
       studentId: p.student.id,
       studentCustomId: p.student.studentId,
-      name: p.student.name,
+      name: p.student.nameEn,
+      nameEn: p.student.nameEn,
+      nameBn: p.student.nameBn,
       restoredClass: p.fromEnrollment.schoolClass.name,
       restoredSection: p.fromEnrollment.section.name,
       restoredRoll: p.fromEnrollment.roll,

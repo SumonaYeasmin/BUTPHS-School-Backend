@@ -135,7 +135,8 @@ model Student {
   id                 String        @id @default(uuid()) @db.Uuid
   studentId          String        @unique @db.VarChar(50)
   birthCertificateNo String?       @unique @db.VarChar(17)
-  name               String        @db.VarChar(150)
+  nameEn             String        @db.VarChar(150)
+  nameBn             String?       @db.VarChar(150)
   photo              String?
   dateOfBirth        DateTime?     @db.Date
   gender             Gender
@@ -153,7 +154,8 @@ model Student {
   promotions  StudentPromotion[]
   rfidcards   StudentRFIDcard[]
 
-  @@index([status, name])
+  @@index([status, nameEn])
+  @@index([nameBn])
 }
 
 model StudentRFIDcard {
