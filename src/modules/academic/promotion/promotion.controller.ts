@@ -19,7 +19,6 @@ import { PromotionService } from './promotion.service';
 import { PreviewPromotionDto } from './dto/preview-promotion.dto';
 import { BulkPromotionDto } from './dto/bulk-promotion.dto';
 import { QueryPromotionDto } from './dto/query-promotion.dto';
-import { GraduateBatchDto } from './dto/graduate-batch.dto';
 import { RollbackBatchDto } from './dto/rollback-promotion.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -35,13 +34,14 @@ export class PromotionController {
   @Roles('ADMIN', 'TEACHER')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Preview student promotion eligibility and suggested roll numbers',
+    summary:
+      'Preview student promotion or graduation eligibility and suggested roll numbers',
     description:
-      'Fetches all active students in a given class and optional section, integrates their published annual examination results, and provides suggested promotions, rolls, and repeater flags.',
+      'Fetches all active students in a given class and optional section, integrates their published annual examination results, and provides suggested promotions, rolls, repeater flags, or graduation status for Class 10.',
   })
   @ApiResponse({
     status: 200,
-    description: 'Promotion preview generated successfully',
+    description: 'Promotion/Graduation preview generated successfully',
   })
   @ApiResponse({
     status: 400,
@@ -61,18 +61,18 @@ export class PromotionController {
   @ApiBearerAuth()
   @ApiOperation({
     summary:
-      'Bulk promote an entire section of students using Annual Exam ResultSummaries (Admin only)',
+      'Execute bulk promotion or graduation for an entire section (Admin only)',
     description:
-      'Atomically executes year-end promotion for all students in a section based on published annual exam results: passed students are promoted to the target class and assigned sequential rolls (1, 2, 3...) according to merit position, while failed students are re-enrolled as repeaters in the source class.',
+      'Unified execution endpoint: If Source Class is Terminal (Class 10), marks enrollments as COMPLETED and students as GRADUATED. If Source Class is Class 6-9, promotes passed students to the target class with sequential merit rolls and re-enrolls failed students as repeaters.',
   })
   @ApiResponse({
     status: 201,
-    description: 'Bulk promotion processed successfully',
+    description: 'Bulk promotion or graduation processed successfully',
   })
   @ApiResponse({
     status: 400,
     description:
-      'Validation failed (incomplete results, invalid classes/sections, or same academic year)',
+      'Validation failed (missing target class for 6-9, incomplete results, or same academic year)',
   })
   @ApiResponse({
     status: 404,
@@ -121,32 +121,6 @@ export class PromotionController {
   @ApiResponse({ status: 404, description: 'Student not found' })
   async getStudentHistory(@Param('studentId', ParseUUIDPipe) studentId: string) {
     return this.promotionService.getStudentPromotionHistory(studentId);
-  }
-
-  @Post('graduate-batch')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Graduate / complete an entire Class 10 batch (Admin only)',
-    description:
-      'Marks active Class 10 enrollments as COMPLETED and permanent student profiles as GRADUATED in an atomic transaction upon completion of school.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Class 10 batch graduated successfully',
-  })
-  @ApiResponse({
-    status: 400,
-    description:
-      'Validation failed or class is not a terminal graduating class',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Academic year, class, or section not found',
-  })
-  async graduateBatch(@Body() dto: GraduateBatchDto) {
-    return this.promotionService.graduateBatch(dto);
   }
 
   @Post('rollback-batch')

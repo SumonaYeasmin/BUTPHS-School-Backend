@@ -62,29 +62,32 @@ export class BulkPromotionDto {
   @IsNotEmpty({ message: 'sourceSectionId is required' })
   sourceSectionId: string;
 
-  @ApiProperty({
-    description: 'Target Academic Year UUID (next academic year)',
+  @ApiPropertyOptional({
+    description:
+      'Target Academic Year UUID (Required for Class 6-9 promotion; omit for Class 10 Graduation)',
     example: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44',
   })
   @IsUUID('4', { message: 'targetAcademicYearId must be a valid UUID' })
-  @IsNotEmpty({ message: 'targetAcademicYearId is required' })
-  targetAcademicYearId: string;
+  @IsOptional()
+  targetAcademicYearId?: string;
 
-  @ApiProperty({
-    description: 'Target Class UUID (next class, e.g. Class 7)',
+  @ApiPropertyOptional({
+    description:
+      'Target Class UUID (Required for Class 6-9 promotion; omit for Class 10 Graduation)',
     example: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55',
   })
   @IsUUID('4', { message: 'targetClassId must be a valid UUID' })
-  @IsNotEmpty({ message: 'targetClassId is required' })
-  targetClassId: string;
+  @IsOptional()
+  targetClassId?: string;
 
-  @ApiProperty({
-    description: 'Target Section UUID in the target class',
+  @ApiPropertyOptional({
+    description:
+      'Target Section UUID (Required for Class 6-9 promotion; omit for Class 10 Graduation)',
     example: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66',
   })
   @IsUUID('4', { message: 'targetSectionId must be a valid UUID' })
-  @IsNotEmpty({ message: 'targetSectionId is required' })
-  targetSectionId: string;
+  @IsOptional()
+  targetSectionId?: string;
 
   @ApiPropertyOptional({
     description:

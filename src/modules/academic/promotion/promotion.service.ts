@@ -3,7 +3,6 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { PreviewPromotionDto } from './dto/preview-promotion.dto';
 import { BulkPromotionDto } from './dto/bulk-promotion.dto';
 import { QueryPromotionDto } from './dto/query-promotion.dto';
-import { GraduateBatchDto } from './dto/graduate-batch.dto';
 import { RollbackBatchDto } from './dto/rollback-promotion.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import { Prisma } from '../../../../prisma/generated/client';
@@ -318,61 +317,177 @@ export class PromotionService {
   }
 
   /**
-   * Promote an entire section of students in bulk using published Annual Exam ResultSummaries
-   * within an atomic database transaction.
+   * Bulk promote or graduate an entire section of students atomically.
    *
-   * - Passed students are promoted to target class & section with sequential merit rolls (1, 2, 3...)
-   * - Failed students are enrolled in the target year as repeaters in the source class & section
-   * - All source enrollments are marked as PROMOTED
-   * - StudentPromotion audit entries are generated for every student
+   * Unified behavior:
+   * - If Source Class is Terminal (Class 10 / no higher class exists in school):
+   *     Atomically completes graduation (StudentEnrollment -> COMPLETED, Student -> GRADUATED).
+   * - If Source Class is Class 6-9:
+   *     Promotes students sequentially to Target Class & Section based on Annual Exam ResultSummaries (Merit Rolls 1, 2, 3...)
+   *     and enrolls failed students as repeaters in the source class.
    */
   async promoteBulkStudents(dto: BulkPromotionDto) {
-    // 1. Validate Academic Years
+    // 1. Validate Source Academic Year
+    const sourceYear = await this.prisma.academicYear.findUnique({
+      where: { id: dto.sourceAcademicYearId },
+      select: { id: true, name: true, startDate: true },
+    });
+    if (!sourceYear) {
+      throw new NotFoundException(
+        `Source Academic Year with ID '${dto.sourceAcademicYearId}' not found`,
+      );
+    }
+
+    // 2. Validate Source Class
+    const sourceClass = await this.prisma.schoolClass.findUnique({
+      where: { id: dto.sourceClassId },
+      select: { id: true, name: true, numericValue: true },
+    });
+    if (!sourceClass) {
+      throw new NotFoundException(
+        `Source Class with ID '${dto.sourceClassId}' not found`,
+      );
+    }
+
+    // Check if there is any higher class in the school (e.g. Class 10 has no higher class)
+    const higherClass = await this.prisma.schoolClass.findFirst({
+      where: { numericValue: { gt: sourceClass.numericValue } },
+      select: { id: true, name: true },
+    });
+    const isTerminalGraduation = !higherClass;
+
+    // 3. Validate Source Section
+    const sourceSection = await this.prisma.section.findFirst({
+      where: { id: dto.sourceSectionId, classId: dto.sourceClassId },
+      select: { id: true, name: true },
+    });
+    if (!sourceSection) {
+      throw new BadRequestException(
+        `Source Section does not belong to Source Class '${sourceClass.name}'`,
+      );
+    }
+
+    // ==========================================
+    // CASE A: CLASS 10 (TERMINAL GRADUATION)
+    // ==========================================
+    if (isTerminalGraduation) {
+      const activeEnrollments = await this.prisma.studentEnrollment.findMany({
+        where: {
+          academicYearId: dto.sourceAcademicYearId,
+          classId: dto.sourceClassId,
+          sectionId: dto.sourceSectionId,
+          status: 'ACTIVE',
+        },
+        include: {
+          student: {
+            select: { id: true, studentId: true, name: true, gender: true },
+          },
+          section: { select: { id: true, name: true } },
+        },
+        orderBy: [{ roll: 'asc' }],
+      });
+
+      if (activeEnrollments.length === 0) {
+        throw new NotFoundException(
+          `No active students found in Class '${sourceClass.name} - ${sourceSection.name}' for academic year '${sourceYear.name}'`,
+        );
+      }
+
+      const enrollmentIds = activeEnrollments.map((e) => e.id);
+      const studentIds = activeEnrollments.map((e) => e.studentId);
+
+      // Execute Atomic Database Transaction for Graduation
+      await this.prisma.$transaction(async (tx) => {
+        // Mark all active enrollments as COMPLETED
+        await tx.studentEnrollment.updateMany({
+          where: { id: { in: enrollmentIds } },
+          data: { status: 'COMPLETED' },
+        });
+
+        // Mark all permanent student profiles as GRADUATED
+        await tx.student.updateMany({
+          where: { id: { in: studentIds } },
+          data: { status: 'GRADUATED' },
+        });
+      });
+
+      const studentList = activeEnrollments.map((enr) => ({
+        studentId: enr.student.id,
+        studentCustomId: enr.student.studentId,
+        name: enr.student.name,
+        gender: enr.student.gender,
+        section: enr.section.name,
+        roll: enr.roll,
+        enrollmentStatus: 'COMPLETED',
+        studentStatus: 'GRADUATED',
+      }));
+
+      const responseData = {
+        action: 'GRADUATION',
+        source: {
+          academicYear: sourceYear.name,
+          class: sourceClass.name,
+          section: sourceSection.name,
+        },
+        summary: {
+          totalProcessed: activeEnrollments.length,
+          graduatedCount: activeEnrollments.length,
+          promotedCount: 0,
+          repeaterCount: 0,
+        },
+        completionDate:
+          dto.promotionDate || new Date().toISOString().split('T')[0],
+        remarks:
+          dto.remarks ||
+          `${sourceClass.name} batch graduated successfully from high school`,
+        graduatedStudents: studentList,
+      };
+
+      return ResponseHelper.success(
+        responseData,
+        `Successfully completed high school graduation for ${activeEnrollments.length} student(s) of ${sourceClass.name} - ${sourceSection.name}`,
+      );
+    }
+
+    // ==========================================
+    // CASE B: CLASSES 6 - 9 (REGULAR BULK PROMOTION)
+    // ==========================================
+    if (!dto.targetAcademicYearId) {
+      throw new BadRequestException(
+        'targetAcademicYearId is required for promoting classes 6 through 9',
+      );
+    }
+    if (!dto.targetClassId) {
+      throw new BadRequestException(
+        'targetClassId is required for promoting classes 6 through 9',
+      );
+    }
+    if (!dto.targetSectionId) {
+      throw new BadRequestException(
+        'targetSectionId is required for promoting classes 6 through 9',
+      );
+    }
+
     if (dto.sourceAcademicYearId === dto.targetAcademicYearId) {
       throw new BadRequestException(
         'Source and Target Academic Years must be different for year-end promotion',
       );
     }
 
-    const [sourceYear, targetYear] = await Promise.all([
-      this.prisma.academicYear.findUnique({
-        where: { id: dto.sourceAcademicYearId },
-        select: { id: true, name: true, startDate: true },
-      }),
-      this.prisma.academicYear.findUnique({
-        where: { id: dto.targetAcademicYearId },
-        select: { id: true, name: true, startDate: true },
-      }),
-    ]);
-
-    if (!sourceYear) {
-      throw new NotFoundException(
-        `Source Academic Year with ID '${dto.sourceAcademicYearId}' not found`,
-      );
-    }
+    const targetYear = await this.prisma.academicYear.findUnique({
+      where: { id: dto.targetAcademicYearId },
+      select: { id: true, name: true, startDate: true },
+    });
     if (!targetYear) {
       throw new NotFoundException(
         `Target Academic Year with ID '${dto.targetAcademicYearId}' not found`,
       );
     }
 
-    // 2. Validate Classes
-    const [sourceClass, targetClass] = await Promise.all([
-      this.prisma.schoolClass.findUnique({
-        where: { id: dto.sourceClassId },
-        select: { id: true, name: true, numericValue: true },
-      }),
-      this.prisma.schoolClass.findUnique({
-        where: { id: dto.targetClassId },
-        select: { id: true, name: true, numericValue: true },
-      }),
-    ]);
-
-    if (!sourceClass) {
-      throw new NotFoundException(
-        `Source Class with ID '${dto.sourceClassId}' not found`,
-      );
-    }
+    const targetClass = await this.prisma.schoolClass.findUnique({
+      where: { id: dto.targetClassId },
+      select: { id: true, name: true, numericValue: true },
+    });
     if (!targetClass) {
       throw new NotFoundException(
         `Target Class with ID '${dto.targetClassId}' not found`,
@@ -385,23 +500,10 @@ export class PromotionService {
       );
     }
 
-    // 3. Validate Sections
-    const [sourceSection, targetSection] = await Promise.all([
-      this.prisma.section.findFirst({
-        where: { id: dto.sourceSectionId, classId: dto.sourceClassId },
-        select: { id: true, name: true },
-      }),
-      this.prisma.section.findFirst({
-        where: { id: dto.targetSectionId, classId: dto.targetClassId },
-        select: { id: true, name: true },
-      }),
-    ]);
-
-    if (!sourceSection) {
-      throw new BadRequestException(
-        `Source Section does not belong to Source Class '${sourceClass.name}'`,
-      );
-    }
+    const targetSection = await this.prisma.section.findFirst({
+      where: { id: dto.targetSectionId, classId: dto.targetClassId },
+      select: { id: true, name: true },
+    });
     if (!targetSection) {
       throw new BadRequestException(
         `Target Section does not belong to Target Class '${targetClass.name}'`,
@@ -614,6 +716,10 @@ export class PromotionService {
       ? new Date(dto.promotionDate)
       : new Date();
 
+    const targetAcademicYearId = dto.targetAcademicYearId!;
+    const targetClassId = dto.targetClassId!;
+    const targetSectionId = dto.targetSectionId!;
+
     const batchResult = await this.prisma.$transaction(async (tx) => {
       const promotedRecords = [];
       const repeaterRecords = [];
@@ -638,9 +744,9 @@ export class PromotionService {
         const newEnrollment = await tx.studentEnrollment.create({
           data: {
             studentId: item.studentId,
-            academicYearId: dto.targetAcademicYearId,
-            classId: dto.targetClassId,
-            sectionId: dto.targetSectionId,
+            academicYearId: targetAcademicYearId,
+            classId: targetClassId,
+            sectionId: targetSectionId,
             groupId: assignedGroupId,
             optionalSubjectId: assignedOptionalSubjectId,
             roll: newRoll,
@@ -694,7 +800,7 @@ export class PromotionService {
         const newEnrollment = await tx.studentEnrollment.create({
           data: {
             studentId: item.studentId,
-            academicYearId: dto.targetAcademicYearId,
+            academicYearId: targetAcademicYearId,
             classId: dto.sourceClassId,
             sectionId: dto.sourceSectionId,
             groupId: item.groupId,
@@ -993,143 +1099,6 @@ export class PromotionService {
         timeline,
       },
       `Promotion history for student '${student.name}' retrieved successfully`,
-    );
-  }
-
-  /**
-   * Graduate/Complete an entire batch of Class 10 students atomically.
-   *
-   * - Validates that the class is the terminal graduating class (no higher class)
-   * - Marks their StudentEnrollment status as COMPLETED
-   * - Marks their permanent Student profile status as GRADUATED
-   */
-  async graduateBatch(dto: GraduateBatchDto) {
-    // 1. Verify Academic Year exists
-    const academicYear = await this.prisma.academicYear.findUnique({
-      where: { id: dto.academicYearId },
-      select: { id: true, name: true },
-    });
-    if (!academicYear) {
-      throw new NotFoundException(
-        `Academic Year with ID '${dto.academicYearId}' not found`,
-      );
-    }
-
-    // 2. Verify Class exists and is terminal (Class 10 / highest class)
-    const schoolClass = await this.prisma.schoolClass.findUnique({
-      where: { id: dto.classId },
-      select: { id: true, name: true, numericValue: true },
-    });
-    if (!schoolClass) {
-      throw new NotFoundException(`Class with ID '${dto.classId}' not found`);
-    }
-
-    // Check if there is any higher class in the school
-    const higherClass = await this.prisma.schoolClass.findFirst({
-      where: { numericValue: { gt: schoolClass.numericValue } },
-      select: { id: true, name: true },
-    });
-
-    if (higherClass) {
-      throw new BadRequestException(
-        `Class '${schoolClass.name}' is not a graduating terminal class. Higher class '${higherClass.name}' exists. Use promotion instead.`,
-      );
-    }
-
-    // 3. Verify section if provided
-    let section: { id: string; name: string } | null = null;
-    if (dto.sectionId) {
-      section = await this.prisma.section.findFirst({
-        where: { id: dto.sectionId, classId: dto.classId },
-        select: { id: true, name: true },
-      });
-      if (!section) {
-        throw new BadRequestException(
-          `Section with ID '${dto.sectionId}' does not belong to Class '${schoolClass.name}'`,
-        );
-      }
-    }
-
-    // 4. Find all active enrollments in this class/section
-    const activeEnrollments = await this.prisma.studentEnrollment.findMany({
-      where: {
-        academicYearId: dto.academicYearId,
-        classId: dto.classId,
-        ...(dto.sectionId ? { sectionId: dto.sectionId } : {}),
-        status: 'ACTIVE',
-      },
-      include: {
-        student: {
-          select: {
-            id: true,
-            studentId: true,
-            name: true,
-            gender: true,
-          },
-        },
-        section: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-      orderBy: [{ section: { name: 'asc' } }, { roll: 'asc' }],
-    });
-
-    if (activeEnrollments.length === 0) {
-      throw new NotFoundException(
-        `No active students found in Class '${schoolClass.name}'${
-          section ? ` (Section ${section.name})` : ''
-        } for academic year '${academicYear.name}'`,
-      );
-    }
-
-    const enrollmentIds = activeEnrollments.map((e) => e.id);
-    const studentIds = activeEnrollments.map((e) => e.studentId);
-
-    // 5. Execute Atomic Database Transaction
-    await this.prisma.$transaction(async (tx) => {
-      // a. Mark all active enrollments as COMPLETED
-      await tx.studentEnrollment.updateMany({
-        where: { id: { in: enrollmentIds } },
-        data: { status: 'COMPLETED' },
-      });
-
-      // b. Mark all permanent student profiles as GRADUATED
-      await tx.student.updateMany({
-        where: { id: { in: studentIds } },
-        data: { status: 'GRADUATED' },
-      });
-    });
-
-    const studentList = activeEnrollments.map((enr) => ({
-      studentId: enr.student.id,
-      studentCustomId: enr.student.studentId,
-      name: enr.student.name,
-      gender: enr.student.gender,
-      section: enr.section.name,
-      roll: enr.roll,
-      enrollmentStatus: 'COMPLETED',
-      studentStatus: 'GRADUATED',
-    }));
-
-    const responseData = {
-      academicYear: academicYear.name,
-      class: schoolClass.name,
-      section: section ? section.name : 'All Sections',
-      totalGraduated: activeEnrollments.length,
-      completionDate:
-        dto.completionDate || new Date().toISOString().split('T')[0],
-      remarks:
-        dto.remarks ||
-        `${schoolClass.name} batch graduated successfully from high school`,
-      students: studentList,
-    };
-
-    return ResponseHelper.success(
-      responseData,
-      `Successfully graduated ${activeEnrollments.length} student(s) from ${schoolClass.name}`,
     );
   }
 
