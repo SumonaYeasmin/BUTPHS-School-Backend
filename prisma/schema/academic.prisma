@@ -166,7 +166,11 @@ model Student {
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 
+<<<<<<< HEAD
   user                 User?                        @relation(fields: [userId], references: [id], onDelete: SetNull)
+=======
+  user                 User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
+>>>>>>> 1f168fc15bfdc9997a4894b7e0788ccaa582fe70
   enrollments          StudentEnrollment[]
   parents              ParentStudent[]
   promotions           StudentPromotion[]
