@@ -1,15 +1,27 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { TeacherAssignmentService } from './teacher-assignment.service';
 import { AssignTeacherDto } from './dto/assign-teacher.dto';
+import { QueryTeacherAssignmentDto } from './dto/query-teacher-assignment.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 
 @ApiTags('(Academic) Teacher Assignment (বিষয় শিক্ষক নিয়োগ ও দায়িত্ব বণ্টন)')
 @Controller('academic/teacher-assignments')
@@ -46,5 +58,59 @@ export class TeacherAssignmentController {
   })
   async assign(@Body() dto: AssignTeacherDto) {
     return this.teacherAssignmentService.assign(dto);
+  }
+
+  @Get('my-assignments')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get assigned classes & subjects for the logged-in teacher',
+    description:
+      'Retrieves the list of active classes, sections, and subjects assigned to the currently authenticated teacher for routine view and mark entry.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Teacher assigned subjects retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Staff profile not linked with this user account',
+  })
+  async getMyAssignments(@CurrentUser() user: { id: string }) {
+    return this.teacherAssignmentService.getMyAssignments(user.id);
+  }
+
+  @Get()
+  @ApiOperation({
+    summary: 'List teacher assignments with filters and pagination',
+    description:
+      'Filter by Academic Year, Class, Section, Teacher, or active status (isActive: true/false).',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of teacher assignments retrieved successfully',
+  })
+  async findAll(@Query() query: QueryTeacherAssignmentDto) {
+    return this.teacherAssignmentService.findAll(query);
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Get single teacher assignment details with class routines',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'UUID of the TeacherAssignment',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Teacher assignment details retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Teacher assignment not found',
+  })
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.teacherAssignmentService.findOne(id);
   }
 }

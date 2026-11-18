@@ -1,12 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AssignTeacherDto } from './dto/assign-teacher.dto';
+import { QueryTeacherAssignmentDto } from './dto/query-teacher-assignment.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
   ConflictException,
   NotFoundException,
 } from '../../../common/exceptions/business.exception';
-import { StaffStatus, StaffType } from '../../../../prisma/generated/client';
+import { Prisma, StaffStatus, StaffType } from '../../../../prisma/generated/client';
 
 @Injectable()
 export class TeacherAssignmentService {
@@ -155,6 +156,155 @@ export class TeacherAssignmentService {
     return ResponseHelper.created(
       assignment,
       `শিক্ষক "${staff.name}" সফলভাবে ${schoolClass.name} (${section.name}) - ${classSubject.subject.name} বিষয়ে নিযুক্ত হয়েছেন।`,
+    );
+  }
+
+  /**
+   * List teacher assignments with filtering and pagination
+   */
+  async findAll(query: QueryTeacherAssignmentDto) {
+    const page = query.page || 1;
+    const limit = query.limit || 20;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.TeacherAssignmentWhereInput = {};
+
+    if (query.academicYearId) {
+      where.academicYearId = query.academicYearId;
+    }
+    if (query.staffId) {
+      where.staffId = query.staffId;
+    }
+    if (query.classId) {
+      where.classId = query.classId;
+    }
+    if (query.sectionId) {
+      where.sectionId = query.sectionId;
+    }
+    if (query.classSubjectId) {
+      where.classSubjectId = query.classSubjectId;
+    }
+    if (query.isActive !== undefined) {
+      where.isActive = query.isActive;
+    }
+
+    const [items, total] = await Promise.all([
+      this.prisma.teacherAssignment.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: [
+          { academicYear: { startDate: 'desc' } },
+          { schoolClass: { numericValue: 'asc' } },
+          { section: { name: 'asc' } },
+          { assignedDate: 'desc' },
+        ],
+        include: {
+          staff: {
+            select: {
+              id: true,
+              name: true,
+              employeeId: true,
+              designation: true,
+              photo: true,
+              phone: true,
+            },
+          },
+          schoolClass: { select: { id: true, name: true, numericValue: true } },
+          section: { select: { id: true, name: true } },
+          classSubject: {
+            include: {
+              subject: { select: { id: true, name: true, officialCode: true } },
+            },
+          },
+          academicYear: { select: { id: true, name: true, isActive: true } },
+          _count: {
+            select: { classRoutines: true },
+          },
+        },
+      }),
+      this.prisma.teacherAssignment.count({ where }),
+    ]);
+
+    const meta = ResponseHelper.buildPaginationMeta(total, page, limit);
+    return ResponseHelper.paginated(
+      items,
+      meta,
+      'Teacher assignments retrieved successfully',
+    );
+  }
+
+  /**
+   * Get single assignment by ID with full details & routine
+   */
+  async findOne(id: string) {
+    const assignment = await this.prisma.teacherAssignment.findUnique({
+      where: { id },
+      include: {
+        staff: true,
+        schoolClass: true,
+        section: true,
+        classSubject: {
+          include: {
+            subject: true,
+          },
+        },
+        academicYear: true,
+        classRoutines: {
+          orderBy: [{ day: 'asc' }, { periodNumber: 'asc' }],
+        },
+      },
+    });
+
+    if (!assignment) {
+      throw new NotFoundException('Teacher Assignment');
+    }
+
+    return ResponseHelper.success(
+      assignment,
+      'Teacher assignment details retrieved successfully',
+    );
+  }
+
+  /**
+   * Get all active assigned subjects and classes for the currently logged-in teacher
+   */
+  async getMyAssignments(userId: string) {
+    const staff = await this.prisma.staff.findUnique({
+      where: { userId },
+    });
+
+    if (!staff) {
+      throw new NotFoundException('Teacher profile linked to this user');
+    }
+
+    const assignments = await this.prisma.teacherAssignment.findMany({
+      where: {
+        staffId: staff.id,
+        isActive: true,
+      },
+      include: {
+        schoolClass: { select: { id: true, name: true, numericValue: true } },
+        section: { select: { id: true, name: true } },
+        classSubject: {
+          include: {
+            subject: { select: { id: true, name: true, officialCode: true } },
+          },
+        },
+        academicYear: { select: { id: true, name: true, isActive: true } },
+        classRoutines: {
+          orderBy: [{ day: 'asc' }, { periodNumber: 'asc' }],
+        },
+      },
+      orderBy: [
+        { schoolClass: { numericValue: 'asc' } },
+        { section: { name: 'asc' } },
+      ],
+    });
+
+    return ResponseHelper.success(
+      assignments,
+      'My active teacher assignments retrieved successfully',
     );
   }
 }
