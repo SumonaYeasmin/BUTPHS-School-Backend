@@ -164,7 +164,8 @@ export class StudentService {
       const student = await tx.student.create({
         data: {
           studentId: finalStudentId,
-          name: dto.name.trim(),
+          nameEn: (dto.nameEn || dto.name || '').trim(),
+          nameBn: dto.nameBn?.trim() || null,
           gender: dto.gender,
           dateOfBirth,
           bloodGroup: (dto.bloodGroup?.trim() as BloodGroup) || null,
@@ -274,7 +275,7 @@ export class StudentService {
 
     return ResponseHelper.created(
       result,
-      `Student '${result.name}' (${result.studentId}) admitted and enrolled successfully in ${schoolClass.name} (Section: ${section.name})`,
+      `Student '${result.nameEn}' (${result.studentId}) admitted and enrolled successfully in ${schoolClass.name} (Section: ${section.name})`,
     );
   }
 
@@ -292,7 +293,8 @@ export class StudentService {
     if (query.search) {
       const term = query.search.trim();
       where.OR = [
-        { name: { contains: term, mode: 'insensitive' } },
+        { nameEn: { contains: term, mode: 'insensitive' } },
+        { nameBn: { contains: term, mode: 'insensitive' } },
         { studentId: { contains: term, mode: 'insensitive' } },
         { birthCertificateNo: { contains: term, mode: 'insensitive' } },
         { rfidcards: { some: { cardNumber: { contains: term, mode: 'insensitive' } } } },
@@ -573,8 +575,10 @@ export class StudentService {
     }
 
     // 4. Prepare student update data
-    const studentUpdateData: Prisma.StudentUpdateInput = {};
-    if (dto.name !== undefined) studentUpdateData.name = dto.name.trim();
+    const studentUpdateData: any = {};
+    if (dto.nameEn !== undefined) studentUpdateData.nameEn = dto.nameEn.trim();
+    else if (dto.name !== undefined) studentUpdateData.nameEn = dto.name.trim();
+    if (dto.nameBn !== undefined) studentUpdateData.nameBn = dto.nameBn?.trim() || null;
     if (dto.gender !== undefined) studentUpdateData.gender = dto.gender;
     if (dto.dateOfBirth !== undefined)
       studentUpdateData.dateOfBirth = dto.dateOfBirth
@@ -733,7 +737,7 @@ export class StudentService {
 
       return ResponseHelper.success(
         null,
-        `Student '${student.name}' (${student.studentId}) permanently deleted successfully`,
+        `Student '${student.nameEn}' (${student.studentId}) permanently deleted successfully`,
       );
     }
 
@@ -745,7 +749,7 @@ export class StudentService {
 
     return ResponseHelper.success(
       null,
-      `Student '${student.name}' (${student.studentId}) marked as INACTIVE (soft deleted) successfully`,
+      `Student '${student.nameEn}' (${student.studentId}) marked as INACTIVE (soft deleted) successfully`,
     );
   }
 
@@ -759,7 +763,7 @@ export class StudentService {
     // 1. Verify student exists
     const student = await this.prisma.student.findUnique({
       where: { id: studentId },
-      select: { id: true, name: true, studentId: true },
+      select: { id: true, nameEn: true, nameBn: true, studentId: true },
     });
 
     if (!student) {
@@ -788,7 +792,7 @@ export class StudentService {
       });
       if (alreadyLinked) {
         throw new ConflictException(
-          `Parent '${existingParent.name}' is already linked to student '${student.name}' (${alreadyLinked.relationship})`,
+          `Parent '${existingParent.name}' is already linked to student '${student.nameEn}' (${alreadyLinked.relationship})`,
         );
       }
     } else {
@@ -844,7 +848,7 @@ export class StudentService {
 
     return ResponseHelper.created(
       linkResult,
-      `Parent '${linkResult.parent.name}' successfully linked to student '${student.name}' as ${linkResult.relationship}`,
+      `Parent '${linkResult.parent.name}' successfully linked to student '${student.nameEn}' as ${linkResult.relationship}`,
     );
   }
 
@@ -854,7 +858,7 @@ export class StudentService {
   async getStudentParents(studentId: string) {
     const student = await this.prisma.student.findUnique({
       where: { id: studentId },
-      select: { id: true, name: true, studentId: true },
+      select: { id: true, nameEn: true, nameBn: true, studentId: true },
     });
 
     if (!student) {
@@ -891,7 +895,7 @@ export class StudentService {
         totalParents: links.length,
         parents: parentsList,
       },
-      `Parents/guardians for student '${student.name}' retrieved successfully`,
+      `Parents/guardians for student '${student.nameEn}' retrieved successfully`,
     );
   }
 
@@ -989,7 +993,7 @@ export class StudentService {
 
     return ResponseHelper.success(
       null,
-      `Parent '${link.parent.name}' unlinked from student '${link.student.name}' successfully`,
+      `Parent '${link.parent.name}' unlinked from student '${link.student.nameEn}' successfully`,
     );
   }
 }

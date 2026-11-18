@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
+  IsBoolean,
   IsInt,
   IsNotEmpty,
   IsOptional,
@@ -28,6 +29,15 @@ export class CreateClassDto {
   @IsPositive()
   @IsNotEmpty()
   numericValue: number;
+
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Whether the class is active',
+    default: true,
+  })
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean;
 
   @ApiPropertyOptional({
     example: ['A', 'B'],

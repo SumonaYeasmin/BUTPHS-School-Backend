@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -19,6 +20,7 @@ import {
 import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
+import { QueryClassDto } from './dto/query-class.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -49,13 +51,13 @@ export class ClassController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get all classes list with sections' })
+  @ApiOperation({ summary: 'Get all classes list with sections (optionally filtered by isActive)' })
   @ApiResponse({
     status: 200,
     description: 'Classes retrieved successfully',
   })
-  async findAll() {
-    return this.classService.findAll();
+  async findAll(@Query() query?: QueryClassDto) {
+    return this.classService.findAll(query);
   }
 
   @Get(':id')

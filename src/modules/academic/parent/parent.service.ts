@@ -98,7 +98,8 @@ export class ParentService {
               select: {
                 id: true,
                 studentId: true,
-                name: true,
+                nameEn: true,
+                nameBn: true,
                 gender: true,
                 photo: true,
                 enrollments: {
@@ -126,7 +127,9 @@ export class ParentService {
       return {
         studentId: link.student.id,
         studentCustomId: link.student.studentId,
-        studentName: link.student.name,
+        studentName: link.student.nameEn,
+        studentNameEn: link.student.nameEn,
+        studentNameBn: link.student.nameBn,
         relationship: link.relationship,
         isPrimary: link.isPrimary,
         currentClass: activeEnrollment ? activeEnrollment.schoolClass.name : null,
@@ -165,7 +168,8 @@ export class ParentService {
               select: {
                 id: true,
                 studentId: true,
-                name: true,
+                nameEn: true,
+                nameBn: true,
                 gender: true,
                 photo: true,
                 status: true,
@@ -197,7 +201,9 @@ export class ParentService {
         mappingId: link.id,
         studentId: link.student.id,
         studentCustomId: link.student.studentId,
-        studentName: link.student.name,
+        studentName: link.student.nameEn,
+        studentNameEn: link.student.nameEn,
+        studentNameBn: link.student.nameBn,
         gender: link.student.gender,
         photo: link.student.photo,
         relationship: link.relationship,
