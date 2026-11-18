@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
+import { QueryClassDto } from './dto/query-class.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
   ConflictException,
@@ -41,6 +42,7 @@ export class ClassService {
         data: {
           name: trimmedName,
           numericValue: dto.numericValue,
+          isActive: dto.isActive ?? true,
           ...(dto.sections && dto.sections.length > 0
             ? {
                 sections: {
@@ -65,14 +67,25 @@ export class ClassService {
     );
   }
 
-  async findAll() {
+  async findAll(query?: QueryClassDto) {
+    const where: any = {};
+    if (query?.isActive !== undefined) {
+      where.isActive = query.isActive;
+    }
+
     const classes = await this.prisma.schoolClass.findMany({
+      where,
       orderBy: { numericValue: 'asc' },
       include: {
         sections: {
+          where:
+            query?.isActive !== undefined
+              ? { isActive: query.isActive }
+              : undefined,
           select: {
             id: true,
             name: true,
+            isActive: true,
           },
           orderBy: { name: 'asc' },
         },
@@ -169,6 +182,7 @@ export class ClassService {
         ...(dto.numericValue !== undefined
           ? { numericValue: dto.numericValue }
           : {}),
+        ...(dto.isActive !== undefined ? { isActive: dto.isActive } : {}),
       },
       include: {
         sections: {

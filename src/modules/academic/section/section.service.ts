@@ -47,6 +47,7 @@ export class SectionService {
       data: {
         classId: dto.classId,
         name: trimmedName,
+        isActive: dto.isActive ?? true,
       },
       include: {
         schoolClass: {
@@ -66,10 +67,14 @@ export class SectionService {
   }
 
   async findAll(query?: QuerySectionDto) {
-    const where: Prisma.SectionWhereInput = {};
+    const where: any = {};
 
     if (query?.classId) {
       where.classId = query.classId;
+    }
+
+    if (query?.isActive !== undefined) {
+      where.isActive = query.isActive;
     }
 
     const sections = await this.prisma.section.findMany({
@@ -162,6 +167,10 @@ export class SectionService {
 
         data.name = trimmedName;
       }
+    }
+
+    if (dto.isActive !== undefined) {
+      data.isActive = dto.isActive;
     }
 
     const updated = await this.prisma.section.update({
