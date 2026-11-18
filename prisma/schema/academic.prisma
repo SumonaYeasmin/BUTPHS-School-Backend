@@ -17,7 +17,6 @@ model AcademicYear {
   exams                 Exam[]
   digitalResources      DigitalResource[]
   sectionClassTeachers  SectionClassTeacher[]
-  admissionApplications AdmissionApplication[]
 
   @@index([isActive])
 }
@@ -32,7 +31,6 @@ model AcademicGroup {
   enrollments           StudentEnrollment[]
   classSubjects         ClassSubject[]
   examSubjects          ExamSubject[]
-  admissionApplications AdmissionApplication[]
 
   @@index([isActive])
 }
@@ -50,7 +48,6 @@ model SchoolClass {
   teacherAssignments    TeacherAssignment[]
   exams                 Exam[]
   digitalResources      DigitalResource[]
-  admissionApplications AdmissionApplication[]
   books                 Book[]
 
   @@index([isActive])
@@ -172,7 +169,6 @@ model Student {
   promotions           StudentPromotion[]
   rfidcards            StudentRFIDcard[]
   transferCertificates StudentTransferCertificate[]
-  admissionApplication AdmissionApplication?
 
   @@index([status, nameEn])
   @@index([nameBn])
@@ -414,41 +410,4 @@ model ClassRoutine {
   @@unique([academicYearId, staffId, day, periodNumber])
   @@index([academicYearId, room, day, periodNumber])
   @@index([staffId, day])
-}
-
-model AdmissionApplication {
-  id                String                     @id @default(uuid()) @db.Uuid
-  applicationNo     String                     @unique @db.VarChar(50)
-  academicYearId    String                     @db.Uuid
-  appliedClassId    String                     @db.Uuid
-  appliedGroupId    String?                    @db.Uuid
-  enrolledStudentId String?                    @unique @db.Uuid
-  studentName       String                     @db.VarChar(150)
-  dateOfBirth       DateTime                   @db.Date
-  gender            Gender
-  bloodGroup        BloodGroup?
-  religion          Religion?
-  birthCertificate  String?                    @db.VarChar(50)
-  fatherName        String                     @db.VarChar(150)
-  motherName        String                     @db.VarChar(150)
-  guardianPhone     String                     @db.VarChar(20)
-  email             String?                    @db.VarChar(150)
-  presentAddress    String
-  permanentAddress  String
-  previousSchool    String?                    @db.VarChar(200)
-  previousGrade     String?                    @db.VarChar(50)
-  photo             String?
-  documentsUrl      String?
-  status            AdmissionApplicationStatus @default(PENDING)
-  remarks           String?
-  submittedAt       DateTime                   @default(now())
-  updatedAt         DateTime                   @updatedAt
-
-  academicYear    AcademicYear   @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
-  schoolClass     SchoolClass    @relation(fields: [appliedClassId], references: [id], onDelete: Restrict)
-  appliedGroup    AcademicGroup? @relation(fields: [appliedGroupId], references: [id], onDelete: SetNull)
-  enrolledStudent Student?       @relation(fields: [enrolledStudentId], references: [id], onDelete: SetNull)
-
-  @@index([academicYearId, appliedClassId, status])
-  @@index([appliedGroupId])
 }
