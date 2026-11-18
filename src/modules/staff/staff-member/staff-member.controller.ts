@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -17,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { StaffMemberService } from './staff-member.service';
 import { CreateStaffDto } from './dto/create-staff.dto';
+import { UpdateStaffDto } from './dto/update-staff.dto';
 import { QueryStaffDto } from './dto/query-staff.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -124,5 +127,70 @@ export class StaffMemberController {
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.staffMemberService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update staff member profile (Admin only)',
+    description:
+      'Updates staff personal details, department, approved post, designation, or status with complete safety checks (NID/Employee ID uniqueness, quota checks, auto leaving date).',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'UUID of the staff member to update',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Staff member updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation failed or target post quota is full',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Staff member, Department, or Staff Structure not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Employee ID or NID already in use by another staff member',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateStaffDto,
+  ) {
+    return this.staffMemberService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete staff member profile (Safe Delete - Admin only)',
+    description:
+      'Permanently deletes an unlinked staff profile (e.g. mistaken entry). Blocks deletion if the staff member has assigned classes, routines, or administrative positions, prompting status change to RETIRED/RESIGNED instead.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'UUID of the staff member to delete',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Staff member deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot delete staff member with existing academic or routine records',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Staff member not found',
+  })
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.staffMemberService.remove(id);
   }
 }

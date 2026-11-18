@@ -204,13 +204,6 @@ enum PublicationType {
   OTHER
 }
 
-enum AdmissionApplicationStatus {
-  PENDING
-  REVIEWING
-  APPROVED
-  REJECTED
-}
-
 enum AchievementType {
   INSTITUTION_ACHIEVEMENT
   STUDENT_STAR

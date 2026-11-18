@@ -211,7 +211,6 @@ export class ClassService {
             classSubjects: true,
             teacherAssignments: true,
             exams: true,
-            admissionApplications: true,
           },
         },
       },
@@ -223,7 +222,7 @@ export class ClassService {
 
     const counts = existing._count;
 
-    // Critical data protection: Enrolled students, Exams, or Applications
+    // Critical data protection: Enrolled students or Exams
     if (counts.enrollments > 0) {
       throw new BadRequestException(
         `Cannot delete class '${existing.name}' because it contains ${counts.enrollments} enrolled student(s).`,
@@ -233,12 +232,6 @@ export class ClassService {
     if (counts.exams > 0) {
       throw new BadRequestException(
         `Cannot delete class '${existing.name}' because it is linked to ${counts.exams} exam(s).`,
-      );
-    }
-
-    if (counts.admissionApplications > 0) {
-      throw new BadRequestException(
-        `Cannot delete class '${existing.name}' because it has ${counts.admissionApplications} admission application(s).`,
       );
     }
 

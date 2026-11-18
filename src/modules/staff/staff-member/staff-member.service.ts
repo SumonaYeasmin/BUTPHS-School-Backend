@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateStaffDto } from './dto/create-staff.dto';
+import { UpdateStaffDto } from './dto/update-staff.dto';
 import { QueryStaffDto } from './dto/query-staff.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
@@ -173,19 +174,6 @@ export class StaffMemberService {
     return ResponseHelper.created(staff, 'Staff member created successfully');
   }
 
-  /**
-   * List staff with filtering, search, and pagination
-   * Supports:
-   * - staffType (TEACHER, OFFICER, EMPLOYEE)
-   * - isFormer (প্রাক্তন শিক্ষক/কর্মচারী - RETIRED or RESIGNED)
-   * - departmentId
-   * - staffStructureId
-   * - employmentType
-   * - status
-   * - gender
-   * - search (name, employeeId, phone, email, designation, nid)
-   * - dynamic sorting (displayOrder, joiningDate, name, createdAt)
-   */
   async findAll(query: QueryStaffDto) {
     const page = query.page || 1;
     const limit = query.limit || 20;
@@ -275,9 +263,8 @@ export class StaffMemberService {
     return ResponseHelper.paginated(items, meta, 'Staff list retrieved successfully');
   }
 
-  /**
-   * Get single staff profile by ID with full details (assignments, routines, department, structure)
-   */
+  // Get single staff profile by ID with full details (assignments, routines, department, structure)
+   
   async findOne(id: string) {
     const staff = await this.prisma.staff.findUnique({
       where: { id },
@@ -411,6 +398,244 @@ export class StaffMemberService {
         },
       },
       'Staff statistics retrieved successfully',
+    );
+  }
+
+
+  async update(id: string, dto: UpdateStaffDto) {
+    const existing = await this.prisma.staff.findUnique({
+      where: { id },
+      include: {
+        department: true,
+        staffStructure: true,
+      },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Staff member');
+    }
+
+    // 1. Employee ID Uniqueness Check (excluding self)
+    if (dto.employeeId && dto.employeeId !== existing.employeeId) {
+      const idConflict = await this.prisma.staff.findUnique({
+        where: { employeeId: dto.employeeId },
+      });
+      if (idConflict) {
+        throw new ConflictException(
+          `Employee ID "${dto.employeeId}" is already assigned to another staff member.`,
+        );
+      }
+    }
+
+    // 2. NID Uniqueness Check (excluding self)
+    if (dto.nid && dto.nid !== existing.nid) {
+      const nidConflict = await this.prisma.staff.findUnique({
+        where: { nid: dto.nid },
+      });
+      if (nidConflict) {
+        throw new ConflictException(
+          `National ID (NID) "${dto.nid}" is already registered to another staff member.`,
+        );
+      }
+    }
+
+    // 3. Department Validation
+    if (dto.departmentId && dto.departmentId !== existing.departmentId) {
+      const department = await this.prisma.department.findUnique({
+        where: { id: dto.departmentId },
+      });
+      if (!department) {
+        throw new NotFoundException('Department');
+      }
+    }
+
+    let designation = dto.designation;
+    let staffType = dto.staffType;
+    let departmentId = dto.departmentId;
+
+    // 4. Staff Structure (Approved Post) Transfer / Promotion Validation
+    if (dto.staffStructureId && dto.staffStructureId !== existing.staffStructureId) {
+      const targetStructure = await this.prisma.staffStructure.findFirst({
+        where: { id: dto.staffStructureId, isDeleted: false },
+        include: {
+          _count: {
+            select: {
+              staffList: {
+                where: { status: 'ACTIVE' },
+              },
+            },
+          },
+        },
+      });
+
+      if (!targetStructure) {
+        throw new NotFoundException('Staff Structure / Approved Post');
+      }
+
+      // Check quota vacancy
+      const activeCount = targetStructure._count.staffList;
+      if (activeCount >= targetStructure.totalPositions) {
+        throw new BadRequestException(
+          `Cannot transfer staff to "${targetStructure.designation}". The approved quota is already full (${activeCount}/${targetStructure.totalPositions} positions filled).`,
+        );
+      }
+
+      // Auto-inherit designation, staffType, and department from target structure if not explicitly provided
+      if (!designation) {
+        designation = targetStructure.designation;
+      }
+      if (!staffType) {
+        staffType = targetStructure.staffType;
+      }
+      if (!departmentId && targetStructure.departmentId) {
+        departmentId = targetStructure.departmentId;
+      }
+    } else if (
+      // If reactivating back to ACTIVE under same structure, check quota
+      dto.status === StaffStatus.ACTIVE &&
+      existing.status !== StaffStatus.ACTIVE &&
+      existing.staffStructureId
+    ) {
+      const currentStructure = await this.prisma.staffStructure.findFirst({
+        where: { id: existing.staffStructureId, isDeleted: false },
+        include: {
+          _count: {
+            select: {
+              staffList: {
+                where: { status: 'ACTIVE' },
+              },
+            },
+          },
+        },
+      });
+
+      if (
+        currentStructure &&
+        currentStructure._count.staffList >= currentStructure.totalPositions
+      ) {
+        throw new BadRequestException(
+          `Cannot reactivate staff under "${currentStructure.designation}". Quota is currently full (${currentStructure._count.staffList}/${currentStructure.totalPositions}). Please increase quota first.`,
+        );
+      }
+    }
+
+    // 5. Leaving Date logic based on Status
+    let leavingDate: Date | null | undefined = undefined;
+    if (dto.leavingDate !== undefined) {
+      leavingDate = dto.leavingDate ? new Date(dto.leavingDate) : null;
+    } else if (dto.status) {
+      if (
+        dto.status === StaffStatus.RETIRED ||
+        dto.status === StaffStatus.RESIGNED ||
+        dto.status === StaffStatus.TERMINATED
+      ) {
+        // Automatically set leaving date if not already recorded
+        leavingDate = existing.leavingDate || new Date();
+      } else if (dto.status === StaffStatus.ACTIVE) {
+        // Clear leaving date if reactivated
+        leavingDate = null;
+      }
+    }
+
+    // 6. Execute Update
+    const updated = await this.prisma.staff.update({
+      where: { id },
+      data: {
+        ...(dto.employeeId !== undefined && { employeeId: dto.employeeId }),
+        ...(dto.name !== undefined && { name: dto.name }),
+        ...(dto.photo !== undefined && { photo: dto.photo }),
+        ...(designation !== undefined && { designation }),
+        ...(dto.qualification !== undefined && { qualification: dto.qualification }),
+        ...(staffType !== undefined && { staffType }),
+        ...(departmentId !== undefined && { departmentId }),
+        ...(dto.staffStructureId !== undefined && { staffStructureId: dto.staffStructureId }),
+        ...(dto.employmentType !== undefined && { employmentType: dto.employmentType }),
+        ...(dto.fatherName !== undefined && { fatherName: dto.fatherName }),
+        ...(dto.motherName !== undefined && { motherName: dto.motherName }),
+        ...(dto.gender !== undefined && { gender: dto.gender }),
+        ...(dto.dateOfBirth !== undefined && {
+          dateOfBirth: dto.dateOfBirth ? new Date(dto.dateOfBirth) : null,
+        }),
+        ...(dto.nid !== undefined && { nid: dto.nid }),
+        ...(dto.bloodGroup !== undefined && { bloodGroup: dto.bloodGroup }),
+        ...(dto.religion !== undefined && { religion: dto.religion }),
+        ...(dto.presentAddress !== undefined && { presentAddress: dto.presentAddress }),
+        ...(dto.permanentAddress !== undefined && { permanentAddress: dto.permanentAddress }),
+        ...(dto.emergencyContact !== undefined && { emergencyContact: dto.emergencyContact }),
+        ...(dto.phone !== undefined && { phone: dto.phone }),
+        ...(dto.email !== undefined && { email: dto.email }),
+        ...(dto.joiningDate !== undefined && {
+          joiningDate: dto.joiningDate ? new Date(dto.joiningDate) : null,
+        }),
+        ...(leavingDate !== undefined && { leavingDate }),
+        ...(dto.displayOrder !== undefined && { displayOrder: dto.displayOrder }),
+        ...(dto.status !== undefined && { status: dto.status }),
+      },
+      include: {
+        department: {
+          select: { id: true, name: true, code: true },
+        },
+        staffStructure: {
+          select: { id: true, designation: true, totalPositions: true },
+        },
+      },
+    });
+
+    return ResponseHelper.success(updated, 'Staff profile updated successfully');
+  }
+
+  async remove(id: string) {
+    const staff = await this.prisma.staff.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            teacherAssignments: true,
+            classRoutines: true,
+            sectionClassTeachers: true,
+          },
+        },
+        administrator: {
+          select: { id: true, designation: true },
+        },
+      },
+    });
+
+    if (!staff) {
+      throw new NotFoundException('Staff member');
+    }
+
+    const { teacherAssignments, classRoutines, sectionClassTeachers } = staff._count;
+    const hasAdminRole = !!staff.administrator;
+
+    if (
+      teacherAssignments > 0 ||
+      classRoutines > 0 ||
+      sectionClassTeachers > 0 ||
+      hasAdminRole
+    ) {
+      const reasons: string[] = [];
+      if (teacherAssignments > 0) reasons.push(`${teacherAssignments} assigned subject(s)`);
+      if (classRoutines > 0) reasons.push(`${classRoutines} class routine(s)`);
+      if (sectionClassTeachers > 0) reasons.push('class teacher assignment(s)');
+      if (hasAdminRole) {
+        reasons.push(
+          `administrative leadership position (${staff.administrator?.designation})`,
+        );
+      }
+
+      throw new BadRequestException(
+        `Cannot delete "${staff.name}". This staff member has active institutional records: ${reasons.join(', ')}. To preserve academic and institutional history, please update their status to "RETIRED" or "RESIGNED" instead.`,
+      );
+    }
+
+    await this.prisma.staff.delete({
+      where: { id },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Staff member "${staff.name}" (${staff.employeeId || id}) has been successfully deleted.`,
     );
   }
 }

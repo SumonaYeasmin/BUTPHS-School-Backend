@@ -10,6 +10,7 @@ import { ClassSubjectModule } from './class-subject/class-subject.module';
 import { BookModule } from './book/book.module';
 import { PromotionModule } from './promotion/promotion.module';
 import { TransferCertificateModule } from './transfer-certificate/transfer-certificate.module';
+import { TeacherAssignmentModule } from './teacher-assignment/teacher-assignment.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { TransferCertificateModule } from './transfer-certificate/transfer-certi
     BookModule,
     PromotionModule,
     TransferCertificateModule,
+    TeacherAssignmentModule,
   ],
   exports: [
     AcademicYearModule,
@@ -37,6 +39,7 @@ import { TransferCertificateModule } from './transfer-certificate/transfer-certi
     BookModule,
     PromotionModule,
     TransferCertificateModule,
+    TeacherAssignmentModule,
   ],
 })
 export class AcademicModule {}
