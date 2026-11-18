@@ -98,7 +98,8 @@ export class ParentService {
               select: {
                 id: true,
                 studentId: true,
-                name: true,
+                nameEn: true,
+                nameBn: true,
                 gender: true,
                 photo: true,
                 enrollments: {
@@ -167,7 +168,8 @@ export class ParentService {
               select: {
                 id: true,
                 studentId: true,
-                name: true,
+                nameEn: true,
+                nameBn: true,
                 gender: true,
                 photo: true,
                 status: true,

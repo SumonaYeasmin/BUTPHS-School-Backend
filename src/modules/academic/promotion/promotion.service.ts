@@ -561,7 +561,8 @@ export class PromotionService {
           select: {
             id: true,
             studentId: true,
-            name: true,
+            nameEn: true,
+            nameBn: true,
             gender: true,
           },
         },
@@ -927,7 +928,8 @@ export class PromotionService {
     if (query.search) {
       where.student = {
         OR: [
-          { name: { contains: query.search, mode: 'insensitive' } },
+          { nameEn: { contains: query.search, mode: 'insensitive' } },
+          { nameBn: { contains: query.search, mode: 'insensitive' } },
           { studentId: { contains: query.search, mode: 'insensitive' } },
         ],
       };
