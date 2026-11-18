@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -17,6 +18,8 @@ import {
 } from '@nestjs/swagger';
 import { TeacherAssignmentService } from './teacher-assignment.service';
 import { AssignTeacherDto } from './dto/assign-teacher.dto';
+import { UpdateTeacherAssignmentDto } from './dto/update-teacher-assignment.dto';
+import { ReleaseTeacherDto } from './dto/release-teacher.dto';
 import { QueryTeacherAssignmentDto } from './dto/query-teacher-assignment.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -112,5 +115,70 @@ export class TeacherAssignmentController {
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.teacherAssignmentService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update teacher assignment details (Admin only)',
+    description:
+      'Transfers assignment to a new teacher, toggles marks entry permissions, or re-activates an inactive assignment with conflict checks.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'UUID of the TeacherAssignment to update',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Teacher assignment updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Validation failed or another teacher is already actively assigned to this subject',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'TeacherAssignment or new Staff not found',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateTeacherAssignmentDto,
+  ) {
+    return this.teacherAssignmentService.update(id, dto);
+  }
+
+  @Patch(':id/release')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Release / Relieve a teacher from an active assignment (Admin only)',
+    description:
+      'Ends a teacher’s active assignment (for leave, transfer, or departure) while preserving all historical routines and grading logs.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'UUID of the TeacherAssignment record',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Teacher released successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Teacher is already released or inactive',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Teacher assignment record not found',
+  })
+  async release(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: ReleaseTeacherDto,
+  ) {
+    return this.teacherAssignmentService.release(id, dto);
   }
 }
