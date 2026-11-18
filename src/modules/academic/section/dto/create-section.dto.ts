@@ -1,5 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUUID, MaxLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 
 export class CreateSectionDto {
   @ApiProperty({
@@ -18,4 +25,13 @@ export class CreateSectionDto {
   @IsNotEmpty()
   @MaxLength(50)
   name: string;
+
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Whether the section is active',
+    default: true,
+  })
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean;
 }

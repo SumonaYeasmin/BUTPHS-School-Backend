@@ -145,7 +145,8 @@ export class TransferCertificateService {
         student: {
           id: student.id,
           studentId: student.studentId,
-          name: student.name,
+          nameEn: student.nameEn,
+          nameBn: student.nameBn,
           dateOfBirth: student.dateOfBirth,
           fatherName: father || null,
           motherName: mother || null,
@@ -189,7 +190,8 @@ export class TransferCertificateService {
     if (query.search) {
       where.OR = [
         { tcNumber: { contains: query.search, mode: 'insensitive' } },
-        { student: { name: { contains: query.search, mode: 'insensitive' } } },
+        { student: { nameEn: { contains: query.search, mode: 'insensitive' } } },
+        { student: { nameBn: { contains: query.search, mode: 'insensitive' } } },
         { student: { studentId: { contains: query.search, mode: 'insensitive' } } },
       ];
     }
@@ -219,7 +221,8 @@ export class TransferCertificateService {
             select: {
               id: true,
               studentId: true,
-              name: true,
+              nameEn: true,
+              nameBn: true,
               dateOfBirth: true,
               gender: true,
               photo: true,
@@ -296,7 +299,8 @@ export class TransferCertificateService {
         student: {
           select: {
             studentId: true,
-            name: true,
+            nameEn: true,
+            nameBn: true,
             dateOfBirth: true,
           },
         },
@@ -321,7 +325,8 @@ export class TransferCertificateService {
         tcNumber: tc.tcNumber,
         issueDate: tc.issueDate,
         leavingDate: tc.leavingDate,
-        studentName: tc.student.name,
+        studentNameEn: tc.student.nameEn,
+        studentNameBn: tc.student.nameBn,
         studentId: tc.student.studentId,
         leavingClass: tc.leavingClass,
         schoolName: schoolProfile?.name || 'School Authority',

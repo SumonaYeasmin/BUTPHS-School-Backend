@@ -8,7 +8,21 @@ enum StaffType {
 
 enum StaffStatus {
   ACTIVE
-  FORMER
+  RESIGNED
+  RETIRED
+  TERMINATED
+}
+
+enum EmploymentType {
+  PERMANENT
+  PROBATIONARY
+  CONTRACTUAL
+  PART_TIME
+}
+
+enum DepartmentStatus {
+  ACTIVE
+  INACTIVE
 }
 
 enum Gender {
@@ -31,10 +45,17 @@ enum EnrollmentStatus {
   COMPLETED
 }
 
+enum PromotionType {
+  PROMOTED
+  RETAINED
+  DOUBLE_PROMOTED
+}
+
 enum RelationshipType {
   FATHER
   MOTHER
   GUARDIAN
+  OTHER
 }
 
 enum AcademicDocumentType {

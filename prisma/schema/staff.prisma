@@ -3,25 +3,61 @@
 model Staff {
   id            String      @id @default(uuid()) @db.Uuid
   userId        String?     @unique @db.Uuid
+  employeeId    String?     @unique @db.VarChar(50)   /// স্টাফ / শিক্ষক আইডি (যেমন: T-001, EMP-012)
   name          String      @db.VarChar(150)
   photo         String?
   designation   String      @db.VarChar(100)
   qualification String?     @db.VarChar(150)
   staffType     StaffType
+  
+  departmentId   String?        @db.Uuid
+  employmentType EmploymentType @default(PERMANENT)
+  
+  fatherName       String?     @db.VarChar(150)
+  motherName       String?     @db.VarChar(150)
+  gender           Gender?
+  dateOfBirth      DateTime?   @db.Date
+  nid              String?     @unique @db.VarChar(20)
+  bloodGroup       BloodGroup?
+  religion         Religion?
+  
+  presentAddress   String?
+  permanentAddress String?
+  emergencyContact String?     @db.VarChar(20)
+  
   phone         String?     @db.VarChar(20)
   email         String?     @db.VarChar(150)
   joiningDate   DateTime?   @db.Date
-  leavingDate   DateTime?   @db.Date
+  leavingDate   DateTime?   @db.Date /// চাকরি ছাড়ার তারিখ
+  displayOrder  Int         @default(0) /// ওয়েবসাইটে পদমর্যাদা অনুযায়ী দেখানোর ক্রম
   status        StaffStatus @default(ACTIVE)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
-  user               User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
-  administrator      Administrator?
-  teacherAssignments TeacherAssignment[]
-  classRoutines      ClassRoutine[]
+  user                 User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
+  department           Department?           @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  administrator        Administrator?
+  teacherAssignments   TeacherAssignment[]
+  classRoutines        ClassRoutine[]
+  sectionClassTeachers SectionClassTeacher[]
 
   @@index([staffType, status])
+  @@index([departmentId])
+  @@index([displayOrder])
+}
+
+model Department {
+  id          String           @id @default(uuid()) @db.Uuid
+  name        String           @unique @db.VarChar(100) /// যেমন: বিজ্ঞান বিভাগ, Accounts, Office Management
+  code        String?          @unique @db.VarChar(20)  /// যেমন: SCI, ACC, ADM
+  description String?
+  status      DepartmentStatus @default(ACTIVE)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  staffList   Staff[]
+
+  @@index([status])
 }
 
 model StaffStructure {
