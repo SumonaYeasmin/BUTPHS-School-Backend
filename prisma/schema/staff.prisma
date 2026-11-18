@@ -10,8 +10,9 @@ model Staff {
   qualification String?     @db.VarChar(150)
   staffType     StaffType
   
-  departmentId   String?        @db.Uuid
-  employmentType EmploymentType @default(PERMANENT)
+  departmentId     String?        @db.Uuid
+  staffStructureId String?        @db.Uuid
+  employmentType   EmploymentType @default(PERMANENT)
   
   fatherName       String?     @db.VarChar(150)
   motherName       String?     @db.VarChar(150)
@@ -36,6 +37,7 @@ model Staff {
 
   user                 User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
   department           Department?           @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  staffStructure       StaffStructure?       @relation(fields: [staffStructureId], references: [id], onDelete: SetNull)
   administrator        Administrator?
   teacherAssignments   TeacherAssignment[]
   classRoutines        ClassRoutine[]
@@ -43,32 +45,43 @@ model Staff {
 
   @@index([staffType, status])
   @@index([departmentId])
+  @@index([staffStructureId])
   @@index([displayOrder])
 }
 
 model Department {
-  id          String           @id @default(uuid()) @db.Uuid
-  name        String           @unique @db.VarChar(100) /// যেমন: বিজ্ঞান বিভাগ, Accounts, Office Management
-  code        String?          @unique @db.VarChar(20)  /// যেমন: SCI, ACC, ADM
-  description String?
-  status      DepartmentStatus @default(ACTIVE)
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  id           String           @id @default(uuid()) @db.Uuid
+  name         String           @unique @db.VarChar(100) /// যেমন: বিজ্ঞান বিভাগ, Accounts, Office Management
+  code         String?          @unique @db.VarChar(20)  /// যেমন: SCI, ACC, ADM
+  description  String?
+  displayOrder Int              @default(0)              /// ওয়েবসাইটে বা ড্রপডাউনে প্রদর্শনের ক্রম
+  status       DepartmentStatus @default(ACTIVE)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 
-  staffList   Staff[]
+  staffList       Staff[]
+  staffStructures StaffStructure[]
 
-  @@index([status])
+  @@index([status, displayOrder])
 }
 
 model StaffStructure {
-  id              String    @id @default(uuid()) @db.Uuid
-  designation     String    @db.VarChar(100)
+  id              String      @id @default(uuid()) @db.Uuid
+  designation     String      @db.VarChar(100)
   staffType       StaffType
   totalPositions  Int
-  filledPositions Int       @default(0)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  filledPositions Int         @default(0)
+  
+  departmentId    String?     @db.Uuid
+  department      Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+
+  staffList       Staff[]
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
   // vacantPositions is calculated as totalPositions - filledPositions.
   @@unique([designation, staffType])
+  @@index([staffType])
+  @@index([departmentId])
 }
