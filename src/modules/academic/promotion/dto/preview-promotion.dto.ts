@@ -29,7 +29,7 @@ export class PreviewPromotionDto {
 
   @ApiPropertyOptional({
     description:
-      'Final Exam UUID (optional; if omitted, automatically finds the published ANNUAL exam for this class & year)',
+      'Final Exam UUID (optional; if omitted, automatically finds the published CONSOLIDATED or ANNUAL exam for this class & year)',
     example: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44',
   })
   @IsUUID('4', { message: 'examId must be a valid UUID' })

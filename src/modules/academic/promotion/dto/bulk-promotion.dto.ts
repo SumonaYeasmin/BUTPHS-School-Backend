@@ -91,7 +91,7 @@ export class BulkPromotionDto {
 
   @ApiPropertyOptional({
     description:
-      'Final Exam UUID (optional; if omitted, automatically uses the published ANNUAL exam for this class & year)',
+      'Final Exam UUID (optional; if omitted, automatically uses the published CONSOLIDATED or ANNUAL exam for this class & year)',
     example: 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a77',
   })
   @IsUUID('4', { message: 'examId must be a valid UUID' })

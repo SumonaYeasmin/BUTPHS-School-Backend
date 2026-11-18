@@ -60,6 +60,8 @@ model Exam {
   examRoutines    ExamRoutine[]
   subjectResults  StudentSubjectResult[]
   resultSummaries ResultSummary[]
+  consolidatedSources  ConsolidatedExamConfig[] @relation("ConsolidatedParent")
+  usedInConsolidations ConsolidatedExamConfig[] @relation("ConsolidatedSource")
 
   @@unique([academicYearId, classId, name])
   @@index([academicYearId, classId])
@@ -189,4 +191,20 @@ model ResultSummary {
 
   @@unique([studentEnrollmentId, examId])
   @@index([examId, meritPosition])
+}
+
+model ConsolidatedExamConfig {
+  id                  String   @id @default(uuid()) @db.Uuid
+  consolidatedExamId  String   @db.Uuid
+  sourceExamId        String   @db.Uuid
+  weightagePercentage Decimal  @db.Decimal(5, 2) /// সমন্বিত ফলাফলে এই পরীক্ষার শতকরা হার (যেমন: ৩০.০০ বা ৭০.০০)
+  displayOrder        Int      @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  consolidatedExam Exam @relation("ConsolidatedParent", fields: [consolidatedExamId], references: [id], onDelete: Cascade)
+  sourceExam       Exam @relation("ConsolidatedSource", fields: [sourceExamId], references: [id], onDelete: Restrict)
+
+  @@unique([consolidatedExamId, sourceExamId])
+  @@index([sourceExamId])
 }
