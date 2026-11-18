@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
+import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { QueryDepartmentDto } from './dto/query-department.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
@@ -123,5 +124,76 @@ export class DepartmentService {
     }
 
     return ResponseHelper.success(department, 'Department details retrieved successfully');
+  }
+
+  /**
+   * Update an existing Department
+   */
+  async update(id: string, dto: UpdateDepartmentDto) {
+    const existing = await this.prisma.department.findUnique({
+      where: { id },
+    });
+    if (!existing) {
+      throw new NotFoundException('Department');
+    }
+
+    // Check name uniqueness if changed
+    if (dto.name && dto.name !== existing.name) {
+      const conflictName = await this.prisma.department.findUnique({
+        where: { name: dto.name },
+      });
+      if (conflictName) {
+        throw new ConflictException(`Department with name "${dto.name}" already exists.`);
+      }
+    }
+
+    // Check code uniqueness if changed
+    if (dto.code && dto.code !== existing.code) {
+      const conflictCode = await this.prisma.department.findUnique({
+        where: { code: dto.code },
+      });
+      if (conflictCode) {
+        throw new ConflictException(`Department with code "${dto.code}" already exists.`);
+      }
+    }
+
+    const updated = await this.prisma.department.update({
+      where: { id },
+      data: dto,
+    });
+
+    return ResponseHelper.success(updated, 'Department updated successfully');
+  }
+
+  /**
+   * Safely delete a department
+   * Prevents deletion if any staff or approved positions are linked
+   */
+  async remove(id: string) {
+    const department = await this.prisma.department.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            staffList: true,
+            staffStructures: true,
+          },
+        },
+      },
+    });
+
+    if (!department) {
+      throw new NotFoundException('Department');
+    }
+
+    if (department._count.staffList > 0 || department._count.staffStructures > 0) {
+      throw new BadRequestException(
+        'Cannot delete this department because it has linked staff or approved positions. Please set its status to INACTIVE instead.',
+      );
+    }
+
+    await this.prisma.department.delete({ where: { id } });
+
+    return ResponseHelper.noContent('Department deleted successfully');
   }
 }
