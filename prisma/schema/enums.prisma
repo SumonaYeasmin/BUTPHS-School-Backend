@@ -8,7 +8,21 @@ enum StaffType {
 
 enum StaffStatus {
   ACTIVE
-  FORMER
+  RESIGNED
+  RETIRED
+  TERMINATED
+}
+
+enum EmploymentType {
+  PERMANENT
+  PROBATIONARY
+  CONTRACTUAL
+  PART_TIME
+}
+
+enum DepartmentStatus {
+  ACTIVE
+  INACTIVE
 }
 
 enum Gender {
