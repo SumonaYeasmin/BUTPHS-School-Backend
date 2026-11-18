@@ -316,14 +316,20 @@ model ParentStudent {
 }
 
 model TeacherAssignment {
-  id             String   @id @default(uuid()) @db.Uuid
-  staffId        String   @db.Uuid
-  academicYearId String   @db.Uuid
-  classId        String   @db.Uuid
-  sectionId      String   @db.Uuid
-  classSubjectId String   @db.Uuid
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id             String    @id @default(uuid()) @db.Uuid
+  staffId        String    @db.Uuid
+  academicYearId String    @db.Uuid
+  classId        String    @db.Uuid
+  sectionId      String    @db.Uuid
+  classSubjectId String    @db.Uuid
+
+  canEnterMarks  Boolean   @default(true)           /// শিক্ষক পোর্টালে এই বিষয়ের নম্বর দেওয়ার অনুমতি আছে কি না
+  assignedDate   DateTime  @default(now()) @db.Date /// দায়িত্ব পাওয়ার তারিখ
+  releasedDate   DateTime? @db.Date                 /// দায়িত্ব শেষ বা অন্য শিক্ষককে দেওয়ার তারিখ
+  isActive       Boolean   @default(true)           /// বর্তমানে কার্যকর দায়িত্ব কি না
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   staff         Staff          @relation(fields: [staffId], references: [id], onDelete: Restrict)
   academicYear  AcademicYear   @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
@@ -332,9 +338,10 @@ model TeacherAssignment {
   classSubject  ClassSubject   @relation(fields: [classSubjectId, academicYearId, classId], references: [id, academicYearId, classId], onDelete: Restrict)
   classRoutines ClassRoutine[]
 
-  @@unique([academicYearId, sectionId, classSubjectId, staffId])
-  @@index([staffId, academicYearId])
-  @@index([classId, sectionId, academicYearId])
+  @@index([academicYearId, sectionId, classSubjectId, staffId])
+  @@index([academicYearId, sectionId, classSubjectId, isActive])
+  @@index([staffId, academicYearId, isActive])
+  @@index([classId, sectionId, academicYearId, isActive])
 }
 
 model SectionClassTeacher {

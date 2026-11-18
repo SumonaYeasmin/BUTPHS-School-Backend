@@ -401,14 +401,7 @@ export class StaffMemberService {
     );
   }
 
-  /**
-   * Update an existing staff member with comprehensive validations:
-   * - Validates existence
-   * - Validates NID and Employee ID uniqueness (excluding current staff)
-   * - Validates department existence if modified
-   * - Validates staffStructure vacancy if transferred to a new post or reactivated
-   * - Handles leavingDate automatically on status change (RETIRED, RESIGNED, TERMINATED)
-   */
+
   async update(id: string, dto: UpdateStaffDto) {
     const existing = await this.prisma.staff.findUnique({
       where: { id },
@@ -591,13 +584,6 @@ export class StaffMemberService {
     return ResponseHelper.success(updated, 'Staff profile updated successfully');
   }
 
-  /**
-   * Safely delete a staff member:
-   * - Checks if staff member exists
-   * - Checks relations (teacherAssignments, classRoutines, sectionClassTeachers, administrator)
-   * - If relations exist: blocks deletion with a clear, helpful message advising status change to RETIRED/RESIGNED
-   * - If no relations exist: deletes the record cleanly from database
-   */
   async remove(id: string) {
     const staff = await this.prisma.staff.findUnique({
       where: { id },
