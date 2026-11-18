@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -162,5 +163,34 @@ export class StaffMemberController {
     @Body() dto: UpdateStaffDto,
   ) {
     return this.staffMemberService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete staff member profile (Safe Delete - Admin only)',
+    description:
+      'Permanently deletes an unlinked staff profile (e.g. mistaken entry). Blocks deletion if the staff member has assigned classes, routines, or administrative positions, prompting status change to RETIRED/RESIGNED instead.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'UUID of the staff member to delete',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Staff member deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot delete staff member with existing academic or routine records',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Staff member not found',
+  })
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.staffMemberService.remove(id);
   }
 }

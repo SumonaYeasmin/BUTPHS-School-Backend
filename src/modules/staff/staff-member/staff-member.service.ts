@@ -590,4 +590,66 @@ export class StaffMemberService {
 
     return ResponseHelper.success(updated, 'Staff profile updated successfully');
   }
+
+  /**
+   * Safely delete a staff member:
+   * - Checks if staff member exists
+   * - Checks relations (teacherAssignments, classRoutines, sectionClassTeachers, administrator)
+   * - If relations exist: blocks deletion with a clear, helpful message advising status change to RETIRED/RESIGNED
+   * - If no relations exist: deletes the record cleanly from database
+   */
+  async remove(id: string) {
+    const staff = await this.prisma.staff.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            teacherAssignments: true,
+            classRoutines: true,
+            sectionClassTeachers: true,
+          },
+        },
+        administrator: {
+          select: { id: true, designation: true },
+        },
+      },
+    });
+
+    if (!staff) {
+      throw new NotFoundException('Staff member');
+    }
+
+    const { teacherAssignments, classRoutines, sectionClassTeachers } = staff._count;
+    const hasAdminRole = !!staff.administrator;
+
+    if (
+      teacherAssignments > 0 ||
+      classRoutines > 0 ||
+      sectionClassTeachers > 0 ||
+      hasAdminRole
+    ) {
+      const reasons: string[] = [];
+      if (teacherAssignments > 0) reasons.push(`${teacherAssignments} assigned subject(s)`);
+      if (classRoutines > 0) reasons.push(`${classRoutines} class routine(s)`);
+      if (sectionClassTeachers > 0) reasons.push('class teacher assignment(s)');
+      if (hasAdminRole) {
+        reasons.push(
+          `administrative leadership position (${staff.administrator?.designation})`,
+        );
+      }
+
+      throw new BadRequestException(
+        `Cannot delete "${staff.name}". This staff member has active institutional records: ${reasons.join(', ')}. To preserve academic and institutional history, please update their status to "RETIRED" or "RESIGNED" instead.`,
+      );
+    }
+
+    await this.prisma.staff.delete({
+      where: { id },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Staff member "${staff.name}" (${staff.employeeId || id}) has been successfully deleted.`,
+    );
+  }
 }
