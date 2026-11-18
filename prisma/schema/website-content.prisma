@@ -54,14 +54,25 @@ model GalleryMedia {
 }
 
 model AdmissionContent {
-  id            String   @id @default(uuid()) @db.Uuid
-  title         String   @db.VarChar(200)
-  description   String?
-  admissionInfo String?
-  image         String?
-  isPublished   Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                String    @id @default(uuid()) @db.Uuid
+  title             String    @db.VarChar(200)          /// যেমন: "২০২৬ শিক্ষাবর্ষে ৬ষ্ঠ হতে ৯ম শ্রেণিতে ভর্তি চলছে"
+  subTitle          String?   @db.VarChar(250)          /// যেমন: "সীমিত আসনে মেধার ভিত্তিতে ভর্তি"
+  academicSession   String?   @db.VarChar(50)           /// শিক্ষাবর্ষ (যেমন: "২০২৬")
+  description       String?                             /// বিস্তারিত বিবরণ বা ভর্তি সার্কুলারের মূল বক্তব্য
+  admissionInfo     String?                             /// ভর্তির নিয়মাবলী, পরীক্ষার তারিখ বা লটারির নিয়ম
+  requiredDocuments String?                             /// প্রয়োজনীয় কাগজপত্র (জন্ম সনদ, ছবি, প্রত্যয়নপত্র ইত্যাদি)
+  formPdfUrl        String?                             /// ভর্তির আবেদন ফরম ডাউনলোড লিংক (PDF)
+  circularPdfUrl    String?                             /// ভর্তি বিজ্ঞপ্তির অফিসিয়াল নোটিশ বা সার্কুলার PDF লিংক
+  image             String?                             /// ব্যানার বা আকর্ষণীয় ছবি
+  applicationFee    Decimal?  @db.Decimal(7, 2)         /// আবেদন ফরম বা ভর্তি ফি (যদি থাকে, যেমন: ২০০.০০)
+  startDate         DateTime? @db.Date                  /// আবেদন বা ফরম বিতরণের শুরুর তারিখ
+  endDate           DateTime? @db.Date                  /// আবেদন বা ফরম জমা দেওয়ার শেষ তারিখ
+  helplinePhone     String?   @db.VarChar(50)           /// ভর্তি সংক্রান্ত হেল্পলাইন / ফোন নম্বর
+  isPublished       Boolean   @default(true)            /// ওয়েবসাইটে প্রদর্শিত হবে কি না
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([isPublished])
 }
 
 model ContactInformation {
