@@ -1,6 +1,15 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Max,
+  Min,
+} from 'class-validator';
 import {
   EmploymentType,
   Gender,
@@ -25,7 +34,7 @@ export class QueryStaffDto {
   limit?: number = 20;
 
   @ApiPropertyOptional({
-    description: 'Search by staff name, employee ID, phone, email, or NID',
+    description: 'Search by staff name, employee ID, phone, email, designation, or NID',
   })
   @IsOptional()
   @IsString()
@@ -62,6 +71,15 @@ export class QueryStaffDto {
   status?: StaffStatus;
 
   @ApiPropertyOptional({
+    description:
+      'Filter for former staff (প্রাক্তন শিক্ষক/কর্মচারী - RETIRED or RESIGNED). true: former only, false: active only',
+  })
+  @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  isFormer?: boolean;
+
+  @ApiPropertyOptional({
     enum: EmploymentType,
     description: 'Filter by employment type (PERMANENT, PROBATIONARY, CONTRACTUAL, PART_TIME)',
   })
@@ -71,9 +89,27 @@ export class QueryStaffDto {
 
   @ApiPropertyOptional({
     enum: Gender,
-    description: 'Filter by gender',
+    description: 'Filter by gender (MALE, FEMALE, OTHER)',
   })
   @IsOptional()
   @IsEnum(Gender)
   gender?: Gender;
+
+  @ApiPropertyOptional({
+    enum: ['displayOrder', 'joiningDate', 'name', 'createdAt'],
+    default: 'displayOrder',
+    description: 'Field to sort results by',
+  })
+  @IsOptional()
+  @IsString()
+  sortBy?: 'displayOrder' | 'joiningDate' | 'name' | 'createdAt' = 'displayOrder';
+
+  @ApiPropertyOptional({
+    enum: ['asc', 'desc'],
+    default: 'asc',
+    description: 'Sort direction',
+  })
+  @IsOptional()
+  @IsString()
+  sortOrder?: 'asc' | 'desc' = 'asc';
 }

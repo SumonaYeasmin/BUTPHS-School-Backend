@@ -60,7 +60,7 @@ export class StaffMemberController {
   @ApiOperation({
     summary: 'List staff members with search, department/type filters, and pagination',
     description:
-      'Retrieves staff list ordered by seniority (displayOrder). Used for public website (শিক্ষক, কর্মকর্তা, কর্মচারী, প্রাক্তন শিক্ষকবৃন্দ) and admin panels.',
+      'Retrieves staff list ordered by seniority (displayOrder). Supports filtering by staffType (TEACHER, OFFICER, EMPLOYEE), isFormer (প্রাক্তন শিক্ষক/কর্মচারী), departmentId, employmentType, status, and multi-field keyword search.',
   })
   @ApiResponse({
     status: 200,
@@ -70,9 +70,45 @@ export class StaffMemberController {
     return this.staffMemberService.findAll(query);
   }
 
+  @Get('statistics')
+  @ApiOperation({
+    summary: 'Get HR & staff summary statistics for dashboard',
+    description:
+      'Returns aggregate counts of active teachers, officers, employees, former teachers, and employment breakdown.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Staff statistics retrieved successfully',
+  })
+  async getStatistics() {
+    return this.staffMemberService.getStatistics();
+  }
+
+  @Get('employee-id/:employeeId')
+  @ApiOperation({
+    summary: 'Get single staff profile by sequential Employee ID (e.g. T-2026-0001)',
+  })
+  @ApiParam({
+    name: 'employeeId',
+    description: 'Sequential employee ID of the staff member (e.g. T-2026-0001, OFF-2026-0002)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Staff profile retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Staff member with specified employee ID not found',
+  })
+  async findByEmployeeId(@Param('employeeId') employeeId: string) {
+    return this.staffMemberService.findByEmployeeId(employeeId);
+  }
+
   @Get(':id')
   @ApiOperation({
-    summary: 'Get single staff profile by ID with assigned classes and routines',
+    summary: 'Get single staff profile by UUID with assigned classes and routines',
+    description:
+      'Returns comprehensive staff profile including department, approved post, assigned classes/subjects, and class routines.',
   })
   @ApiParam({
     name: 'id',
