@@ -77,6 +77,10 @@ model StaffStructure {
 
   staffList       Staff[]
 
+  isActive        Boolean     @default(true)
+  isDeleted       Boolean     @default(false)
+  deletedAt       DateTime?
+
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
@@ -84,4 +88,5 @@ model StaffStructure {
   @@unique([designation, staffType])
   @@index([staffType])
   @@index([departmentId])
+  @@index([isDeleted, isActive])
 }
