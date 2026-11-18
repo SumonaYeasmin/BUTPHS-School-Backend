@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -18,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { StaffStructureService } from './staff-structure.service';
 import { CreateStaffStructureDto } from './dto/create-staff-structure.dto';
+import { UpdateStaffStructureDto } from './dto/update-staff-structure.dto';
 import { QueryStaffStructureDto } from './dto/query-staff-structure.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -81,6 +83,42 @@ export class StaffStructureController {
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.structureService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update approved post quota or details (Admin only)',
+    description:
+      'Updates post designation, quota, or department. Blocks quota reduction if active staff count exceeds new quota.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'UUID of the staff structure to update',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Staff structure updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot reduce quota below currently active staff count',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Staff structure not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Designation with this staffType already exists',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateStaffStructureDto,
+  ) {
+    return this.structureService.update(id, dto);
   }
 
   @Delete(':id')

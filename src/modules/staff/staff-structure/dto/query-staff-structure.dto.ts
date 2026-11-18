@@ -40,4 +40,18 @@ export class QueryStaffStructureDto {
   @IsOptional()
   @IsUUID()
   departmentId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by active status',
+  })
+  @IsOptional()
+  @Type(() => Boolean)
+  isActive?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Filter only posts that have vacancies (শূন্যপদ আছে এমন পদ)',
+  })
+  @IsOptional()
+  @Type(() => Boolean)
+  hasVacancy?: boolean;
 }

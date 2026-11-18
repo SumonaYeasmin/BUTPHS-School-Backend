@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateStaffStructureDto } from './dto/create-staff-structure.dto';
+import { UpdateStaffStructureDto } from './dto/update-staff-structure.dto';
 import { QueryStaffStructureDto } from './dto/query-staff-structure.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
@@ -102,6 +103,10 @@ export class StaffStructureService {
       where.departmentId = query.departmentId;
     }
 
+    if (query.isActive !== undefined) {
+      where.isActive = query.isActive;
+    }
+
     if (query.search) {
       where.designation = {
         contains: query.search,
@@ -132,7 +137,7 @@ export class StaffStructureService {
     ]);
 
     // Map dynamic live counts for filled & vacant positions
-    const formattedItems = items.map((item) => {
+    let formattedItems = items.map((item) => {
       const activeCount = item._count.staffList;
       const vacant = Math.max(0, item.totalPositions - activeCount);
 
@@ -149,6 +154,10 @@ export class StaffStructureService {
         updatedAt: item.updatedAt,
       };
     });
+
+    if (query.hasVacancy === true) {
+      formattedItems = formattedItems.filter((item) => item.vacantPositions > 0);
+    }
 
     const meta = ResponseHelper.buildPaginationMeta(total, page, limit);
     return ResponseHelper.paginated(
@@ -198,6 +207,94 @@ export class StaffStructureService {
         vacantPositions: vacant,
       },
       'Staff structure details retrieved successfully',
+    );
+  }
+
+  /**
+   * Update an approved post with integrity validations:
+   * 1. Cannot reduce totalPositions below currently active staff count
+   * 2. Cannot create duplicate designation + staffType
+   * 3. Validates department if changed
+   */
+  async update(id: string, dto: UpdateStaffStructureDto) {
+    const existing = await this.prisma.staffStructure.findFirst({
+      where: { id, isDeleted: false },
+      include: {
+        _count: {
+          select: {
+            staffList: {
+              where: { status: 'ACTIVE' },
+            },
+          },
+        },
+      },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Staff Structure / Approved Post');
+    }
+
+    // 1. Validate department if updated
+    if (dto.departmentId && dto.departmentId !== existing.departmentId) {
+      const department = await this.prisma.department.findUnique({
+        where: { id: dto.departmentId },
+      });
+      if (!department) {
+        throw new NotFoundException('Department');
+      }
+    }
+
+    // 2. Validate totalPositions against active staff count
+    const activeStaffCount = existing._count.staffList;
+    if (dto.totalPositions !== undefined && dto.totalPositions < activeStaffCount) {
+      throw new BadRequestException(
+        `Cannot reduce total positions to ${dto.totalPositions} because there are currently ${activeStaffCount} active staff members assigned to this post. Please release or reassign staff first.`,
+      );
+    }
+
+    // 3. Validate designation and staffType uniqueness if changed
+    const newDesignation = dto.designation || existing.designation;
+    const newStaffType = dto.staffType || existing.staffType;
+
+    if (
+      (dto.designation && dto.designation !== existing.designation) ||
+      (dto.staffType && dto.staffType !== existing.staffType)
+    ) {
+      const duplicate = await this.prisma.staffStructure.findFirst({
+        where: {
+          id: { not: id },
+          designation: newDesignation,
+          staffType: newStaffType,
+          isDeleted: false,
+        },
+      });
+
+      if (duplicate) {
+        throw new ConflictException(
+          `Another approved post for "${newDesignation}" (${newStaffType}) already exists.`,
+        );
+      }
+    }
+
+    const updated = await this.prisma.staffStructure.update({
+      where: { id },
+      data: dto,
+      include: {
+        department: {
+          select: { id: true, name: true, code: true },
+        },
+      },
+    });
+
+    const vacantPositions = Math.max(0, updated.totalPositions - activeStaffCount);
+
+    return ResponseHelper.success(
+      {
+        ...updated,
+        filledPositions: activeStaffCount,
+        vacantPositions,
+      },
+      'Staff structure updated successfully',
     );
   }
 
