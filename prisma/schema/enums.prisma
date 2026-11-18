@@ -31,10 +31,17 @@ enum EnrollmentStatus {
   COMPLETED
 }
 
+enum PromotionType {
+  PROMOTED
+  RETAINED
+  DOUBLE_PROMOTED
+}
+
 enum RelationshipType {
   FATHER
   MOTHER
   GUARDIAN
+  OTHER
 }
 
 enum AcademicDocumentType {

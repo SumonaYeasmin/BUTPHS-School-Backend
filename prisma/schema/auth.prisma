@@ -13,6 +13,7 @@ model User {
   userRoles         UserRole[]
   staff             Staff?
   parent            Parent?
+  student           Student?
   markedAttendances Attendance[] @relation("AttendanceMarkedBy")
   enteredMarks      Mark[]       @relation("MarksEnteredBy")
   createdNotices    Notice[]     @relation("NoticeCreatedBy")

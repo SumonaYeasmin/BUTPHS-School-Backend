@@ -9,24 +9,32 @@ model AcademicYear {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  enrollments        StudentEnrollment[]
-  classSubjects      ClassSubject[]
-  teacherAssignments TeacherAssignment[]
-  academicEvents     AcademicEvent[]
-  classRoutines      ClassRoutine[]
-  exams              Exam[]
-  digitalResources   DigitalResource[]
+  enrollments           StudentEnrollment[]
+  classSubjects         ClassSubject[]
+  teacherAssignments    TeacherAssignment[]
+  academicEvents        AcademicEvent[]
+  classRoutines         ClassRoutine[]
+  exams                 Exam[]
+  digitalResources      DigitalResource[]
+  sectionClassTeachers  SectionClassTeacher[]
+  admissionApplications AdmissionApplication[]
 
   @@index([isActive])
 }
 
 model AcademicGroup {
-  id            String              @id @default(uuid()) @db.Uuid
-  name          String              @unique @db.VarChar(100)
-  description   String?
-  enrollments   StudentEnrollment[]
-  classSubjects ClassSubject[]
-  examSubjects  ExamSubject[]
+  id                    String                 @id @default(uuid()) @db.Uuid
+  name                  String                 @unique @db.VarChar(100)
+  description           String?
+  isActive              Boolean                @default(true)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  enrollments           StudentEnrollment[]
+  classSubjects         ClassSubject[]
+  examSubjects          ExamSubject[]
+  admissionApplications AdmissionApplication[]
+
+  @@index([isActive])
 }
 
 model SchoolClass {
@@ -50,17 +58,18 @@ model SchoolClass {
 }
 
 model Section {
-  id                 String              @id @default(uuid()) @db.Uuid
-  classId            String              @db.Uuid
-  name               String              @db.VarChar(50)
-  isActive           Boolean             @default(true)
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  schoolClass        SchoolClass         @relation(fields: [classId], references: [id], onDelete: Restrict)
-  enrollments        StudentEnrollment[]
-  teacherAssignments TeacherAssignment[]
-  classRoutines      ClassRoutine[]
-  examRoutines       ExamRoutine[]
+  id                   String                @id @default(uuid()) @db.Uuid
+  classId              String                @db.Uuid
+  name                 String                @db.VarChar(50)
+  isActive             Boolean               @default(true)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  schoolClass          SchoolClass           @relation(fields: [classId], references: [id], onDelete: Restrict)
+  enrollments          StudentEnrollment[]
+  teacherAssignments   TeacherAssignment[]
+  classRoutines        ClassRoutine[]
+  examRoutines         ExamRoutine[]
+  sectionClassTeachers SectionClassTeacher[]
 
   @@unique([classId, name])
   @@unique([id, classId])
@@ -72,6 +81,7 @@ model Subject {
   name            String          @unique @db.VarChar(150)
   officialCode    String?         @unique @db.VarChar(30)
   category        SubjectCategory @default(GENERAL)
+  paperNumber     Int?
   description     String?
   displayOrder    Int             @default(0)
   isSystemDefault Boolean         @default(false)
@@ -79,6 +89,9 @@ model Subject {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 
+  combinedSubjectId   String?             @db.Uuid
+  combinedSubject     Subject?            @relation("SubjectPairing", fields: [combinedSubjectId], references: [id], onDelete: SetNull)
+  pairedSubjects      Subject[]           @relation("SubjectPairing")
   books               Book[]
   classSubjects       ClassSubject[]
   examSubjects        ExamSubject[]
@@ -87,6 +100,7 @@ model Subject {
 
   @@index([isActive, displayOrder])
   @@index([category])
+  @@index([combinedSubjectId])
 }
 
 model Book {
@@ -128,32 +142,40 @@ model ClassSubject {
   teacherAssignments TeacherAssignment[]
 
   @@unique([academicYearId, classId, subjectId, groupId])
+  @@unique([id, academicYearId, classId])
   @@index([classId, academicYearId])
 }
 
 model Student {
-  id                 String        @id @default(uuid()) @db.Uuid
-  studentId          String        @unique @db.VarChar(50)
-  birthCertificateNo String?       @unique @db.VarChar(17)
-  name               String        @db.VarChar(150)
-  photo              String?
-  dateOfBirth        DateTime?     @db.Date
-  gender             Gender
-  bloodGroup         BloodGroup?
-  religion           Religion?
-  presentAddress     String?
-  permanentAddress   String?
-  admissionDate      DateTime      @db.Date
-  status             StudentStatus @default(ACTIVE)
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
+  id                  String        @id @default(uuid()) @db.Uuid
+  userId              String?       @unique @db.Uuid
+  studentId           String        @unique @db.VarChar(50)
+  birthCertificateNo  String?       @unique @db.VarChar(20)
+  boardRegistrationNo String?       @unique @db.VarChar(30)
+  nameEn              String        @db.VarChar(150)
+  nameBn              String?       @db.VarChar(150)
+  photo               String?
+  dateOfBirth         DateTime?     @db.Date
+  gender              Gender
+  bloodGroup          BloodGroup?
+  religion            Religion?
+  presentAddress      String?
+  permanentAddress    String?
+  admissionDate       DateTime      @db.Date
+  status              StudentStatus @default(ACTIVE)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 
-  enrollments StudentEnrollment[]
-  parents     ParentStudent[]
-  promotions  StudentPromotion[]
-  rfidcards   StudentRFIDcard[]
+  user                 User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
+  enrollments          StudentEnrollment[]
+  parents              ParentStudent[]
+  promotions           StudentPromotion[]
+  rfidcards            StudentRFIDcard[]
+  admissionApplication AdmissionApplication?
 
-  @@index([status, name])
+  @@index([status, nameEn])
+  @@index([nameBn])
+  @@index([boardRegistrationNo])
 }
 
 model StudentRFIDcard {
@@ -208,15 +230,16 @@ model StudentEnrollment {
 }
 
 model StudentPromotion {
-  id               String   @id @default(uuid()) @db.Uuid
-  studentId        String   @db.Uuid
-  fromEnrollmentId String   @db.Uuid
-  toEnrollmentId   String   @db.Uuid
-  resultSummaryId  String?  @db.Uuid
-  promotionDate    DateTime @db.Date
+  id               String        @id @default(uuid()) @db.Uuid
+  studentId        String        @db.Uuid
+  fromEnrollmentId String        @db.Uuid
+  toEnrollmentId   String        @db.Uuid
+  resultSummaryId  String?       @db.Uuid
+  promotionType    PromotionType @default(PROMOTED)
+  promotionDate    DateTime      @db.Date
   remarks          String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   student        Student           @relation(fields: [studentId], references: [id], onDelete: Restrict)
   fromEnrollment StudentEnrollment @relation("PromotionFrom", fields: [fromEnrollmentId, studentId], references: [id, studentId], onDelete: Restrict)
@@ -249,12 +272,14 @@ model Parent {
 }
 
 model ParentStudent {
-  id           String           @id @default(uuid()) @db.Uuid
-  parentId     String           @db.Uuid
-  studentId    String           @db.Uuid
-  relationship RelationshipType
-  isPrimary    Boolean          @default(false)
-  createdAt    DateTime         @default(now())
+  id                 String           @id @default(uuid()) @db.Uuid
+  parentId           String           @db.Uuid
+  studentId          String           @db.Uuid
+  relationship       RelationshipType
+  isPrimary          Boolean          @default(false)
+  isEmergencyContact Boolean          @default(false)
+  isSmsReceiver      Boolean          @default(true)
+  createdAt          DateTime         @default(now())
 
   parent  Parent  @relation(fields: [parentId], references: [id], onDelete: Cascade)
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -264,22 +289,44 @@ model ParentStudent {
 }
 
 model TeacherAssignment {
-  id             String @id @default(uuid()) @db.Uuid
-  staffId        String @db.Uuid
-  academicYearId String @db.Uuid
-  classId        String @db.Uuid
-  sectionId      String @db.Uuid
-  classSubjectId String @db.Uuid
+  id             String   @id @default(uuid()) @db.Uuid
+  staffId        String   @db.Uuid
+  academicYearId String   @db.Uuid
+  classId        String   @db.Uuid
+  sectionId      String   @db.Uuid
+  classSubjectId String   @db.Uuid
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   staff         Staff          @relation(fields: [staffId], references: [id], onDelete: Restrict)
   academicYear  AcademicYear   @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
   schoolClass   SchoolClass    @relation(fields: [classId], references: [id], onDelete: Restrict)
-  section       Section        @relation(fields: [sectionId], references: [id], onDelete: Restrict)
-  classSubject  ClassSubject   @relation(fields: [classSubjectId], references: [id], onDelete: Restrict)
+  section       Section        @relation(fields: [sectionId, classId], references: [id, classId], onDelete: Restrict)
+  classSubject  ClassSubject   @relation(fields: [classSubjectId, academicYearId, classId], references: [id, academicYearId, classId], onDelete: Restrict)
   classRoutines ClassRoutine[]
 
+  @@unique([academicYearId, sectionId, classSubjectId, staffId])
   @@index([staffId, academicYearId])
   @@index([classId, sectionId, academicYearId])
+}
+
+model SectionClassTeacher {
+  id             String   @id @default(uuid()) @db.Uuid
+  academicYearId String   @db.Uuid
+  sectionId      String   @db.Uuid
+  staffId        String   @db.Uuid
+  assignedDate   DateTime @default(now()) @db.Date
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+  section      Section      @relation(fields: [sectionId], references: [id], onDelete: Restrict)
+  staff        Staff        @relation(fields: [staffId], references: [id], onDelete: Restrict)
+
+  @@unique([academicYearId, sectionId])
+  @@unique([academicYearId, staffId])
+  @@index([staffId])
+  @@index([academicYearId, sectionId])
 }
 
 // -------------------- ACADEMIC CONTENT & CALENDAR --------------------
@@ -321,6 +368,8 @@ model ClassRoutine {
   startTime           DateTime @db.Time(0)
   endTime             DateTime @db.Time(0)
   room                String?  @db.VarChar(50)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   academicYear      AcademicYear      @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
   teacherAssignment TeacherAssignment @relation(fields: [teacherAssignmentId], references: [id], onDelete: Restrict)
@@ -328,35 +377,44 @@ model ClassRoutine {
   section           Section           @relation(fields: [sectionId], references: [id], onDelete: Restrict)
 
   @@unique([academicYearId, sectionId, day, periodNumber])
+  @@unique([academicYearId, staffId, day, periodNumber])
+  @@index([academicYearId, room, day, periodNumber])
   @@index([staffId, day])
 }
 
 model AdmissionApplication {
-  id               String                     @id @default(uuid()) @db.Uuid
-  applicationNo    String                     @unique @db.VarChar(50)
-  appliedClassId   String                     @db.Uuid
-  studentName      String                     @db.VarChar(150)
-  dateOfBirth      DateTime                   @db.Date
-  gender           Gender
-  bloodGroup       BloodGroup?
-  religion         Religion?
-  birthCertificate String?                    @db.VarChar(50)
-  fatherName       String                     @db.VarChar(150)
-  motherName       String                     @db.VarChar(150)
-  guardianPhone    String                     @db.VarChar(20)
-  email            String?                    @db.VarChar(150)
-  presentAddress   String
-  permanentAddress String
-  previousSchool   String?                    @db.VarChar(200)
-  previousGrade    String?                    @db.VarChar(50)
-  photo            String?
-  documentsUrl     String?
-  status           AdmissionApplicationStatus @default(PENDING)
-  remarks          String?
-  submittedAt      DateTime                   @default(now())
-  updatedAt        DateTime                   @updatedAt
+  id                String                     @id @default(uuid()) @db.Uuid
+  applicationNo     String                     @unique @db.VarChar(50)
+  academicYearId    String                     @db.Uuid
+  appliedClassId    String                     @db.Uuid
+  appliedGroupId    String?                    @db.Uuid
+  enrolledStudentId String?                    @unique @db.Uuid
+  studentName       String                     @db.VarChar(150)
+  dateOfBirth       DateTime                   @db.Date
+  gender            Gender
+  bloodGroup        BloodGroup?
+  religion          Religion?
+  birthCertificate  String?                    @db.VarChar(50)
+  fatherName        String                     @db.VarChar(150)
+  motherName        String                     @db.VarChar(150)
+  guardianPhone     String                     @db.VarChar(20)
+  email             String?                    @db.VarChar(150)
+  presentAddress    String
+  permanentAddress  String
+  previousSchool    String?                    @db.VarChar(200)
+  previousGrade     String?                    @db.VarChar(50)
+  photo             String?
+  documentsUrl      String?
+  status            AdmissionApplicationStatus @default(PENDING)
+  remarks           String?
+  submittedAt       DateTime                   @default(now())
+  updatedAt         DateTime                   @updatedAt
 
-  schoolClass SchoolClass @relation(fields: [appliedClassId], references: [id], onDelete: Restrict)
+  academicYear    AcademicYear   @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+  schoolClass     SchoolClass    @relation(fields: [appliedClassId], references: [id], onDelete: Restrict)
+  appliedGroup    AcademicGroup? @relation(fields: [appliedGroupId], references: [id], onDelete: SetNull)
+  enrolledStudent Student?       @relation(fields: [enrolledStudentId], references: [id], onDelete: SetNull)
 
-  @@index([appliedClassId, status])
+  @@index([academicYearId, appliedClassId, status])
+  @@index([appliedGroupId])
 }
