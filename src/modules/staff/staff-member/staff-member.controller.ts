@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -17,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { StaffMemberService } from './staff-member.service';
 import { CreateStaffDto } from './dto/create-staff.dto';
+import { UpdateStaffDto } from './dto/update-staff.dto';
 import { QueryStaffDto } from './dto/query-staff.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -124,5 +126,41 @@ export class StaffMemberController {
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.staffMemberService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update staff member profile (Admin only)',
+    description:
+      'Updates staff personal details, department, approved post, designation, or status with complete safety checks (NID/Employee ID uniqueness, quota checks, auto leaving date).',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'UUID of the staff member to update',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Staff member updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation failed or target post quota is full',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Staff member, Department, or Staff Structure not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Employee ID or NID already in use by another staff member',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateStaffDto,
+  ) {
+    return this.staffMemberService.update(id, dto);
   }
 }
