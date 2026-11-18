@@ -221,6 +221,7 @@ model StudentEnrollment {
   marks           Mark[]
   subjectResults  StudentSubjectResult[]
   resultSummaries ResultSummary[]
+  transferCertificates StudentTransferCertificate[]
 
   @@unique([studentId, academicYearId])
   @@unique([academicYearId, classId, sectionId, roll])
@@ -249,6 +250,31 @@ model StudentPromotion {
   @@unique([fromEnrollmentId])
   @@unique([toEnrollmentId])
   @@index([studentId, promotionDate])
+}
+
+model StudentTransferCertificate {
+  id                  String   @id @default(uuid()) @db.Uuid
+  studentId           String   @db.Uuid
+  enrollmentId        String?  @db.Uuid
+  tcNumber            String   @unique @db.VarChar(50) /// টিসি নম্বর / স্মারক নং (যেমন: TC-2024-001)
+  issueDate           DateTime @db.Date               /// টিসি ইস্যুর তারিখ
+  leavingDate         DateTime @db.Date               /// বিদ্যালয় পরিত্যাগের তারিখ
+  reason              String                          /// বিদ্যালয় ত্যাগের কারণ
+  duesCleared         Boolean  @default(true)         /// সকল বকেয়া পরিশোধিত কিনা
+  conductRemarks      String?  @db.VarChar(150)       /// আচরণ ও চরিত্র সম্পর্কিত মন্তব্য (যেমন: উত্তম / সন্তোষজনক)
+  leavingClass        String?  @db.VarChar(50)        /// কোন শ্রেণি থেকে ছাড়পত্র নিচ্ছে
+  promotedToNextClass Boolean  @default(false)        /// পরবর্তী শ্রেণিতে উত্তীর্ণ হয়ে টিসি নিচ্ছে কিনা
+  destinationSchool   String?  @db.VarChar(200)       /// যে বিদ্যালয়ে ভর্তি হতে যাচ্ছে (যদি থাকে)
+  documentUrl         String?                         /// স্বাক্ষরিত ছাড়পত্রের স্ক্যান কপি বা পিডিএফ ডাউনলোড লিংক
+  remarks             String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  student    Student            @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  enrollment StudentEnrollment? @relation(fields: [enrollmentId], references: [id], onDelete: SetNull)
+
+  @@index([studentId])
+  @@index([issueDate])
 }
 
 model Parent {

@@ -9,6 +9,7 @@ import { SubjectModule } from './subject/subject.module';
 import { ClassSubjectModule } from './class-subject/class-subject.module';
 import { BookModule } from './book/book.module';
 import { PromotionModule } from './promotion/promotion.module';
+import { TransferCertificateModule } from './transfer-certificate/transfer-certificate.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PromotionModule } from './promotion/promotion.module';
     ClassSubjectModule,
     BookModule,
     PromotionModule,
+    TransferCertificateModule,
   ],
   exports: [
     AcademicYearModule,
@@ -34,6 +36,7 @@ import { PromotionModule } from './promotion/promotion.module';
     ClassSubjectModule,
     BookModule,
     PromotionModule,
+    TransferCertificateModule,
   ],
 })
 export class AcademicModule {}
