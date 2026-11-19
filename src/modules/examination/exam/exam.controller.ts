@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -18,6 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { ExamService } from './exam.service';
 import { CreateExamDto } from './dto/create-exam.dto';
+import { UpdateExamDto } from './dto/update-exam.dto';
 import { ExamRoutineService } from '../exam-routine/exam-routine.service';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -91,5 +94,66 @@ export class ExamController {
     @Query('sectionId') sectionId?: string,
   ) {
     return this.examRoutineService.getRoutineByExam(examId, sectionId);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update an examination (Admin only)',
+    description:
+      'Partially updates an existing examination with safety guards (locked status, published results, grading scale validity, dates within academic year, weightage threshold, and name uniqueness).',
+  })
+  @ApiParam({ name: 'id', description: 'Exam UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Examination updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Validation failed, examination locked, published results restriction, or weightage overflow',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Examination or referenced entity not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Another examination with this name already exists in this class and academic year',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateExamDto,
+  ) {
+    return this.examService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Soft delete an examination (Admin only)',
+    description:
+      'Soft deletes an examination (sets isDeleted=true, deletedAt=now, status=CANCELLED). Prohibited if results are published, if exam is locked, or if student marks are already recorded.',
+  })
+  @ApiParam({ name: 'id', description: 'Exam UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Examination soft deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot delete: exam is locked, results are already published, or student marks are recorded',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Examination not found',
+  })
+  async softDelete(@Param('id', ParseUUIDPipe) id: string) {
+    return this.examService.softDelete(id);
   }
 }

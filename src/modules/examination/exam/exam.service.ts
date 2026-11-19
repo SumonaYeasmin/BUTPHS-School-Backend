@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateExamDto } from './dto/create-exam.dto';
-import { ExamStatus } from '../../../../prisma/generated/client';
+import { UpdateExamDto } from './dto/update-exam.dto';
+import {
+  ExamStatus,
+  ResultPublicationStatus,
+} from '../../../../prisma/generated/client';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 
 @Injectable()
@@ -271,6 +275,295 @@ export class ExamService {
     return ResponseHelper.created(
       exam,
       `Examination '${exam.name}' created successfully for class '${schoolClass.name}'`,
+    );
+  }
+
+  /**
+   * Update an existing examination with complete domain validations
+   */
+  async update(id: string, dto: UpdateExamDto) {
+    const exam = await this.prisma.exam.findFirst({
+      where: { id, isDeleted: false },
+      include: {
+        academicYear: true,
+        schoolClass: true,
+        gradingScale: true,
+      },
+    });
+
+    if (!exam) {
+      throw new NotFoundException('Examination not found');
+    }
+
+    // 1. Lock Guard: If exam is locked, cannot edit parameters unless unlocking
+    const isUnlockingOnly =
+      dto.isLocked === false &&
+      Object.keys(dto).filter((k) => (dto as any)[k] !== undefined).length === 1;
+
+    if (exam.isLocked && !isUnlockingOnly) {
+      throw new BadRequestException(
+        'This examination is locked. Unlock the examination first before modifying its details.',
+      );
+    }
+
+    // 2. Published Results Guard: Cannot change grading scale or pass policy after results published
+    if (exam.resultStatus === ResultPublicationStatus.PUBLISHED) {
+      if (dto.gradingScaleId && dto.gradingScaleId !== exam.gradingScaleId) {
+        throw new BadRequestException(
+          'Cannot change grading scale after examination results have been published',
+        );
+      }
+      if (
+        dto.allowCombinedPass !== undefined &&
+        dto.allowCombinedPass !== exam.allowCombinedPass
+      ) {
+        throw new BadRequestException(
+          'Cannot modify passing policy after examination results have been published',
+        );
+      }
+    }
+
+    // 3. Grading Scale Validation (if changed)
+    let newGradingScaleId = exam.gradingScaleId;
+    if (dto.gradingScaleId && dto.gradingScaleId !== exam.gradingScaleId) {
+      const scale = await this.prisma.gradingScale.findFirst({
+        where: { id: dto.gradingScaleId, isDeleted: false },
+        include: {
+          _count: {
+            select: { gradeRanges: { where: { isDeleted: false } } },
+          },
+        },
+      });
+
+      if (!scale) {
+        throw new NotFoundException('Grading scale not found or has been deleted');
+      }
+
+      if (!scale.isActive) {
+        throw new BadRequestException(
+          `Grading scale '${scale.name}' is inactive and cannot be assigned`,
+        );
+      }
+
+      if (scale._count.gradeRanges === 0) {
+        throw new BadRequestException(
+          `Grading scale '${scale.name}' has no active grade ranges configured`,
+        );
+      }
+
+      // Check if marks exist
+      const marksCount = await this.prisma.mark.count({
+        where: { examSubject: { examId: id } },
+      });
+      if (marksCount > 0) {
+        throw new BadRequestException(
+          `Cannot change grading scale because ${marksCount} student marks are already recorded for this examination`,
+        );
+      }
+
+      newGradingScaleId = dto.gradingScaleId;
+    }
+
+    // 4. Dates Validation
+    const targetStartDate = dto.startDate
+      ? new Date(dto.startDate)
+      : exam.startDate;
+    const targetEndDate = dto.endDate ? new Date(dto.endDate) : exam.endDate;
+
+    if (targetStartDate > targetEndDate) {
+      throw new BadRequestException(
+        'Exam startDate cannot be after endDate',
+      );
+    }
+
+    // Academic year bounds
+    const ayStart = new Date(exam.academicYear.startDate);
+    const ayEnd = new Date(exam.academicYear.endDate);
+    ayStart.setHours(0, 0, 0, 0);
+    ayEnd.setHours(23, 59, 59, 999);
+
+    const examStart = new Date(targetStartDate);
+    examStart.setHours(0, 0, 0, 0);
+    const examEnd = new Date(targetEndDate);
+    examEnd.setHours(23, 59, 59, 999);
+
+    if (examStart < ayStart || examEnd > ayEnd) {
+      const ayStartStr = exam.academicYear.startDate.toISOString().split('T')[0];
+      const ayEndStr = exam.academicYear.endDate.toISOString().split('T')[0];
+      throw new BadRequestException(
+        `Exam dates must fall within academic year '${exam.academicYear.name}' (${ayStartStr} to ${ayEndStr})`,
+      );
+    }
+
+    // Marks entry deadline
+    let targetDeadline: Date | null = exam.marksEntryDeadline;
+    if (dto.marksEntryDeadline !== undefined) {
+      targetDeadline = dto.marksEntryDeadline
+        ? new Date(dto.marksEntryDeadline)
+        : null;
+    }
+    if (targetDeadline && targetDeadline < examStart) {
+      throw new BadRequestException(
+        'marksEntryDeadline cannot be earlier than exam startDate',
+      );
+    }
+
+    // 5. Weightage Percentage Validation (if changed)
+    if (
+      dto.weightagePercentage !== undefined &&
+      dto.weightagePercentage !== null
+    ) {
+      const existingExams = await this.prisma.exam.findMany({
+        where: {
+          id: { not: id },
+          academicYearId: exam.academicYearId,
+          classId: exam.classId,
+          isDeleted: false,
+          weightagePercentage: { not: null },
+        },
+        select: {
+          name: true,
+          weightagePercentage: true,
+        },
+      });
+
+      const currentTotalWeightage = existingExams.reduce(
+        (acc, e) => acc + Number(e.weightagePercentage || 0),
+        0,
+      );
+
+      const proposedTotal =
+        currentTotalWeightage + Number(dto.weightagePercentage);
+      if (proposedTotal > 100) {
+        throw new BadRequestException(
+          `Total weightage percentage for class '${exam.schoolClass.name}' exams cannot exceed 100% (Other exams: ${currentTotalWeightage}%, Proposed: ${dto.weightagePercentage}%, Total: ${proposedTotal}%).`,
+        );
+      }
+    }
+
+    // 6. Duplicate Name Check (if name changed)
+    let normalizedName = exam.name;
+    if (dto.name) {
+      normalizedName = dto.name.trim();
+      if (normalizedName.toLowerCase() !== exam.name.toLowerCase()) {
+        const duplicate = await this.prisma.exam.findFirst({
+          where: {
+            id: { not: id },
+            academicYearId: exam.academicYearId,
+            classId: exam.classId,
+            name: { equals: normalizedName, mode: 'insensitive' },
+            isDeleted: false,
+          },
+        });
+
+        if (duplicate) {
+          throw new ConflictException(
+            `An examination named '${normalizedName}' already exists for class '${exam.schoolClass.name}' in academic year '${exam.academicYear.name}'.`,
+          );
+        }
+      }
+    }
+
+    // 7. Update in Database
+    const updated = await this.prisma.exam.update({
+      where: { id },
+      data: {
+        ...(dto.name ? { name: normalizedName } : {}),
+        ...(dto.examType ? { examType: dto.examType } : {}),
+        ...(dto.gradingScaleId ? { gradingScaleId: newGradingScaleId } : {}),
+        ...(dto.startDate ? { startDate: targetStartDate } : {}),
+        ...(dto.endDate ? { endDate: targetEndDate } : {}),
+        ...(dto.status ? { status: dto.status } : {}),
+        ...(dto.marksEntryDeadline !== undefined
+          ? { marksEntryDeadline: targetDeadline }
+          : {}),
+        ...(dto.allowCombinedPass !== undefined
+          ? { allowCombinedPass: dto.allowCombinedPass }
+          : {}),
+        ...(dto.weightagePercentage !== undefined
+          ? { weightagePercentage: dto.weightagePercentage }
+          : {}),
+        ...(dto.isLocked !== undefined ? { isLocked: dto.isLocked } : {}),
+      },
+      include: {
+        academicYear: {
+          select: {
+            id: true,
+            name: true,
+            startDate: true,
+            endDate: true,
+          },
+        },
+        schoolClass: {
+          select: {
+            id: true,
+            name: true,
+            numericValue: true,
+          },
+        },
+        gradingScale: {
+          select: {
+            id: true,
+            name: true,
+            maxGpa: true,
+            isDefault: true,
+          },
+        },
+      },
+    });
+
+    return ResponseHelper.success(
+      updated,
+      `Examination '${updated.name}' updated successfully`,
+    );
+  }
+
+  /**
+   * Soft delete an examination with safety integrity checks
+   */
+  async softDelete(id: string) {
+    const exam = await this.prisma.exam.findFirst({
+      where: { id, isDeleted: false },
+    });
+
+    if (!exam) {
+      throw new NotFoundException('Examination not found');
+    }
+
+    if (exam.resultStatus === ResultPublicationStatus.PUBLISHED) {
+      throw new BadRequestException(
+        `Cannot delete examination '${exam.name}' because its results have already been published. Unpublish or withhold results first.`,
+      );
+    }
+
+    if (exam.isLocked) {
+      throw new BadRequestException(
+        `Cannot delete examination '${exam.name}' because it is locked. Unlock it first.`,
+      );
+    }
+
+    const marksCount = await this.prisma.mark.count({
+      where: { examSubject: { examId: id } },
+    });
+
+    if (marksCount > 0) {
+      throw new BadRequestException(
+        `Cannot delete examination '${exam.name}' because ${marksCount} student mark(s) have already been entered. Remove marks first.`,
+      );
+    }
+
+    await this.prisma.exam.update({
+      where: { id },
+      data: {
+        isDeleted: true,
+        deletedAt: new Date(),
+        status: ExamStatus.CANCELLED,
+      },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Examination '${exam.name}' soft deleted successfully`,
     );
   }
 }
