@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -106,5 +107,32 @@ export class ExamRoutineController {
   })
   async findRoutines(@Query() query: QueryExamRoutineDto) {
     return this.examRoutineService.findRoutines(query);
+  }
+
+  @Delete(':routineId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Soft delete an exam routine slot (Admin only)',
+    description:
+      'Soft deletes a scheduled exam routine slot (sets isDeleted=true, deletedAt=now, status=CANCELLED). Prohibited if student marks are already recorded, if the exam has already taken place/concluded, if results are published, or if the exam is locked.',
+  })
+  @ApiParam({ name: 'routineId', description: 'Exam Routine UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Exam routine slot soft deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot delete: marks entered, exam already conducted in past, results published, or exam is locked',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Exam routine slot not found',
+  })
+  async softDelete(@Param('routineId', ParseUUIDPipe) routineId: string) {
+    return this.examRoutineService.softDelete(routineId);
   }
 }

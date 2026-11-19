@@ -132,6 +132,37 @@ export class ExamController {
     return this.examRoutineService.create(examId, dto);
   }
 
+  @Delete(':examId/routine/:routineId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Soft delete an exam routine slot (Admin only)',
+    description:
+      'Soft deletes a scheduled exam routine slot under this exam. Strictly blocked if marks are entered, if the exam has already concluded, if results are published, or if the exam is locked.',
+  })
+  @ApiParam({ name: 'examId', description: 'Exam UUID' })
+  @ApiParam({ name: 'routineId', description: 'Exam Routine UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Exam routine slot soft deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot delete: marks entered, past exam, results published, or exam is locked',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Exam routine slot not found',
+  })
+  async deleteRoutine(
+    @Param('examId', ParseUUIDPipe) examId: string,
+    @Param('routineId', ParseUUIDPipe) routineId: string,
+  ) {
+    return this.examRoutineService.softDelete(routineId, examId);
+  }
+
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')

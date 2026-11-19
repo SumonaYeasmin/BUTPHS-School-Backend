@@ -50,6 +50,7 @@ export class ExamRoutineService {
 
     const whereClause: Prisma.ExamRoutineWhereInput = {
       examId,
+      isDeleted: false,
     };
 
     if (sectionId) {
@@ -128,6 +129,7 @@ export class ExamRoutineService {
     }
 
     const whereClause: Prisma.ExamRoutineWhereInput = {
+      isDeleted: false,
       exam: examWhere,
     };
 
@@ -411,6 +413,7 @@ export class ExamRoutineService {
       where: {
         examId,
         examSubjectId: dto.examSubjectId,
+        isDeleted: false,
         ...(dto.sectionId ? { sectionId: dto.sectionId } : {}),
       },
     });
@@ -426,6 +429,7 @@ export class ExamRoutineService {
       where: {
         examId,
         examDate: targetDate,
+        isDeleted: false,
         status: { not: ExamRoutineStatus.CANCELLED },
         OR: [
           { sectionId: null },
@@ -455,6 +459,7 @@ export class ExamRoutineService {
         where: {
           examDate: targetDate,
           roomNo: { equals: normalizedRoom, mode: 'insensitive' },
+          isDeleted: false,
           status: { not: ExamRoutineStatus.CANCELLED },
         },
         include: {
@@ -532,6 +537,137 @@ export class ExamRoutineService {
     return ResponseHelper.created(
       formatted,
       `Exam routine slot for '${examSubject.subject.name}' scheduled successfully on ${dto.examDate}`,
+    );
+  }
+
+  /**
+   * Soft delete an exam routine slot with strict integrity validations
+   */
+  async softDelete(routineId: string, examId?: string) {
+    const routine = await this.prisma.examRoutine.findFirst({
+      where: {
+        id: routineId,
+        ...(examId ? { examId } : {}),
+        isDeleted: false,
+      },
+      include: {
+        exam: {
+          select: {
+            id: true,
+            name: true,
+            status: true,
+            resultStatus: true,
+            isLocked: true,
+          },
+        },
+        examSubject: {
+          include: {
+            subject: {
+              select: { id: true, name: true },
+            },
+          },
+        },
+      },
+    });
+
+    if (!routine) {
+      throw new NotFoundException(
+        'Exam routine slot not found or has already been deleted',
+      );
+    }
+
+    const subjectName = routine.examSubject.subject.name;
+    const examName = routine.exam.name;
+
+    // 1. Exam Lock Guard
+    if (routine.exam.isLocked) {
+      throw new BadRequestException(
+        `Cannot delete routine slot: Examination '${examName}' is locked. Unlock the examination first.`,
+      );
+    }
+
+    // 2. Exam Results Published Guard
+    if (routine.exam.resultStatus === ResultPublicationStatus.PUBLISHED) {
+      throw new BadRequestException(
+        `Cannot delete routine slot: Results for examination '${examName}' have already been published. Deleting timetable slots is prohibited.`,
+      );
+    }
+
+    // 3. Exam Status Completed Guard
+    if (routine.exam.status === ExamStatus.COMPLETED) {
+      throw new BadRequestException(
+        `Cannot delete routine slot of an already completed examination '${examName}'.`,
+      );
+    }
+
+    // 4. Routine Status Completed Guard
+    if (routine.status === ExamRoutineStatus.COMPLETED) {
+      throw new BadRequestException(
+        `Cannot delete routine slot for subject '${subjectName}' because it has already been marked as COMPLETED.`,
+      );
+    }
+
+    // 5. Past Date & Concluded Exam Guard (Cannot delete historical exams that already happened)
+    const now = new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const slotDate = new Date(routine.examDate);
+    slotDate.setHours(0, 0, 0, 0);
+
+    if (slotDate < today) {
+      const formattedDate = routine.examDate.toISOString().split('T')[0];
+      throw new BadRequestException(
+        `Cannot delete routine slot: The exam for '${subjectName}' was scheduled for ${formattedDate}, which has already passed. Historical exam records cannot be deleted. You may mark its status as CANCELLED or POSTPONED instead.`,
+      );
+    }
+
+    // If today is the exam date, check if the exam has already concluded
+    if (slotDate.getTime() === today.getTime()) {
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const endMinutes = this.timeToMinutes(routine.endTime);
+      if (currentMinutes >= endMinutes) {
+        throw new BadRequestException(
+          `Cannot delete routine slot: The exam for '${subjectName}' concluded earlier today at ${this.formatTime12h(routine.endTime).time12}.`,
+        );
+      }
+    }
+
+    // 6. Student Marks Recorded Guard (Critical Data Integrity Protection)
+    const marksCount = await this.prisma.mark.count({
+      where: { examSubjectId: routine.examSubjectId },
+    });
+
+    if (marksCount > 0) {
+      throw new BadRequestException(
+        `Cannot delete routine slot: ${marksCount} student mark(s) have already been entered for subject '${subjectName}'. Remove or reset student marks before removing the routine slot.`,
+      );
+    }
+
+    // 7. Student Subject Results Processed Guard
+    const resultsCount = await this.prisma.studentSubjectResult.count({
+      where: { examSubjectId: routine.examSubjectId },
+    });
+
+    if (resultsCount > 0) {
+      throw new BadRequestException(
+        `Cannot delete routine slot: Student subject results have already been calculated and processed for '${subjectName}'.`,
+      );
+    }
+
+    // 8. Execute Soft Delete
+    await this.prisma.examRoutine.update({
+      where: { id: routineId },
+      data: {
+        isDeleted: true,
+        deletedAt: new Date(),
+        status: ExamRoutineStatus.CANCELLED,
+      },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Exam routine slot for subject '${subjectName}' soft deleted successfully`,
     );
   }
 }
