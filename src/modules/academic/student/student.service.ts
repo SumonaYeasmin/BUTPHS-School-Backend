@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { Prisma, BloodGroup, Religion } from '../../../../prisma/generated/client';
+import { Prisma, BloodGroup, Religion, RelationshipType } from '../../../../prisma/generated/client';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { QueryStudentDto } from './dto/query-student.dto';
@@ -176,6 +176,17 @@ export class StudentService {
           permanentAddress: dto.permanentAddress?.trim() || null,
           admissionDate,
           status: 'ACTIVE',
+
+          // পূর্বের অ্যাকাডেমিক রেকর্ড (ভর্তি ফর্মের ৮ ও ৯ নম্বর পয়েন্ট)
+          previousSchoolName: dto.previousSchoolName?.trim() || null,
+          previousSchoolAddress: dto.previousSchoolAddress?.trim() || null,
+          previousGrade: dto.previousGrade?.trim() || null,
+          previousGpa: dto.previousGpa !== undefined ? dto.previousGpa : null,
+          prevExamPassingYear: dto.prevExamPassingYear !== undefined ? dto.prevExamPassingYear : null,
+          prevExamRoll: dto.prevExamRoll?.trim() || null,
+          prevExamRegistration: dto.prevExamRegistration?.trim() || null,
+          prevExamGpa: dto.prevExamGpa !== undefined ? dto.prevExamGpa : null,
+
           rfidcards: dto.rfidCardNo?.trim()
             ? {
                 create: {
@@ -187,6 +198,24 @@ export class StudentService {
         },
       });
 
+      const optClassSubjectId =
+        dto.optionalClassSubjectId || dto.optionalSubjectId || null;
+
+      if (optClassSubjectId) {
+        const classSubject = await tx.classSubject.findUnique({
+          where: { id: optClassSubjectId },
+          include: { subject: true },
+        });
+        if (!classSubject) {
+          throw new NotFoundException('Optional ClassSubject');
+        }
+        if (classSubject.classId !== dto.classId) {
+          throw new BadRequestException(
+            `Optional subject '${classSubject.subject.name}' does not belong to the selected class`,
+          );
+        }
+      }
+
       const enrollment = await tx.studentEnrollment.create({
         data: {
           studentId: student.id,
@@ -194,9 +223,13 @@ export class StudentService {
           classId: dto.classId,
           sectionId: dto.sectionId,
           groupId: dto.groupId || null,
-          optionalSubjectId: dto.optionalSubjectId || null,
+          optionalClassSubjectId: optClassSubjectId,
           roll: dto.roll,
           enrollmentDate: admissionDate,
+          formSerialNo: dto.formSerialNo?.trim() || null,
+          isRepeater: dto.isRepeater ?? false,
+          isReadmission: dto.isReadmission ?? false,
+          remarks: dto.remarks?.trim() || null,
           status: 'ACTIVE',
         },
         include: {
@@ -206,21 +239,101 @@ export class StudentService {
           },
           section: { select: { id: true, name: true } },
           group: { select: { id: true, name: true } },
-          optionalSubject: { select: { id: true, name: true, officialCode: true } },
+          optionalClassSubject: {
+            include: {
+              subject: { select: { id: true, name: true, officialCode: true } },
+            },
+          },
         },
       });
 
-      // Link or create parents in the same atomic transaction
+      // --- Auto-sync or Link Parents in the same atomic transaction ---
       const linkedParents = [];
-      if (dto.parents && dto.parents.length > 0) {
-        for (const p of dto.parents) {
-          let resolvedParentId = p.parentId;
+      let parentsToProcess: AssignParentDto[] = [];
 
-          if (!resolvedParentId) {
+      if (dto.parents && dto.parents.length > 0) {
+        parentsToProcess = dto.parents;
+      } else {
+        // Auto-generate from Father information
+        if (
+          dto.fatherPhone?.trim() ||
+          dto.fatherNameEn?.trim() ||
+          dto.fatherNameBn?.trim() ||
+          dto.fatherNid?.trim()
+        ) {
+          parentsToProcess.push({
+            name: (dto.fatherNameEn || dto.fatherNameBn || `Father of ${student.nameEn}`).trim(),
+            phone: dto.fatherPhone?.trim() || dto.guardianPhone?.trim() || dto.motherPhone?.trim() || 'N/A',
+            nid: dto.fatherNid?.trim(),
+            occupation: dto.fatherOccupation?.trim(),
+            address: dto.presentAddress?.trim() || dto.permanentAddress?.trim(),
+            relationship: RelationshipType.FATHER,
+            isPrimary: true,
+          });
+        }
+
+        // Auto-generate from Mother information
+        if (
+          dto.motherPhone?.trim() ||
+          dto.motherNameEn?.trim() ||
+          dto.motherNameBn?.trim() ||
+          dto.motherNid?.trim()
+        ) {
+          const hasFather = parentsToProcess.length > 0;
+          parentsToProcess.push({
+            name: (dto.motherNameEn || dto.motherNameBn || `Mother of ${student.nameEn}`).trim(),
+            phone: dto.motherPhone?.trim() || dto.fatherPhone?.trim() || dto.guardianPhone?.trim() || 'N/A',
+            nid: dto.motherNid?.trim(),
+            occupation: dto.motherOccupation?.trim(),
+            address: dto.presentAddress?.trim() || dto.permanentAddress?.trim(),
+            relationship: RelationshipType.MOTHER,
+            isPrimary: !hasFather,
+          });
+        }
+
+        // Auto-generate from Guardian information (if other than parents)
+        if (dto.guardianName?.trim() || dto.guardianPhone?.trim()) {
+          const hasFatherOrMother = parentsToProcess.length > 0;
+          parentsToProcess.push({
+            name: (dto.guardianName || `Guardian of ${student.nameEn}`).trim(),
+            phone: dto.guardianPhone?.trim() || dto.fatherPhone?.trim() || dto.motherPhone?.trim() || 'N/A',
+            address: dto.presentAddress?.trim() || dto.permanentAddress?.trim(),
+            relationship: RelationshipType.GUARDIAN,
+            isPrimary: !hasFatherOrMother,
+          });
+        }
+      }
+
+      for (const p of parentsToProcess) {
+        let resolvedParentId = p.parentId;
+
+        if (!resolvedParentId) {
+          // Check if parent already exists by phone (or NID) to reuse existing profile for siblings
+          let existingParent = null;
+          if (p.phone && p.phone.trim() && p.phone.trim() !== 'N/A') {
+            existingParent = await tx.parent.findFirst({
+              where: { phone: p.phone.trim() },
+            });
+          }
+          if (!existingParent && p.nid && p.nid.trim()) {
+            existingParent = await tx.parent.findFirst({
+              where: { nid: p.nid.trim() },
+            });
+          }
+
+          if (existingParent) {
+            resolvedParentId = existingParent.id;
+          } else {
             const newParent = await tx.parent.create({
               data: {
                 name: p.name!.trim(),
-                phone: p.phone!.trim(),
+                nameBn:
+                  p.relationship === RelationshipType.FATHER
+                    ? (dto.fatherNameBn?.trim() || null)
+                    : p.relationship === RelationshipType.MOTHER
+                    ? (dto.motherNameBn?.trim() || null)
+                    : null,
+                phone: p.phone?.trim() || 'N/A',
                 email: p.email?.trim() || null,
                 nid: p.nid?.trim() || null,
                 occupation: p.occupation?.trim() || null,
@@ -229,7 +342,19 @@ export class StudentService {
             });
             resolvedParentId = newParent.id;
           }
+        }
 
+        // Ensure this parent is not already linked to the student
+        const existingLink = await tx.parentStudent.findUnique({
+          where: {
+            parentId_studentId: {
+              parentId: resolvedParentId,
+              studentId: student.id,
+            },
+          },
+        });
+
+        if (!existingLink) {
           if (p.isPrimary) {
             await tx.parentStudent.updateMany({
               where: { studentId: student.id },
@@ -237,12 +362,15 @@ export class StudentService {
             });
           }
 
+          const isPrimary = p.isPrimary ?? false;
           const parentLink = await tx.parentStudent.create({
             data: {
               studentId: student.id,
               parentId: resolvedParentId,
               relationship: p.relationship,
-              isPrimary: p.isPrimary || false,
+              isPrimary,
+              isEmergencyContact: isPrimary,
+              isSmsReceiver: isPrimary,
             },
             include: {
               parent: true,
@@ -253,9 +381,12 @@ export class StudentService {
             mappingId: parentLink.id,
             relationship: parentLink.relationship,
             isPrimary: parentLink.isPrimary,
+            isEmergencyContact: parentLink.isEmergencyContact,
+            isSmsReceiver: parentLink.isSmsReceiver,
             parent: {
               id: parentLink.parent.id,
               name: parentLink.parent.name,
+              nameBn: parentLink.parent.nameBn,
               phone: parentLink.parent.phone,
               email: parentLink.parent.email,
               nid: parentLink.parent.nid,
@@ -470,11 +601,17 @@ export class StudentService {
       }
     }
 
-    // 3. Handle Active Enrollment corrections (sectionId, groupId, roll)
+    // 3. Handle Active Enrollment corrections (sectionId, groupId, roll, formSerialNo, remarks, etc.)
     const hasEnrollmentUpdate =
       dto.sectionId !== undefined ||
       dto.groupId !== undefined ||
-      dto.roll !== undefined;
+      dto.optionalClassSubjectId !== undefined ||
+      dto.optionalSubjectId !== undefined ||
+      dto.roll !== undefined ||
+      dto.formSerialNo !== undefined ||
+      dto.isRepeater !== undefined ||
+      dto.isReadmission !== undefined ||
+      dto.remarks !== undefined;
 
     let targetEnrollmentId: string | null = null;
     let enrollmentUpdateData: Prisma.StudentEnrollmentUpdateInput | null = null;
@@ -488,6 +625,15 @@ export class StudentService {
       }
       targetEnrollmentId = currentEnrollment.id;
       enrollmentUpdateData = {};
+
+      if (dto.formSerialNo !== undefined)
+        enrollmentUpdateData.formSerialNo = dto.formSerialNo?.trim() || null;
+      if (dto.isRepeater !== undefined)
+        enrollmentUpdateData.isRepeater = dto.isRepeater;
+      if (dto.isReadmission !== undefined)
+        enrollmentUpdateData.isReadmission = dto.isReadmission;
+      if (dto.remarks !== undefined)
+        enrollmentUpdateData.remarks = dto.remarks?.trim() || null;
 
       const targetSectionId = dto.sectionId ?? currentEnrollment.sectionId;
       const targetRoll = dto.roll ?? currentEnrollment.roll;
@@ -527,22 +673,33 @@ export class StudentService {
         }
       }
 
+      const targetOptClassSubjectId =
+        dto.optionalClassSubjectId !== undefined
+          ? dto.optionalClassSubjectId
+          : dto.optionalSubjectId;
+
       if (
-        dto.optionalSubjectId !== undefined &&
-        dto.optionalSubjectId !== currentEnrollment.optionalSubjectId
+        targetOptClassSubjectId !== undefined &&
+        targetOptClassSubjectId !== currentEnrollment.optionalClassSubjectId
       ) {
-        if (dto.optionalSubjectId) {
-          const optSubject = await this.prisma.subject.findUnique({
-            where: { id: dto.optionalSubjectId },
+        if (targetOptClassSubjectId) {
+          const classSubject = await this.prisma.classSubject.findUnique({
+            where: { id: targetOptClassSubjectId },
+            include: { subject: true },
           });
-          if (!optSubject) {
-            throw new NotFoundException('Optional Subject');
+          if (!classSubject) {
+            throw new NotFoundException('Optional ClassSubject');
           }
-          enrollmentUpdateData.optionalSubject = {
-            connect: { id: dto.optionalSubjectId },
+          if (classSubject.classId !== currentEnrollment.classId) {
+            throw new BadRequestException(
+              `Optional subject '${classSubject.subject.name}' does not belong to student's currently enrolled class`,
+            );
+          }
+          enrollmentUpdateData.optionalClassSubject = {
+            connect: { id: targetOptClassSubjectId },
           };
         } else {
-          enrollmentUpdateData.optionalSubject = { disconnect: true };
+          enrollmentUpdateData.optionalClassSubject = { disconnect: true };
         }
       }
 
@@ -600,6 +757,27 @@ export class StudentService {
       studentUpdateData.permanentAddress = dto.permanentAddress?.trim() || null;
     if (dto.status !== undefined) studentUpdateData.status = dto.status;
 
+    // পূর্বের অ্যাকাডেমিক রেকর্ড আপডেট
+    if (dto.previousSchoolName !== undefined)
+      studentUpdateData.previousSchoolName =
+        dto.previousSchoolName?.trim() || null;
+    if (dto.previousSchoolAddress !== undefined)
+      studentUpdateData.previousSchoolAddress =
+        dto.previousSchoolAddress?.trim() || null;
+    if (dto.previousGrade !== undefined)
+      studentUpdateData.previousGrade = dto.previousGrade?.trim() || null;
+    if (dto.previousGpa !== undefined)
+      studentUpdateData.previousGpa = dto.previousGpa;
+    if (dto.prevExamPassingYear !== undefined)
+      studentUpdateData.prevExamPassingYear = dto.prevExamPassingYear;
+    if (dto.prevExamRoll !== undefined)
+      studentUpdateData.prevExamRoll = dto.prevExamRoll?.trim() || null;
+    if (dto.prevExamRegistration !== undefined)
+      studentUpdateData.prevExamRegistration =
+        dto.prevExamRegistration?.trim() || null;
+    if (dto.prevExamGpa !== undefined)
+      studentUpdateData.prevExamGpa = dto.prevExamGpa;
+
     // 5. Execute in atomic transaction
     const updatedResult = await this.prisma.$transaction(async (tx) => {
       if (
@@ -634,6 +812,76 @@ export class StudentService {
         });
       }
 
+      // Auto-sync updates to linked Father profile if already linked
+      if (
+        dto.fatherPhone !== undefined ||
+        dto.fatherNameEn !== undefined ||
+        dto.fatherNameBn !== undefined ||
+        dto.fatherNid !== undefined ||
+        dto.fatherOccupation !== undefined
+      ) {
+        const fatherLink = await tx.parentStudent.findFirst({
+          where: { studentId: id, relationship: RelationshipType.FATHER },
+          include: { parent: true },
+        });
+        if (fatherLink) {
+          await tx.parent.update({
+            where: { id: fatherLink.parentId },
+            data: {
+              name: dto.fatherNameEn?.trim() || fatherLink.parent.name,
+              nameBn:
+                dto.fatherNameBn !== undefined
+                  ? dto.fatherNameBn?.trim() || null
+                  : fatherLink.parent.nameBn,
+              phone: dto.fatherPhone?.trim() || fatherLink.parent.phone,
+              nid:
+                dto.fatherNid !== undefined
+                  ? dto.fatherNid?.trim() || null
+                  : fatherLink.parent.nid,
+              occupation:
+                dto.fatherOccupation !== undefined
+                  ? dto.fatherOccupation?.trim() || null
+                  : fatherLink.parent.occupation,
+            },
+          });
+        }
+      }
+
+      // Auto-sync updates to linked Mother profile if already linked
+      if (
+        dto.motherPhone !== undefined ||
+        dto.motherNameEn !== undefined ||
+        dto.motherNameBn !== undefined ||
+        dto.motherNid !== undefined ||
+        dto.motherOccupation !== undefined
+      ) {
+        const motherLink = await tx.parentStudent.findFirst({
+          where: { studentId: id, relationship: RelationshipType.MOTHER },
+          include: { parent: true },
+        });
+        if (motherLink) {
+          await tx.parent.update({
+            where: { id: motherLink.parentId },
+            data: {
+              name: dto.motherNameEn?.trim() || motherLink.parent.name,
+              nameBn:
+                dto.motherNameBn !== undefined
+                  ? dto.motherNameBn?.trim() || null
+                  : motherLink.parent.nameBn,
+              phone: dto.motherPhone?.trim() || motherLink.parent.phone,
+              nid:
+                dto.motherNid !== undefined
+                  ? dto.motherNid?.trim() || null
+                  : motherLink.parent.nid,
+              occupation:
+                dto.motherOccupation !== undefined
+                  ? dto.motherOccupation?.trim() || null
+                  : motherLink.parent.occupation,
+            },
+          });
+        }
+      }
+
       return tx.student.findUnique({
         where: { id },
         include: {
@@ -650,6 +898,11 @@ export class StudentService {
               },
               section: { select: { id: true, name: true } },
               group: { select: { id: true, name: true } },
+            },
+          },
+          parents: {
+            include: {
+              parent: true,
             },
           },
         },

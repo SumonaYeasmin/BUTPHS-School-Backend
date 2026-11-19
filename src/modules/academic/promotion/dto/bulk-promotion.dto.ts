@@ -29,7 +29,15 @@ export class StudentGroupOverrideDto {
   groupId: string;
 
   @ApiPropertyOptional({
-    description: 'Optional 4th Subject UUID',
+    description: 'Optional 4th ClassSubject UUID',
+    example: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33',
+  })
+  @IsUUID('4', { message: 'optionalClassSubjectId must be a valid UUID' })
+  @IsOptional()
+  optionalClassSubjectId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Alias for optionalClassSubjectId (backward compatibility)',
     example: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33',
   })
   @IsUUID('4', { message: 'optionalSubjectId must be a valid UUID' })

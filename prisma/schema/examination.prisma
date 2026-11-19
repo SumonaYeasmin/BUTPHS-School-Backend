@@ -85,6 +85,7 @@ model ExamSubject {
   continuousAssessmentFullMarks Decimal? @db.Decimal(7, 2)
   continuousAssessmentPassMarks Decimal? @db.Decimal(7, 2)
   isOptional                    Boolean  @default(false) /// ঐচ্ছিক / ৪র্থ বিষয় হিসেবে নেওয়া সম্ভব কিনা
+  displayOrder                  Int      @default(0)     /// মার্কশিট, রেজাল্ট কার্ড ও রুটিনে বিষয়ের ক্রম
 
   exam           Exam                   @relation(fields: [examId], references: [id], onDelete: Cascade)
   subject        Subject                @relation(fields: [subjectId], references: [id], onDelete: Restrict)
@@ -95,6 +96,7 @@ model ExamSubject {
 
   @@unique([examId, subjectId])
   @@index([examId, groupId])
+  @@index([examId, displayOrder])
 }
 
 model ExamRoutine {
