@@ -70,6 +70,7 @@ model Exam {
 
   @@unique([academicYearId, classId, name])
   @@index([academicYearId, classId])
+  @@index([academicYearId, classId, isDeleted])
 }
 
 model ExamSubject {
