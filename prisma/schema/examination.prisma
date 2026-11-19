@@ -20,20 +20,23 @@ model GradingScale {
 }
 
 model GradeRange {
-  id             String  @id @default(uuid()) @db.Uuid
-  gradingScaleId String  @db.Uuid
-  minPercentage  Decimal @db.Decimal(5, 2)
-  maxPercentage  Decimal @db.Decimal(5, 2)
-  letterGrade    String  @db.VarChar(5)
-  gradePoint     Decimal @db.Decimal(3, 2)
-  remarks        String? @db.VarChar(50)
-  isFailGrade    Boolean @default(false)
-  displayOrder   Int     @default(0)
+  id             String    @id @default(uuid()) @db.Uuid
+  gradingScaleId String    @db.Uuid
+  minPercentage  Decimal   @db.Decimal(5, 2)
+  maxPercentage  Decimal   @db.Decimal(5, 2)
+  letterGrade    String    @db.VarChar(5)
+  gradePoint     Decimal   @db.Decimal(3, 2)
+  remarks        String?   @db.VarChar(50)
+  isFailGrade    Boolean   @default(false)
+  displayOrder   Int       @default(0)
+  isDeleted      Boolean   @default(false)
+  deletedAt      DateTime?
 
   gradingScale GradingScale @relation(fields: [gradingScaleId], references: [id], onDelete: Cascade)
 
-  @@unique([gradingScaleId, letterGrade])
+  @@index([gradingScaleId, letterGrade])
   @@index([gradingScaleId, minPercentage, maxPercentage])
+  @@index([gradingScaleId, isDeleted])
 }
 
 model Exam {

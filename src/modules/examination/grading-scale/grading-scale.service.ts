@@ -4,6 +4,9 @@ import { Prisma } from '../../../../prisma/generated/client';
 import { CreateGradingScaleDto } from './dto/create-grading-scale.dto';
 import { UpdateGradingScaleDto } from './dto/update-grading-scale.dto';
 import { QueryGradingScaleDto } from './dto/query-grading-scale.dto';
+import { CreateGradeRangeDto } from './dto/create-grade-range.dto';
+import { UpdateGradeRangeDto } from './dto/update-grade-range.dto';
+import { BulkCreateGradeRangeDto } from './dto/bulk-create-grade-range.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
   ConflictException,
@@ -355,6 +358,392 @@ export class GradingScaleService {
     return ResponseHelper.success(
       null,
       `Grading scale '${existing.name}' soft deleted successfully`,
+    );
+  }
+
+  /**
+   * Add a single grade range to a grading scale
+   */
+  async addGradeRange(scaleId: string, dto: CreateGradeRangeDto) {
+    const scale = await this.prisma.gradingScale.findFirst({
+      where: { id: scaleId, isDeleted: false },
+      include: {
+        _count: { select: { exams: true } },
+        gradeRanges: {
+          where: { isDeleted: false },
+        },
+      },
+    });
+
+    if (!scale) {
+      throw new NotFoundException('Grading scale');
+    }
+
+    if (scale.isSystemDefault) {
+      throw new BadRequestException(
+        'Cannot modify grade ranges of system default grading scale',
+      );
+    }
+
+    if (scale._count.exams > 0) {
+      throw new BadRequestException(
+        `Cannot add grade range because this grading scale is actively used by ${scale._count.exams} examination(s).`,
+      );
+    }
+
+    if (dto.minPercentage > dto.maxPercentage) {
+      throw new BadRequestException(
+        `minPercentage (${dto.minPercentage}%) cannot be greater than maxPercentage (${dto.maxPercentage}%)`,
+      );
+    }
+
+    if (dto.gradePoint > Number(scale.maxGpa)) {
+      throw new BadRequestException(
+        `Grade point (${dto.gradePoint}) exceeds scale maxGpa (${scale.maxGpa})`,
+      );
+    }
+
+    const targetGrade = dto.letterGrade.trim().toUpperCase();
+    const duplicateLetter = scale.gradeRanges.find(
+      (r) => r.letterGrade.toUpperCase() === targetGrade,
+    );
+    if (duplicateLetter) {
+      throw new ConflictException(
+        `Grade range with letter grade '${targetGrade}' already exists in this scale`,
+      );
+    }
+
+    for (const r of scale.gradeRanges) {
+      const curMin = Number(r.minPercentage);
+      const curMax = Number(r.maxPercentage);
+      if (!(dto.maxPercentage < curMin || dto.minPercentage > curMax)) {
+        throw new BadRequestException(
+          `Percentage range (${dto.minPercentage}% - ${dto.maxPercentage}%) overlaps with existing grade '${r.letterGrade}' (${curMin}% - ${curMax}%)`,
+        );
+      }
+    }
+
+    const created = await this.prisma.gradeRange.create({
+      data: {
+        gradingScaleId: scaleId,
+        minPercentage: dto.minPercentage,
+        maxPercentage: dto.maxPercentage,
+        letterGrade: targetGrade,
+        gradePoint: dto.gradePoint,
+        remarks: dto.remarks?.trim() || null,
+        isFailGrade: dto.isFailGrade ?? false,
+        displayOrder: dto.displayOrder ?? 0,
+      },
+    });
+
+    return ResponseHelper.created(
+      created,
+      `Grade range '${created.letterGrade}' added successfully to scale '${scale.name}'`,
+    );
+  }
+
+  /**
+   * Bulk add / replace all grade ranges for a grading scale atomically
+   */
+  async bulkAddGradeRanges(scaleId: string, dto: BulkCreateGradeRangeDto) {
+    const scale = await this.prisma.gradingScale.findFirst({
+      where: { id: scaleId, isDeleted: false },
+      include: {
+        _count: { select: { exams: true } },
+      },
+    });
+
+    if (!scale) {
+      throw new NotFoundException('Grading scale');
+    }
+
+    if (scale.isSystemDefault) {
+      throw new BadRequestException(
+        'Cannot modify grade ranges of system default grading scale',
+      );
+    }
+
+    if (scale._count.exams > 0) {
+      throw new BadRequestException(
+        `Cannot replace grade ranges because this grading scale is actively used by ${scale._count.exams} examination(s).`,
+      );
+    }
+
+    if (!dto.ranges || dto.ranges.length === 0) {
+      throw new BadRequestException(
+        'At least one grade range must be provided',
+      );
+    }
+
+    this.validateGradeRanges(dto.ranges, Number(scale.maxGpa));
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      await tx.gradeRange.deleteMany({
+        where: { gradingScaleId: scaleId },
+      });
+
+      await tx.gradeRange.createMany({
+        data: dto.ranges.map((r) => ({
+          gradingScaleId: scaleId,
+          minPercentage: r.minPercentage,
+          maxPercentage: r.maxPercentage,
+          letterGrade: r.letterGrade.trim().toUpperCase(),
+          gradePoint: r.gradePoint,
+          remarks: r.remarks?.trim() || null,
+          isFailGrade: r.isFailGrade ?? false,
+          displayOrder: r.displayOrder ?? 0,
+        })),
+      });
+
+      return tx.gradeRange.findMany({
+        where: { gradingScaleId: scaleId },
+        orderBy: [{ displayOrder: 'asc' }, { minPercentage: 'desc' }],
+      });
+    });
+
+    return ResponseHelper.created(
+      result,
+      `${result.length} grade range(s) configured successfully for scale '${scale.name}'`,
+    );
+  }
+
+  /**
+   * Get all grade ranges for a grading scale
+   */
+  async getGradeRanges(scaleId: string) {
+    const scale = await this.prisma.gradingScale.findFirst({
+      where: { id: scaleId, isDeleted: false },
+      select: {
+        id: true,
+        name: true,
+        maxGpa: true,
+        isDefault: true,
+        isActive: true,
+      },
+    });
+
+    if (!scale) {
+      throw new NotFoundException('Grading scale');
+    }
+
+    const ranges = await this.prisma.gradeRange.findMany({
+      where: { gradingScaleId: scaleId, isDeleted: false },
+      orderBy: [{ displayOrder: 'asc' }, { minPercentage: 'desc' }],
+    });
+
+    return ResponseHelper.success(
+      {
+        gradingScale: scale,
+        totalRanges: ranges.length,
+        ranges,
+      },
+      `Grade ranges for '${scale.name}' retrieved successfully`,
+    );
+  }
+
+  /**
+   * Get a specific grade range by ID
+   */
+  async getGradeRangeById(scaleId: string, rangeId: string) {
+    const range = await this.prisma.gradeRange.findFirst({
+      where: { id: rangeId, gradingScaleId: scaleId, isDeleted: false },
+      include: {
+        gradingScale: {
+          select: {
+            id: true,
+            name: true,
+            maxGpa: true,
+            isDefault: true,
+            isDeleted: true,
+          },
+        },
+      },
+    });
+
+    if (!range || range.gradingScale.isDeleted) {
+      throw new NotFoundException('Grade range');
+    }
+
+    return ResponseHelper.success(
+      range,
+      `Grade range '${range.letterGrade}' details retrieved successfully`,
+    );
+  }
+
+  /**
+   * Update a specific grade range
+   */
+  async updateGradeRange(
+    scaleId: string,
+    rangeId: string,
+    dto: UpdateGradeRangeDto,
+  ) {
+    const scale = await this.prisma.gradingScale.findFirst({
+      where: { id: scaleId, isDeleted: false },
+      include: {
+        _count: { select: { exams: true } },
+        gradeRanges: {
+          where: { isDeleted: false },
+        },
+      },
+    });
+
+    if (!scale) {
+      throw new NotFoundException('Grading scale');
+    }
+
+    if (scale.isSystemDefault) {
+      throw new BadRequestException(
+        'Cannot modify grade ranges of system default grading scale',
+      );
+    }
+
+    if (scale._count.exams > 0) {
+      throw new BadRequestException(
+        `Cannot modify grade range because this grading scale is actively used by ${scale._count.exams} examination(s).`,
+      );
+    }
+
+    const existingRange = scale.gradeRanges.find((r) => r.id === rangeId);
+    if (!existingRange) {
+      throw new NotFoundException('Grade range');
+    }
+
+    const targetMin =
+      dto.minPercentage !== undefined
+        ? dto.minPercentage
+        : Number(existingRange.minPercentage);
+    const targetMax =
+      dto.maxPercentage !== undefined
+        ? dto.maxPercentage
+        : Number(existingRange.maxPercentage);
+    const targetGrade =
+      dto.letterGrade !== undefined
+        ? dto.letterGrade.trim().toUpperCase()
+        : existingRange.letterGrade;
+    const targetPoint =
+      dto.gradePoint !== undefined
+        ? dto.gradePoint
+        : Number(existingRange.gradePoint);
+
+    if (targetMin > targetMax) {
+      throw new BadRequestException(
+        `minPercentage (${targetMin}%) cannot be greater than maxPercentage (${targetMax}%)`,
+      );
+    }
+
+    if (targetPoint > Number(scale.maxGpa)) {
+      throw new BadRequestException(
+        `Grade point (${targetPoint}) exceeds scale maxGpa (${scale.maxGpa})`,
+      );
+    }
+
+    if (
+      dto.letterGrade !== undefined &&
+      targetGrade !== existingRange.letterGrade
+    ) {
+      const duplicate = scale.gradeRanges.find(
+        (r) => r.id !== rangeId && r.letterGrade.toUpperCase() === targetGrade,
+      );
+      if (duplicate) {
+        throw new ConflictException(
+          `Grade range with letter grade '${targetGrade}' already exists in this scale`,
+        );
+      }
+    }
+
+    // Overlap check against all other active ranges of this scale
+    for (const r of scale.gradeRanges) {
+      if (r.id === rangeId) continue;
+      const curMin = Number(r.minPercentage);
+      const curMax = Number(r.maxPercentage);
+
+      if (!(targetMax < curMin || targetMin > curMax)) {
+        throw new BadRequestException(
+          `Percentage range (${targetMin}% - ${targetMax}%) overlaps with existing grade '${r.letterGrade}' (${curMin}% - ${curMax}%)`,
+        );
+      }
+    }
+
+    const updated = await this.prisma.gradeRange.update({
+      where: { id: rangeId },
+      data: {
+        ...(dto.minPercentage !== undefined
+          ? { minPercentage: dto.minPercentage }
+          : {}),
+        ...(dto.maxPercentage !== undefined
+          ? { maxPercentage: dto.maxPercentage }
+          : {}),
+        ...(dto.letterGrade !== undefined
+          ? { letterGrade: targetGrade }
+          : {}),
+        ...(dto.gradePoint !== undefined
+          ? { gradePoint: dto.gradePoint }
+          : {}),
+        ...(dto.remarks !== undefined
+          ? { remarks: dto.remarks?.trim() || null }
+          : {}),
+        ...(dto.isFailGrade !== undefined
+          ? { isFailGrade: dto.isFailGrade }
+          : {}),
+        ...(dto.displayOrder !== undefined
+          ? { displayOrder: dto.displayOrder }
+          : {}),
+      },
+    });
+
+    return ResponseHelper.success(
+      updated,
+      `Grade range '${updated.letterGrade}' updated successfully`,
+    );
+  }
+
+  /**
+   * Soft delete a specific grade range
+   */
+  async softDeleteGradeRange(scaleId: string, rangeId: string) {
+    const scale = await this.prisma.gradingScale.findFirst({
+      where: { id: scaleId, isDeleted: false },
+      include: {
+        _count: { select: { exams: true } },
+      },
+    });
+
+    if (!scale) {
+      throw new NotFoundException('Grading scale');
+    }
+
+    if (scale.isSystemDefault) {
+      throw new BadRequestException(
+        'Cannot delete grade ranges from system default grading scale',
+      );
+    }
+
+    if (scale._count.exams > 0) {
+      throw new BadRequestException(
+        `Cannot delete grade range because this grading scale is actively used by ${scale._count.exams} examination(s).`,
+      );
+    }
+
+    const existingRange = await this.prisma.gradeRange.findFirst({
+      where: { id: rangeId, gradingScaleId: scaleId, isDeleted: false },
+    });
+
+    if (!existingRange) {
+      throw new NotFoundException('Grade range');
+    }
+
+    await this.prisma.gradeRange.update({
+      where: { id: rangeId },
+      data: {
+        isDeleted: true,
+        deletedAt: new Date(),
+      },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Grade range '${existingRange.letterGrade}' soft deleted successfully`,
     );
   }
 
