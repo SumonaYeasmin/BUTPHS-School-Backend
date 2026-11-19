@@ -1,8 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { CreateExamRoutineDto } from './dto/create-exam-routine.dto';
 import { QueryExamRoutineDto } from './dto/query-exam-routine.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
-import { Prisma } from '../../../../prisma/generated/client';
+import {
+  ExamRoutineStatus,
+  ExamStatus,
+  Prisma,
+  ResultPublicationStatus,
+} from '../../../../prisma/generated/client';
 
 @Injectable()
 export class ExamRoutineService {
@@ -277,5 +288,250 @@ export class ExamRoutineService {
     const time12 = `${String(displayHour).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${period}`;
 
     return { time24, time12 };
+  }
+
+  /**
+   * Helper: Parses time string (HH:mm or HH:mm:ss) to Date relative to epoch 1970 UTC
+   */
+  private parseTimeToDate(timeStr: string): Date {
+    const parts = timeStr.trim().split(':');
+    const hours = parseInt(parts[0], 10);
+    const minutes = parseInt(parts[1], 10);
+    const seconds = parts[2] ? parseInt(parts[2], 10) : 0;
+
+    return new Date(Date.UTC(1970, 0, 1, hours, minutes, seconds));
+  }
+
+  /**
+   * Helper: Converts time (Date or HH:mm string) to minutes from midnight
+   */
+  private timeToMinutes(time: Date | string): number {
+    if (time instanceof Date) {
+      return time.getUTCHours() * 60 + time.getUTCMinutes();
+    }
+    const parts = String(time).split(':');
+    return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+  }
+
+  /**
+   * Create / schedule a new exam routine slot with collision guards
+   */
+  async create(examId: string, dto: CreateExamRoutineDto) {
+    // 1. Verify Exam existence and state guards
+    const exam = await this.prisma.exam.findFirst({
+      where: { id: examId, isDeleted: false },
+    });
+
+    if (!exam) {
+      throw new NotFoundException('Examination not found');
+    }
+
+    if (exam.isLocked) {
+      throw new BadRequestException(
+        `Examination '${exam.name}' is locked. Unlock it first before scheduling routine slots.`,
+      );
+    }
+
+    if (exam.resultStatus === ResultPublicationStatus.PUBLISHED) {
+      throw new BadRequestException(
+        `Cannot schedule routine for examination '${exam.name}' because its results have already been published.`,
+      );
+    }
+
+    if (
+      exam.status === ExamStatus.COMPLETED ||
+      exam.status === ExamStatus.CANCELLED
+    ) {
+      throw new BadRequestException(
+        `Cannot schedule routine for an examination with status '${exam.status}'.`,
+      );
+    }
+
+    // 2. Verify ExamSubject belongs to this examination
+    const examSubject = await this.prisma.examSubject.findFirst({
+      where: { id: dto.examSubjectId, examId },
+      include: {
+        subject: true,
+      },
+    });
+
+    if (!examSubject) {
+      throw new NotFoundException(
+        'The specified subject does not belong to this examination',
+      );
+    }
+
+    // 3. Verify Section (if specified)
+    if (dto.sectionId) {
+      const section = await this.prisma.section.findFirst({
+        where: { id: dto.sectionId, classId: exam.classId },
+      });
+      if (!section) {
+        throw new NotFoundException(
+          'Section not found or does not belong to this examination class',
+        );
+      }
+    }
+
+    // 4. Validate Exam Date within Examination boundaries
+    const exStart = new Date(exam.startDate);
+    const exEnd = new Date(exam.endDate);
+    exStart.setHours(0, 0, 0, 0);
+    exEnd.setHours(23, 59, 59, 999);
+
+    const targetDate = new Date(dto.examDate);
+    targetDate.setHours(0, 0, 0, 0);
+
+    if (targetDate < exStart || targetDate > exEnd) {
+      const startStr = exam.startDate.toISOString().split('T')[0];
+      const endStr = exam.endDate.toISOString().split('T')[0];
+      throw new BadRequestException(
+        `Exam date (${dto.examDate}) must fall within the examination schedule (${startStr} to ${endStr}).`,
+      );
+    }
+
+    // 5. Time Validation
+    const startMinutes = this.timeToMinutes(dto.startTime);
+    const endMinutes = this.timeToMinutes(dto.endTime);
+
+    if (startMinutes >= endMinutes) {
+      throw new BadRequestException(
+        `Exam startTime (${dto.startTime}) must be earlier than endTime (${dto.endTime}).`,
+      );
+    }
+
+    if (endMinutes - startMinutes < 15) {
+      throw new BadRequestException(
+        'Exam duration must be at least 15 minutes.',
+      );
+    }
+
+    // 6. Routine Duplicate Guard: Check if subject is already scheduled
+    const existingSubjectSlot = await this.prisma.examRoutine.findFirst({
+      where: {
+        examId,
+        examSubjectId: dto.examSubjectId,
+        ...(dto.sectionId ? { sectionId: dto.sectionId } : {}),
+      },
+    });
+
+    if (existingSubjectSlot) {
+      throw new ConflictException(
+        `Routine slot for subject '${examSubject.subject.name}' is already scheduled in this examination.`,
+      );
+    }
+
+    // 7. Student Class/Section Time Conflict Check (Double Booking Students)
+    const sameDayClassRoutines = await this.prisma.examRoutine.findMany({
+      where: {
+        examId,
+        examDate: targetDate,
+        status: { not: ExamRoutineStatus.CANCELLED },
+        OR: [
+          { sectionId: null },
+          ...(dto.sectionId ? [{ sectionId: dto.sectionId }] : []),
+        ],
+      },
+      include: {
+        examSubject: { include: { subject: true } },
+      },
+    });
+
+    for (const r of sameDayClassRoutines) {
+      const existingStart = this.timeToMinutes(r.startTime);
+      const existingEnd = this.timeToMinutes(r.endTime);
+
+      if (!(endMinutes <= existingStart || startMinutes >= existingEnd)) {
+        throw new ConflictException(
+          `Time conflict: Subject '${r.examSubject.subject.name}' is already scheduled on ${dto.examDate} from ${this.formatTime12h(r.startTime).time12} to ${this.formatTime12h(r.endTime).time12}.`,
+        );
+      }
+    }
+
+    // 8. Room Double Booking Check (Across the entire school!)
+    if (dto.roomNo) {
+      const normalizedRoom = dto.roomNo.trim();
+      const sameDayRoomRoutines = await this.prisma.examRoutine.findMany({
+        where: {
+          examDate: targetDate,
+          roomNo: { equals: normalizedRoom, mode: 'insensitive' },
+          status: { not: ExamRoutineStatus.CANCELLED },
+        },
+        include: {
+          exam: { select: { name: true } },
+          examSubject: { include: { subject: true } },
+        },
+      });
+
+      for (const r of sameDayRoomRoutines) {
+        const existingStart = this.timeToMinutes(r.startTime);
+        const existingEnd = this.timeToMinutes(r.endTime);
+
+        if (!(endMinutes <= existingStart || startMinutes >= existingEnd)) {
+          throw new ConflictException(
+            `Room conflict: Room '${normalizedRoom}' is already booked on ${dto.examDate} between ${this.formatTime12h(r.startTime).time12} and ${this.formatTime12h(r.endTime).time12} for ${r.exam.name} (${r.examSubject.subject.name}).`,
+          );
+        }
+      }
+    }
+
+    // 9. Create the routine slot
+    const routine = await this.prisma.examRoutine.create({
+      data: {
+        examId,
+        examSubjectId: dto.examSubjectId,
+        sectionId: dto.sectionId || null,
+        examDate: targetDate,
+        startTime: this.parseTimeToDate(dto.startTime),
+        endTime: this.parseTimeToDate(dto.endTime),
+        roomNo: dto.roomNo?.trim() || null,
+        status: dto.status ?? ExamRoutineStatus.SCHEDULED,
+        instructions: dto.instructions?.trim() || null,
+      },
+      include: {
+        exam: {
+          select: {
+            id: true,
+            name: true,
+            examType: true,
+            status: true,
+            academicYear: { select: { id: true, name: true } },
+            schoolClass: { select: { id: true, name: true, numericValue: true } },
+          },
+        },
+        examSubject: {
+          include: {
+            subject: {
+              select: {
+                id: true,
+                name: true,
+                officialCode: true,
+                category: true,
+                paperNumber: true,
+              },
+            },
+            group: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        section: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const formatted = this.formatRoutineSlot(routine);
+
+    return ResponseHelper.created(
+      formatted,
+      `Exam routine slot for '${examSubject.subject.name}' scheduled successfully on ${dto.examDate}`,
+    );
   }
 }

@@ -22,6 +22,7 @@ import { ExamService } from './exam.service';
 import { CreateExamDto } from './dto/create-exam.dto';
 import { UpdateExamDto } from './dto/update-exam.dto';
 import { ExamRoutineService } from '../exam-routine/exam-routine.service';
+import { CreateExamRoutineDto } from '../exam-routine/dto/create-exam-routine.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -94,6 +95,41 @@ export class ExamController {
     @Query('sectionId') sectionId?: string,
   ) {
     return this.examRoutineService.getRoutineByExam(examId, sectionId);
+  }
+
+  @Post(':examId/routine')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Schedule a new exam routine slot (Admin only)',
+    description:
+      'Creates a scheduled exam slot with room assignment, time interval conflict validation, room double-booking validation, and exam date bounds checking.',
+  })
+  @ApiParam({ name: 'examId', description: 'Exam UUID' })
+  @ApiResponse({
+    status: 201,
+    description: 'Exam routine slot scheduled successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Validation failed, date out of exam bounds, or startTime >= endTime',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Exam, subject, or section not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description:
+      'Time conflict: class or room already booked at this date and time, or subject already scheduled',
+  })
+  async createRoutine(
+    @Param('examId', ParseUUIDPipe) examId: string,
+    @Body() dto: CreateExamRoutineDto,
+  ) {
+    return this.examRoutineService.create(examId, dto);
   }
 
   @Patch(':id')
