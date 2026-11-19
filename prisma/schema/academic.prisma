@@ -160,6 +160,34 @@ model Student {
   permanentAddress    String?
   admissionDate       DateTime      @db.Date
   status              StudentStatus @default(ACTIVE)
+
+  // পিতা ও মাতার তথ্য (ভর্তি ফর্মের ২ ও ৩ নম্বর পয়েন্ট)
+  fatherNameBn          String?  @db.VarChar(150) /// পিতার নাম (বাংলায়)
+  fatherNameEn          String?  @db.VarChar(150) /// পিতার নাম (ইংরেজিতে)
+  fatherOccupation      String?  @db.VarChar(100) /// পিতার পেশা
+  fatherNid             String?  @db.VarChar(30)  /// পিতার এনআইডি নং
+  fatherPhone           String?  @db.VarChar(20)  /// পিতার মোবাইল নম্বর
+
+  motherNameBn          String?  @db.VarChar(150) /// মাতার নাম (বাংলায়)
+  motherNameEn          String?  @db.VarChar(150) /// মাতার নাম (ইংরেজিতে)
+  motherOccupation      String?  @db.VarChar(100) /// মাতার পেশা
+  motherNid             String?  @db.VarChar(30)  /// মাতার এনআইডি নং
+  motherPhone           String?  @db.VarChar(20)  /// মাতার মোবাইল নম্বর
+
+  guardianName          String?  @db.VarChar(150) /// অভিভাবকের নাম (যদি পিতা/মাতা ব্যতীত অন্য কেউ হন)
+  guardianPhone         String?  @db.VarChar(20)  /// অভিভাবকের মোবাইল নম্বর
+  guardianRelationship  String?  @db.VarChar(50)  /// অভিভাবকের সাথে সম্পর্ক
+
+  // পূর্বের অ্যাকাডেমিক রেকর্ড (ভর্তি ফর্মের ৮ ও ৯ নম্বর পয়েন্ট)
+  previousSchoolName    String?  @db.VarChar(200) /// পূর্বে অধ্যয়নরত বিদ্যালয়ের নাম
+  previousSchoolAddress String?  @db.VarChar(250) /// পূর্বে অধ্যয়নরত বিদ্যালয়ের ঠিকানা
+  previousGrade         String?  @db.VarChar(50)  /// পূর্ববর্তী শ্রেণিতে প্রাপ্ত গ্রেড
+  previousGpa           Decimal? @db.Decimal(3, 2) /// প্রাপ্ত জিপিএ
+  prevExamPassingYear   Int?                      /// পি.এস.সি/জে.এস.সি পাসের সন
+  prevExamRoll          String?  @db.VarChar(50)  /// পরীক্ষার রোল নম্বর
+  prevExamRegistration  String?  @db.VarChar(50)  /// পরীক্ষার রেজিস্ট্রেশন নম্বর
+  prevExamGpa           Decimal? @db.Decimal(3, 2) /// পি.এস.সি/জে.এস.সি তে প্রাপ্ত জিপিএ
+
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 
@@ -201,8 +229,11 @@ model StudentEnrollment {
   optionalSubjectId String?          @db.Uuid
   roll              Int
   enrollmentDate    DateTime         @db.Date
-  isRepeater        Boolean          @default(false)
+  formSerialNo      String?          @db.VarChar(50)  /// ভর্তি ফরমের ক্রমিক নম্বর (যেমন: "৬৮")
+  isRepeater        Boolean          @default(false)  /// ড্রপ বা একই শ্রেণিতে পুনরাবৃত্তি কি না
+  isReadmission     Boolean          @default(false)  /// নতুন ভর্তি নাকি পুনঃভর্তি (ভর্তি ফর্মের ১০ নম্বর পয়েন্ট)
   status            EnrollmentStatus @default(ACTIVE)
+  remarks           String?                           /// বিশেষ কোনো মন্তব্য বা নোট
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 
@@ -275,16 +306,19 @@ model StudentTransferCertificate {
 }
 
 model Parent {
-  id         String   @id @default(uuid()) @db.Uuid
-  userId     String?  @unique @db.Uuid
-  name       String   @db.VarChar(150)
-  phone      String   @db.VarChar(20)
-  email      String?  @db.VarChar(150)
-  nid        String?  @db.VarChar(20)
-  occupation String?  @db.VarChar(100)
-  address    String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String?  @unique @db.Uuid
+  name          String   @db.VarChar(150) /// অভিভাবকের নাম (ইংরেজিতে)
+  nameBn        String?  @db.VarChar(150) /// অভিভাবকের নাম (বাংলায়)
+  phone         String   @db.VarChar(20)
+  email         String?  @db.VarChar(150)
+  nid           String?  @db.VarChar(30)  /// এনআইডি নম্বর
+  occupation    String?  @db.VarChar(100)
+  monthlyIncome Decimal? @db.Decimal(10, 2) /// অভিভাবকের মাসিক আয়
+  photo         String?                  /// অভিভাবকের ছবি
+  address       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   user     User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
   students ParentStudent[]
@@ -303,6 +337,7 @@ model ParentStudent {
   isEmergencyContact Boolean          @default(false)
   isSmsReceiver      Boolean          @default(true)
   createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
 
   parent  Parent  @relation(fields: [parentId], references: [id], onDelete: Cascade)
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
