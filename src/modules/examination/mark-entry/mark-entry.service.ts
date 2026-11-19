@@ -10,6 +10,7 @@ import {
   BulkCreateMarkDto,
   StudentMarkEntryItemDto,
 } from './dto/bulk-create-mark.dto';
+import { QueryGradeSheetDto } from './dto/query-grade-sheet.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
   EnrollmentStatus,
@@ -583,5 +584,402 @@ export class MarkEntryService {
       continuousAssessmentMarks: ca,
       totalMarks,
     };
+  }
+
+  /**
+   * Get complete grade sheet table for a subject & section (For Teachers & Admins)
+   */
+  async getGradeSheet(query: QueryGradeSheetDto, currentUser: any) {
+    const examSubject = await this.prisma.examSubject.findUnique({
+      where: { id: query.examSubjectId },
+      include: {
+        subject: true,
+        group: true,
+        exam: {
+          include: {
+            academicYear: true,
+            schoolClass: true,
+          },
+        },
+      },
+    });
+
+    if (!examSubject) {
+      throw new NotFoundException('Exam subject configuration not found');
+    }
+
+    const exam = examSubject.exam;
+    if (exam.isDeleted) {
+      throw new NotFoundException('Examination not found');
+    }
+
+    const roles: string[] = currentUser.roles || [];
+    const isAdmin =
+      roles.includes('ADMIN') || roles.includes('SUPER_ADMIN');
+
+    // Find class subject in curriculum
+    const classSubject = await this.prisma.classSubject.findFirst({
+      where: {
+        academicYearId: exam.academicYearId,
+        classId: exam.classId,
+        subjectId: examSubject.subjectId,
+        isActive: true,
+      },
+    });
+
+    if (!classSubject) {
+      throw new BadRequestException(
+        'Class subject curriculum relation not found',
+      );
+    }
+
+    // Determine allowed section IDs for this user
+    let allowedSectionIds: string[] | null = null;
+    if (!isAdmin) {
+      let staffId = currentUser.staff?.id;
+      if (!staffId) {
+        const staff = await this.prisma.staff.findUnique({
+          where: { userId: currentUser.id },
+        });
+        if (!staff) {
+          throw new ForbiddenException(
+            'You do not have a teacher/staff profile linked to your user account.',
+          );
+        }
+        staffId = staff.id;
+      }
+
+      const assignments = await this.prisma.teacherAssignment.findMany({
+        where: {
+          staffId,
+          academicYearId: exam.academicYearId,
+          classId: exam.classId,
+          classSubjectId: classSubject.id,
+          isActive: true,
+        },
+        select: { sectionId: true, canEnterMarks: true },
+      });
+
+      if (assignments.length === 0) {
+        throw new ForbiddenException(
+          `Access denied: You are not assigned to teach '${examSubject.subject.name}' for any section in class '${exam.schoolClass.name}'.`,
+        );
+      }
+
+      allowedSectionIds = assignments.map((a) => a.sectionId);
+
+      if (query.sectionId && !allowedSectionIds.includes(query.sectionId)) {
+        throw new ForbiddenException(
+          'You are not authorized to view or enter marks for this section.',
+        );
+      }
+    }
+
+    // Build filter for student enrollments
+    const enrollmentWhere: any = {
+      academicYearId: exam.academicYearId,
+      classId: exam.classId,
+      status: EnrollmentStatus.ACTIVE,
+    };
+
+    if (query.sectionId) {
+      enrollmentWhere.sectionId = query.sectionId;
+    } else if (allowedSectionIds) {
+      enrollmentWhere.sectionId = { in: allowedSectionIds };
+    }
+
+    if (examSubject.groupId) {
+      enrollmentWhere.groupId = examSubject.groupId;
+    }
+
+    const enrollments = await this.prisma.studentEnrollment.findMany({
+      where: enrollmentWhere,
+      include: {
+        student: {
+          select: {
+            id: true,
+            studentId: true,
+            nameEn: true,
+            nameBn: true,
+            gender: true,
+          },
+        },
+        section: { select: { id: true, name: true } },
+        group: { select: { id: true, name: true } },
+      },
+      orderBy: [{ section: { name: 'asc' } }, { roll: 'asc' }],
+    });
+
+    // Fetch existing marks for these students in this exam subject
+    const enrollmentIds = enrollments.map((e) => e.id);
+    const existingMarks = await this.prisma.mark.findMany({
+      where: {
+        examSubjectId: query.examSubjectId,
+        studentEnrollmentId: { in: enrollmentIds },
+      },
+      include: {
+        creator: {
+          select: { id: true, name: true, email: true },
+        },
+      },
+    });
+
+    const marksMap = new Map<string, any>();
+    for (const m of existingMarks) {
+      marksMap.set(m.studentEnrollmentId, m);
+    }
+
+    let marksEnteredCount = 0;
+    let absentCount = 0;
+
+    const studentRows = enrollments.map((e) => {
+      const existing = marksMap.get(e.id);
+      let markInfo = null;
+
+      if (existing) {
+        marksEnteredCount++;
+        if (existing.isAbsent) {
+          absentCount++;
+        }
+        markInfo = {
+          id: existing.id,
+          isAbsent: existing.isAbsent,
+          writtenMarks: Number(existing.writtenMarks),
+          mcqMarks: Number(existing.mcqMarks),
+          practicalMarks: Number(existing.practicalMarks),
+          continuousAssessmentMarks: Number(existing.continuousAssessmentMarks),
+          totalMarks: Number(existing.totalMarks),
+          isLocked: existing.isLocked,
+          enteredBy: existing.creator?.name || 'System',
+          updatedAt: existing.updatedAt,
+        };
+      }
+
+      // 4th subject eligibility check
+      const isOptionalEnrolled =
+        examSubject.isOptional || classSubject.isOptional
+          ? e.optionalClassSubjectId === classSubject.id
+          : false;
+
+      return {
+        studentEnrollmentId: e.id,
+        studentId: e.student.studentId,
+        roll: e.roll,
+        name: e.student.nameEn,
+        nameBn: e.student.nameBn,
+        gender: e.student.gender,
+        section: e.section.name,
+        sectionId: e.sectionId,
+        group: e.group ? e.group.name : null,
+        isOptionalSubject: examSubject.isOptional || classSubject.isOptional,
+        isEnrolledOptional: isOptionalEnrolled,
+        mark: markInfo,
+      };
+    });
+
+    return ResponseHelper.success(
+      {
+        examination: {
+          id: exam.id,
+          name: exam.name,
+          examType: exam.examType,
+          status: exam.status,
+          marksEntryDeadline: exam.marksEntryDeadline,
+          isLocked: exam.isLocked,
+          resultStatus: exam.resultStatus,
+          academicYear: exam.academicYear.name,
+          schoolClass: exam.schoolClass.name,
+        },
+        examSubject: {
+          id: examSubject.id,
+          subjectName: examSubject.subject.name,
+          officialCode: examSubject.subject.officialCode,
+          fullMarks: Number(examSubject.fullMarks),
+          passMarks: Number(examSubject.passMarks),
+          hasWritten: examSubject.hasWritten,
+          writtenFullMarks: examSubject.writtenFullMarks
+            ? Number(examSubject.writtenFullMarks)
+            : null,
+          hasMcq: examSubject.hasMcq,
+          mcqFullMarks: examSubject.mcqFullMarks
+            ? Number(examSubject.mcqFullMarks)
+            : null,
+          hasPractical: examSubject.hasPractical,
+          practicalFullMarks: examSubject.practicalFullMarks
+            ? Number(examSubject.practicalFullMarks)
+            : null,
+          hasContinuousAssessment: examSubject.hasContinuousAssessment,
+          continuousAssessmentFullMarks: examSubject.continuousAssessmentFullMarks
+            ? Number(examSubject.continuousAssessmentFullMarks)
+            : null,
+        },
+        summary: {
+          totalStudents: enrollments.length,
+          marksEnteredCount,
+          marksPendingCount: enrollments.length - marksEnteredCount,
+          absentCount,
+        },
+        students: studentRows,
+      },
+      `Grade sheet for '${examSubject.subject.name}' retrieved successfully`,
+    );
+  }
+
+  /**
+   * Get all marks recorded for a specific student enrollment
+   */
+  async getStudentMarks(enrollmentId: string, examId?: string) {
+    const enrollment = await this.prisma.studentEnrollment.findUnique({
+      where: { id: enrollmentId },
+      include: {
+        student: true,
+        schoolClass: true,
+        academicYear: true,
+        section: true,
+      },
+    });
+
+    if (!enrollment) {
+      throw new NotFoundException('Student enrollment not found');
+    }
+
+    const whereClause: any = {
+      studentEnrollmentId: enrollmentId,
+    };
+
+    if (examId) {
+      whereClause.examSubject = {
+        examId,
+        exam: { isDeleted: false },
+      };
+    }
+
+    const marks = await this.prisma.mark.findMany({
+      where: whereClause,
+      include: {
+        examSubject: {
+          include: {
+            subject: true,
+            exam: {
+              select: {
+                id: true,
+                name: true,
+                examType: true,
+                status: true,
+                resultStatus: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: [{ examSubject: { displayOrder: 'asc' } }],
+    });
+
+    return ResponseHelper.success(
+      {
+        student: {
+          enrollmentId: enrollment.id,
+          studentId: enrollment.student.studentId,
+          name: enrollment.student.nameEn,
+          roll: enrollment.roll,
+          class: enrollment.schoolClass.name,
+          section: enrollment.section.name,
+          academicYear: enrollment.academicYear.name,
+        },
+        totalMarksRecords: marks.length,
+        marks: marks.map((m) => ({
+          id: m.id,
+          examName: m.examSubject.exam.name,
+          examType: m.examSubject.exam.examType,
+          subjectName: m.examSubject.subject.name,
+          officialCode: m.examSubject.subject.officialCode,
+          fullMarks: Number(m.examSubject.fullMarks),
+          passMarks: Number(m.examSubject.passMarks),
+          writtenMarks: Number(m.writtenMarks),
+          mcqMarks: Number(m.mcqMarks),
+          practicalMarks: Number(m.practicalMarks),
+          continuousAssessmentMarks: Number(m.continuousAssessmentMarks),
+          totalMarks: Number(m.totalMarks),
+          isAbsent: m.isAbsent,
+          isLocked: m.isLocked,
+        })),
+      },
+      `Marks for student '${enrollment.student.nameEn}' retrieved successfully`,
+    );
+  }
+
+  /**
+   * Get single mark entry details by ID
+   */
+  async getMarkById(id: string) {
+    const mark = await this.prisma.mark.findUnique({
+      where: { id },
+      include: {
+        enrollment: {
+          include: {
+            student: true,
+            schoolClass: true,
+            section: true,
+            academicYear: true,
+          },
+        },
+        examSubject: {
+          include: {
+            subject: true,
+            exam: true,
+          },
+        },
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+          },
+        },
+      },
+    });
+
+    if (!mark) {
+      throw new NotFoundException('Mark entry record not found');
+    }
+
+    return ResponseHelper.success(
+      {
+        id: mark.id,
+        isAbsent: mark.isAbsent,
+        writtenMarks: Number(mark.writtenMarks),
+        mcqMarks: Number(mark.mcqMarks),
+        practicalMarks: Number(mark.practicalMarks),
+        continuousAssessmentMarks: Number(mark.continuousAssessmentMarks),
+        totalMarks: Number(mark.totalMarks),
+        isLocked: mark.isLocked,
+        enteredAt: mark.createdAt,
+        updatedAt: mark.updatedAt,
+        enteredBy: mark.creator,
+        student: {
+          enrollmentId: mark.enrollment.id,
+          studentId: mark.enrollment.student.studentId,
+          name: mark.enrollment.student.nameEn,
+          roll: mark.enrollment.roll,
+          class: mark.enrollment.schoolClass.name,
+          section: mark.enrollment.section.name,
+        },
+        subject: {
+          id: mark.examSubject.subject.id,
+          name: mark.examSubject.subject.name,
+          code: mark.examSubject.subject.officialCode,
+          fullMarks: Number(mark.examSubject.fullMarks),
+          passMarks: Number(mark.examSubject.passMarks),
+        },
+        exam: {
+          id: mark.examSubject.exam.id,
+          name: mark.examSubject.exam.name,
+          examType: mark.examSubject.exam.examType,
+          status: mark.examSubject.exam.status,
+        },
+      },
+      'Mark entry details retrieved successfully',
+    );
   }
 }
