@@ -4,6 +4,7 @@ import { ExamModule } from './exam/exam.module';
 import { ExamRoutineModule } from './exam-routine/exam-routine.module';
 import { ExamSubjectModule } from './exam-subject/exam-subject.module';
 import { MarkEntryModule } from './mark-entry/mark-entry.module';
+import { ResultProcessingModule } from './result-processing/result-processing.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { MarkEntryModule } from './mark-entry/mark-entry.module';
     ExamRoutineModule,
     ExamSubjectModule,
     MarkEntryModule,
+    ResultProcessingModule,
   ],
   exports: [
     GradingScaleModule,
@@ -19,6 +21,7 @@ import { MarkEntryModule } from './mark-entry/mark-entry.module';
     ExamRoutineModule,
     ExamSubjectModule,
     MarkEntryModule,
+    ResultProcessingModule,
   ],
 })
 export class ExaminationModule {}
