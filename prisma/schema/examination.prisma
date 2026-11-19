@@ -6,13 +6,17 @@ model GradingScale {
   description     String?
   maxGpa          Decimal  @default(5.00) @db.Decimal(3, 2)
   isDefault       Boolean  @default(false)
-  isSystemDefault Boolean  @default(false)
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  isSystemDefault Boolean   @default(false)
+  isActive        Boolean   @default(true)
+  isDeleted       Boolean   @default(false)
+  deletedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   gradeRanges GradeRange[]
   exams       Exam[]
+
+  @@index([isDeleted, isActive])
 }
 
 model GradeRange {

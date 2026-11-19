@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -17,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { GradingScaleService } from './grading-scale.service';
 import { CreateGradingScaleDto } from './dto/create-grading-scale.dto';
+import { UpdateGradingScaleDto } from './dto/update-grading-scale.dto';
 import { QueryGradingScaleDto } from './dto/query-grading-scale.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -87,5 +90,64 @@ export class GradingScaleController {
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.gradingScaleService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update grading scale details or replace grade ranges (Admin only)',
+    description:
+      'Updates grading scale name, description, maxGpa, default flag, or atomically replaces grade ranges with interval overlap validation.',
+  })
+  @ApiParam({ name: 'id', description: 'Grading Scale UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Grading scale updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation failed, scale in use, or cannot modify system default',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Grading scale not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Another grading scale with the new name already exists',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateGradingScaleDto,
+  ) {
+    return this.gradingScaleService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Soft delete grading scale by UUID (Admin only)',
+    description:
+      'Marks the grading scale as deleted (isDeleted: true) and deactivates it. Protected against deleting system default scales, active default scale, or scales used by active exams.',
+  })
+  @ApiParam({ name: 'id', description: 'Grading Scale UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Grading scale soft deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot delete default scale or scale in active use by exams',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Grading scale not found',
+  })
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.gradingScaleService.softDelete(id);
   }
 }
