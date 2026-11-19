@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -142,5 +143,36 @@ export class ExamSubjectController {
     @Body() dto: UpdateExamSubjectDto,
   ) {
     return this.examSubjectService.update(examId, subjectConfigId, dto);
+  }
+
+  @Delete(':subjectConfigId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Remove a subject from an examination (Admin only)',
+    description:
+      'Removes a configured subject from an examination. Strictly prohibited if student marks have already been recorded, if scheduled in an exam routine, if results are published, or if the exam is locked.',
+  })
+  @ApiParam({ name: 'examId', description: 'Exam UUID' })
+  @ApiParam({ name: 'subjectConfigId', description: 'Exam Subject Config UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Exam subject removed successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot remove: student marks recorded, scheduled in routine, results published, or exam is locked',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Exam subject configuration or Examination not found',
+  })
+  async remove(
+    @Param('examId', ParseUUIDPipe) examId: string,
+    @Param('subjectConfigId', ParseUUIDPipe) subjectConfigId: string,
+  ) {
+    return this.examSubjectService.remove(examId, subjectConfigId);
   }
 }

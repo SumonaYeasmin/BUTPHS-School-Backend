@@ -714,4 +714,92 @@ export class ExamSubjectService {
       `Exam subject '${updated.subject.name}' configuration updated successfully`,
     );
   }
+
+  /**
+   * Delete an exam subject configuration with safety checks
+   */
+  async remove(examId: string, subjectConfigId: string) {
+    const exam = await this.prisma.exam.findFirst({
+      where: { id: examId, isDeleted: false },
+    });
+
+    if (!exam) {
+      throw new NotFoundException('Examination not found');
+    }
+
+    if (exam.isLocked) {
+      throw new BadRequestException(
+        `Examination '${exam.name}' is locked. Unlock it first before removing subjects.`,
+      );
+    }
+
+    if (exam.resultStatus === ResultPublicationStatus.PUBLISHED) {
+      throw new BadRequestException(
+        `Cannot remove subjects from examination '${exam.name}' because its results have already been published.`,
+      );
+    }
+
+    if (
+      exam.status === ExamStatus.COMPLETED ||
+      exam.status === ExamStatus.CANCELLED
+    ) {
+      throw new BadRequestException(
+        `Cannot remove subjects from an examination with status '${exam.status}'.`,
+      );
+    }
+
+    const existing = await this.prisma.examSubject.findFirst({
+      where: { id: subjectConfigId, examId },
+      include: {
+        subject: true,
+      },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Exam subject configuration not found');
+    }
+
+    // 1. Marks Recorded Guard: Cannot delete if marks entered
+    const marksCount = await this.prisma.mark.count({
+      where: { examSubjectId: subjectConfigId },
+    });
+
+    if (marksCount > 0) {
+      throw new BadRequestException(
+        `Cannot remove subject '${existing.subject.name}' because ${marksCount} student mark(s) have already been entered. Remove marks first.`,
+      );
+    }
+
+    // 2. Exam Routine Guard: Cannot delete if scheduled in routine
+    const routineCount = await this.prisma.examRoutine.count({
+      where: { examSubjectId: subjectConfigId },
+    });
+
+    if (routineCount > 0) {
+      throw new BadRequestException(
+        `Cannot remove subject '${existing.subject.name}' because it is scheduled in ${routineCount} exam routine slot(s). Remove it from the routine first.`,
+      );
+    }
+
+    // 3. Processed Results Guard
+    const resultCount = await this.prisma.studentSubjectResult.count({
+      where: { examSubjectId: subjectConfigId },
+    });
+
+    if (resultCount > 0) {
+      throw new BadRequestException(
+        `Cannot remove subject '${existing.subject.name}' because student subject results have already been processed.`,
+      );
+    }
+
+    // 4. Safe Delete
+    await this.prisma.examSubject.delete({
+      where: { id: subjectConfigId },
+    });
+
+    return ResponseHelper.success(
+      null,
+      `Subject '${existing.subject.name}' removed successfully from examination '${exam.name}'`,
+    );
+  }
 }
