@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -17,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { ExamSubjectService } from './exam-subject.service';
 import { CreateExamSubjectDto } from './dto/create-exam-subject.dto';
+import { UpdateExamSubjectDto } from './dto/update-exam-subject.dto';
 import { QueryExamSubjectDto } from './dto/query-exam-subject.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -108,5 +110,37 @@ export class ExamSubjectController {
     @Param('subjectConfigId', ParseUUIDPipe) subjectConfigId: string,
   ) {
     return this.examSubjectService.findOne(examId, subjectConfigId);
+  }
+
+  @Patch(':subjectConfigId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update exam subject configuration (Admin only)',
+    description:
+      'Partially updates subject marks distribution, pass marks, or display order. Marks structure changes are blocked if student marks have already been recorded for this subject.',
+  })
+  @ApiParam({ name: 'examId', description: 'Exam UUID' })
+  @ApiParam({ name: 'subjectConfigId', description: 'Exam Subject Config UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Exam subject configuration updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Validation failed, exam locked/published, component sum mismatch, or marks already recorded',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Exam subject configuration or Examination not found',
+  })
+  async update(
+    @Param('examId', ParseUUIDPipe) examId: string,
+    @Param('subjectConfigId', ParseUUIDPipe) subjectConfigId: string,
+    @Body() dto: UpdateExamSubjectDto,
+  ) {
+    return this.examSubjectService.update(examId, subjectConfigId, dto);
   }
 }

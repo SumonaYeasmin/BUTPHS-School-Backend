@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateExamSubjectDto } from './dto/create-exam-subject.dto';
+import { UpdateExamSubjectDto } from './dto/update-exam-subject.dto';
 import { QueryExamSubjectDto } from './dto/query-exam-subject.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
@@ -428,6 +429,289 @@ export class ExamSubjectService {
     return ResponseHelper.success(
       examSubject,
       `Exam subject '${examSubject.subject.name}' details retrieved successfully`,
+    );
+  }
+
+  /**
+   * Update an existing exam subject configuration with safety checks
+   */
+  async update(
+    examId: string,
+    subjectConfigId: string,
+    dto: UpdateExamSubjectDto,
+  ) {
+    // 1. Verify Exam existence and state guards
+    const exam = await this.prisma.exam.findFirst({
+      where: { id: examId, isDeleted: false },
+    });
+
+    if (!exam) {
+      throw new NotFoundException('Examination not found');
+    }
+
+    if (exam.isLocked) {
+      throw new BadRequestException(
+        `Examination '${exam.name}' is locked. Unlock it first before modifying subjects.`,
+      );
+    }
+
+    if (exam.resultStatus === ResultPublicationStatus.PUBLISHED) {
+      throw new BadRequestException(
+        `Cannot modify subjects of examination '${exam.name}' because results have already been published.`,
+      );
+    }
+
+    if (
+      exam.status === ExamStatus.COMPLETED ||
+      exam.status === ExamStatus.CANCELLED
+    ) {
+      throw new BadRequestException(
+        `Cannot modify subjects of an examination with status '${exam.status}'.`,
+      );
+    }
+
+    // 2. Verify ExamSubject existence
+    const existing = await this.prisma.examSubject.findFirst({
+      where: { id: subjectConfigId, examId },
+      include: {
+        subject: true,
+      },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Exam subject configuration not found');
+    }
+
+    // 3. Recorded marks check: Cannot modify marks breakdown if student marks are already recorded
+    const marksCount = await this.prisma.mark.count({
+      where: { examSubjectId: subjectConfigId },
+    });
+
+    const isModifyingMarksStructure =
+      (dto.fullMarks !== undefined &&
+        dto.fullMarks !== Number(existing.fullMarks)) ||
+      (dto.hasWritten !== undefined && dto.hasWritten !== existing.hasWritten) ||
+      (dto.writtenFullMarks !== undefined &&
+        dto.writtenFullMarks !== Number(existing.writtenFullMarks || 0)) ||
+      (dto.hasMcq !== undefined && dto.hasMcq !== existing.hasMcq) ||
+      (dto.mcqFullMarks !== undefined &&
+        dto.mcqFullMarks !== Number(existing.mcqFullMarks || 0)) ||
+      (dto.hasPractical !== undefined &&
+        dto.hasPractical !== existing.hasPractical) ||
+      (dto.practicalFullMarks !== undefined &&
+        dto.practicalFullMarks !== Number(existing.practicalFullMarks || 0)) ||
+      (dto.hasContinuousAssessment !== undefined &&
+        dto.hasContinuousAssessment !== existing.hasContinuousAssessment) ||
+      (dto.continuousAssessmentFullMarks !== undefined &&
+        dto.continuousAssessmentFullMarks !==
+          Number(existing.continuousAssessmentFullMarks || 0));
+
+    if (marksCount > 0 && isModifyingMarksStructure) {
+      throw new BadRequestException(
+        `Cannot modify marks structure or component full marks for '${existing.subject.name}' because ${marksCount} student marks are already recorded for it. Clear marks first.`,
+      );
+    }
+
+    // 4. Verify Group (if changed)
+    let finalGroupId = existing.groupId;
+    if (dto.groupId !== undefined) {
+      if (dto.groupId) {
+        const group = await this.prisma.academicGroup.findFirst({
+          where: { id: dto.groupId, isActive: true },
+        });
+        if (!group) {
+          throw new NotFoundException('Academic group not found or is inactive');
+        }
+        finalGroupId = dto.groupId;
+      } else {
+        finalGroupId = null;
+      }
+    }
+
+    // 5. Compute target marks and components
+    const targetFullMarks =
+      dto.fullMarks !== undefined ? dto.fullMarks : Number(existing.fullMarks);
+    const targetPassMarks =
+      dto.passMarks !== undefined ? dto.passMarks : Number(existing.passMarks);
+
+    if (targetPassMarks > targetFullMarks) {
+      throw new BadRequestException(
+        `passMarks (${targetPassMarks}) cannot exceed fullMarks (${targetFullMarks}).`,
+      );
+    }
+
+    const targetHasWritten =
+      dto.hasWritten !== undefined ? dto.hasWritten : existing.hasWritten;
+    const targetWrittenFull = targetHasWritten
+      ? dto.writtenFullMarks !== undefined
+        ? dto.writtenFullMarks
+        : Number(existing.writtenFullMarks || 0)
+      : null;
+    const targetWrittenPass = targetHasWritten
+      ? dto.writtenPassMarks !== undefined
+        ? dto.writtenPassMarks
+        : Number(existing.writtenPassMarks || 0)
+      : null;
+
+    if (targetHasWritten) {
+      if (!targetWrittenFull || targetWrittenFull <= 0) {
+        throw new BadRequestException(
+          'writtenFullMarks must be specified and greater than 0 when hasWritten is true.',
+        );
+      }
+      if (targetWrittenPass && targetWrittenPass > targetWrittenFull) {
+        throw new BadRequestException(
+          `writtenPassMarks (${targetWrittenPass}) cannot exceed writtenFullMarks (${targetWrittenFull}).`,
+        );
+      }
+    }
+
+    const targetHasMcq =
+      dto.hasMcq !== undefined ? dto.hasMcq : existing.hasMcq;
+    const targetMcqFull = targetHasMcq
+      ? dto.mcqFullMarks !== undefined
+        ? dto.mcqFullMarks
+        : Number(existing.mcqFullMarks || 0)
+      : null;
+    const targetMcqPass = targetHasMcq
+      ? dto.mcqPassMarks !== undefined
+        ? dto.mcqPassMarks
+        : Number(existing.mcqPassMarks || 0)
+      : null;
+
+    if (targetHasMcq) {
+      if (!targetMcqFull || targetMcqFull <= 0) {
+        throw new BadRequestException(
+          'mcqFullMarks must be specified and greater than 0 when hasMcq is true.',
+        );
+      }
+      if (targetMcqPass && targetMcqPass > targetMcqFull) {
+        throw new BadRequestException(
+          `mcqPassMarks (${targetMcqPass}) cannot exceed mcqFullMarks (${targetMcqFull}).`,
+        );
+      }
+    }
+
+    const targetHasPractical =
+      dto.hasPractical !== undefined ? dto.hasPractical : existing.hasPractical;
+    const targetPracticalFull = targetHasPractical
+      ? dto.practicalFullMarks !== undefined
+        ? dto.practicalFullMarks
+        : Number(existing.practicalFullMarks || 0)
+      : null;
+    const targetPracticalPass = targetHasPractical
+      ? dto.practicalPassMarks !== undefined
+        ? dto.practicalPassMarks
+        : Number(existing.practicalPassMarks || 0)
+      : null;
+
+    if (targetHasPractical) {
+      if (!targetPracticalFull || targetPracticalFull <= 0) {
+        throw new BadRequestException(
+          'practicalFullMarks must be specified and greater than 0 when hasPractical is true.',
+        );
+      }
+      if (targetPracticalPass && targetPracticalPass > targetPracticalFull) {
+        throw new BadRequestException(
+          `practicalPassMarks (${targetPracticalPass}) cannot exceed practicalFullMarks (${targetPracticalFull}).`,
+        );
+      }
+    }
+
+    const targetHasCA =
+      dto.hasContinuousAssessment !== undefined
+        ? dto.hasContinuousAssessment
+        : existing.hasContinuousAssessment;
+    const targetCAFull = targetHasCA
+      ? dto.continuousAssessmentFullMarks !== undefined
+        ? dto.continuousAssessmentFullMarks
+        : Number(existing.continuousAssessmentFullMarks || 0)
+      : null;
+    const targetCAPass = targetHasCA
+      ? dto.continuousAssessmentPassMarks !== undefined
+        ? dto.continuousAssessmentPassMarks
+        : Number(existing.continuousAssessmentPassMarks || 0)
+      : null;
+
+    if (targetHasCA) {
+      if (!targetCAFull || targetCAFull <= 0) {
+        throw new BadRequestException(
+          'continuousAssessmentFullMarks must be specified and greater than 0 when hasContinuousAssessment is true.',
+        );
+      }
+      if (targetCAPass && targetCAPass > targetCAFull) {
+        throw new BadRequestException(
+          `continuousAssessmentPassMarks (${targetCAPass}) cannot exceed continuousAssessmentFullMarks (${targetCAFull}).`,
+        );
+      }
+    }
+
+    // 6. Verify component sum exact match
+    if (
+      targetHasWritten ||
+      targetHasMcq ||
+      targetHasPractical ||
+      targetHasCA
+    ) {
+      const componentSum =
+        (targetHasWritten ? Number(targetWrittenFull || 0) : 0) +
+        (targetHasMcq ? Number(targetMcqFull || 0) : 0) +
+        (targetHasPractical ? Number(targetPracticalFull || 0) : 0) +
+        (targetHasCA ? Number(targetCAFull || 0) : 0);
+
+      if (Math.abs(componentSum - targetFullMarks) > 0.001) {
+        throw new BadRequestException(
+          `The sum of component marks (${componentSum}) does not match the total fullMarks (${targetFullMarks}). Please adjust written, MCQ, practical, or continuous marks.`,
+        );
+      }
+    }
+
+    // 7. Update in database
+    const updated = await this.prisma.examSubject.update({
+      where: { id: subjectConfigId },
+      data: {
+        groupId: finalGroupId,
+        fullMarks: targetFullMarks,
+        passMarks: targetPassMarks,
+        hasWritten: targetHasWritten,
+        writtenFullMarks: targetWrittenFull,
+        writtenPassMarks: targetWrittenPass,
+        hasMcq: targetHasMcq,
+        mcqFullMarks: targetMcqFull,
+        mcqPassMarks: targetMcqPass,
+        hasPractical: targetHasPractical,
+        practicalFullMarks: targetPracticalFull,
+        practicalPassMarks: targetPracticalPass,
+        hasContinuousAssessment: targetHasCA,
+        continuousAssessmentFullMarks: targetCAFull,
+        continuousAssessmentPassMarks: targetCAPass,
+        ...(dto.isOptional !== undefined ? { isOptional: dto.isOptional } : {}),
+        ...(dto.displayOrder !== undefined
+          ? { displayOrder: dto.displayOrder }
+          : {}),
+      },
+      include: {
+        subject: {
+          select: {
+            id: true,
+            name: true,
+            officialCode: true,
+            category: true,
+            paperNumber: true,
+          },
+        },
+        group: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return ResponseHelper.success(
+      updated,
+      `Exam subject '${updated.subject.name}' configuration updated successfully`,
     );
   }
 }
