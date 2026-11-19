@@ -737,13 +737,14 @@ export class PromotionService {
     // 12. Build Group Override Map for Class 9/10
     const overrideMap = new Map<
       string,
-      { groupId: string; optionalSubjectId?: string }
+      { groupId: string; optionalClassSubjectId?: string }
     >();
     if (dto.groupOverrides) {
       for (const ov of dto.groupOverrides) {
         overrideMap.set(ov.studentId, {
           groupId: ov.groupId,
-          optionalSubjectId: ov.optionalSubjectId,
+          optionalClassSubjectId:
+            ov.optionalClassSubjectId || ov.optionalSubjectId,
         });
       }
     }
@@ -768,8 +769,8 @@ export class PromotionService {
         const studentOverride = overrideMap.get(item.studentId);
         const assignedGroupId =
           studentOverride?.groupId || dto.defaultGroupId || null;
-        const assignedOptionalSubjectId =
-          studentOverride?.optionalSubjectId || null;
+        const assignedOptionalClassSubjectId =
+          studentOverride?.optionalClassSubjectId || null;
 
         // 1. Mark source enrollment as PROMOTED
         await tx.studentEnrollment.update({
@@ -785,7 +786,7 @@ export class PromotionService {
             classId: targetClassId,
             sectionId: targetSectionId,
             groupId: assignedGroupId,
-            optionalSubjectId: assignedOptionalSubjectId,
+            optionalClassSubjectId: assignedOptionalClassSubjectId,
             roll: newRoll,
             enrollmentDate: promoDate,
             isRepeater: false,
@@ -843,7 +844,7 @@ export class PromotionService {
             classId: dto.sourceClassId,
             sectionId: dto.sourceSectionId,
             groupId: item.groupId,
-            optionalSubjectId: item.optionalSubjectId,
+            optionalClassSubjectId: item.optionalClassSubjectId,
             roll: repeaterRoll,
             enrollmentDate: promoDate,
             isRepeater: true,

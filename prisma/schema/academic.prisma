@@ -93,7 +93,6 @@ model Subject {
   classSubjects       ClassSubject[]
   examSubjects        ExamSubject[]
   digitalResources    DigitalResource[]
-  optionalEnrollments StudentEnrollment[] @relation("StudentOptionalSubject")
 
   @@index([isActive, displayOrder])
   @@index([category])
@@ -135,8 +134,9 @@ model ClassSubject {
   academicYear       AcademicYear        @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
   schoolClass        SchoolClass         @relation(fields: [classId], references: [id], onDelete: Restrict)
   subject            Subject             @relation(fields: [subjectId], references: [id], onDelete: Restrict)
-  group              AcademicGroup?      @relation(fields: [groupId], references: [id], onDelete: SetNull)
-  teacherAssignments TeacherAssignment[]
+  group               AcademicGroup?      @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  teacherAssignments  TeacherAssignment[]
+  optionalEnrollments StudentEnrollment[] @relation("ClassSubjectOptionalEnrollments")
 
   @@unique([academicYearId, classId, subjectId, groupId])
   @@unique([id, academicYearId, classId])
@@ -160,6 +160,17 @@ model Student {
   permanentAddress    String?
   admissionDate       DateTime      @db.Date
   status              StudentStatus @default(ACTIVE)
+
+  // পূর্বের অ্যাকাডেমিক রেকর্ড (ভর্তি ফর্মের ৮ ও ৯ নম্বর পয়েন্ট)
+  previousSchoolName    String?  @db.VarChar(200) /// পূর্বে অধ্যয়নরত বিদ্যালয়ের নাম
+  previousSchoolAddress String?  @db.VarChar(250) /// পূর্বে অধ্যয়নরত বিদ্যালয়ের ঠিকানা
+  previousGrade         String?  @db.VarChar(50)  /// পূর্ববর্তী শ্রেণিতে প্রাপ্ত গ্রেড
+  previousGpa           Decimal? @db.Decimal(3, 2) /// প্রাপ্ত জিপিএ
+  prevExamPassingYear   Int?                      /// পি.এস.সি/জে.এস.সি পাসের সন
+  prevExamRoll          String?  @db.VarChar(50)  /// পরীক্ষার রোল নম্বর
+  prevExamRegistration  String?  @db.VarChar(50)  /// পরীক্ষার রেজিস্ট্রেশন নম্বর
+  prevExamGpa           Decimal? @db.Decimal(3, 2) /// পি.এস.সি/জে.এস.সি তে প্রাপ্ত জিপিএ
+
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 
@@ -197,12 +208,15 @@ model StudentEnrollment {
   academicYearId    String           @db.Uuid
   classId           String           @db.Uuid
   sectionId         String           @db.Uuid
-  groupId           String?          @db.Uuid
-  optionalSubjectId String?          @db.Uuid
-  roll              Int
+  groupId                String?          @db.Uuid
+  optionalClassSubjectId String?          @db.Uuid
+  roll                   Int
   enrollmentDate    DateTime         @db.Date
-  isRepeater        Boolean          @default(false)
+  formSerialNo      String?          @db.VarChar(50)  /// ভর্তি ফরমের ক্রমিক নম্বর (যেমন: "৬৮")
+  isRepeater        Boolean          @default(false)  /// ড্রপ বা একই শ্রেণিতে পুনরাবৃত্তি কি না
+  isReadmission     Boolean          @default(false)  /// নতুন ভর্তি নাকি পুনঃভর্তি (ভর্তি ফর্মের ১০ নম্বর পয়েন্ট)
   status            EnrollmentStatus @default(ACTIVE)
+  remarks           String?                           /// বিশেষ কোনো মন্তব্য বা নোট
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 
@@ -210,9 +224,9 @@ model StudentEnrollment {
   academicYear    AcademicYear           @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
   schoolClass     SchoolClass            @relation(fields: [classId], references: [id], onDelete: Restrict)
   section         Section                @relation(fields: [sectionId, classId], references: [id, classId], onDelete: Restrict)
-  group           AcademicGroup?         @relation(fields: [groupId], references: [id], onDelete: SetNull)
-  optionalSubject Subject?               @relation("StudentOptionalSubject", fields: [optionalSubjectId], references: [id], onDelete: SetNull)
-  promotionsFrom  StudentPromotion[]     @relation("PromotionFrom")
+  group                AcademicGroup?         @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  optionalClassSubject ClassSubject?          @relation("ClassSubjectOptionalEnrollments", fields: [optionalClassSubjectId], references: [id], onDelete: SetNull)
+  promotionsFrom       StudentPromotion[]     @relation("PromotionFrom")
   promotionsTo    StudentPromotion[]     @relation("PromotionTo")
   attendances     Attendance[]
   marks           Mark[]
@@ -275,16 +289,19 @@ model StudentTransferCertificate {
 }
 
 model Parent {
-  id         String   @id @default(uuid()) @db.Uuid
-  userId     String?  @unique @db.Uuid
-  name       String   @db.VarChar(150)
-  phone      String   @db.VarChar(20)
-  email      String?  @db.VarChar(150)
-  nid        String?  @db.VarChar(20)
-  occupation String?  @db.VarChar(100)
-  address    String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String?  @unique @db.Uuid
+  name          String   @db.VarChar(150) /// অভিভাবকের নাম (ইংরেজিতে)
+  nameBn        String?  @db.VarChar(150) /// অভিভাবকের নাম (বাংলায়)
+  phone         String   @db.VarChar(20)
+  email         String?  @db.VarChar(150)
+  nid           String?  @db.VarChar(30)  /// এনআইডি নম্বর
+  occupation    String?  @db.VarChar(100)
+  monthlyIncome Decimal? @db.Decimal(10, 2) /// অভিভাবকের মাসিক আয়
+  photo         String?                  /// অভিভাবকের ছবি
+  address       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   user     User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
   students ParentStudent[]
@@ -303,6 +320,7 @@ model ParentStudent {
   isEmergencyContact Boolean          @default(false)
   isSmsReceiver      Boolean          @default(true)
   createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
 
   parent  Parent  @relation(fields: [parentId], references: [id], onDelete: Cascade)
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)

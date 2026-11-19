@@ -6,30 +6,37 @@ model GradingScale {
   description     String?
   maxGpa          Decimal  @default(5.00) @db.Decimal(3, 2)
   isDefault       Boolean  @default(false)
-  isSystemDefault Boolean  @default(false)
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  isSystemDefault Boolean   @default(false)
+  isActive        Boolean   @default(true)
+  isDeleted       Boolean   @default(false)
+  deletedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   gradeRanges GradeRange[]
   exams       Exam[]
+
+  @@index([isDeleted, isActive])
 }
 
 model GradeRange {
-  id             String  @id @default(uuid()) @db.Uuid
-  gradingScaleId String  @db.Uuid
-  minPercentage  Decimal @db.Decimal(5, 2)
-  maxPercentage  Decimal @db.Decimal(5, 2)
-  letterGrade    String  @db.VarChar(5)
-  gradePoint     Decimal @db.Decimal(3, 2)
-  remarks        String? @db.VarChar(50)
-  isFailGrade    Boolean @default(false)
-  displayOrder   Int     @default(0)
+  id             String    @id @default(uuid()) @db.Uuid
+  gradingScaleId String    @db.Uuid
+  minPercentage  Decimal   @db.Decimal(5, 2)
+  maxPercentage  Decimal   @db.Decimal(5, 2)
+  letterGrade    String    @db.VarChar(5)
+  gradePoint     Decimal   @db.Decimal(3, 2)
+  remarks        String?   @db.VarChar(50)
+  isFailGrade    Boolean   @default(false)
+  displayOrder   Int       @default(0)
+  isDeleted      Boolean   @default(false)
+  deletedAt      DateTime?
 
   gradingScale GradingScale @relation(fields: [gradingScaleId], references: [id], onDelete: Cascade)
 
-  @@unique([gradingScaleId, letterGrade])
+  @@index([gradingScaleId, letterGrade])
   @@index([gradingScaleId, minPercentage, maxPercentage])
+  @@index([gradingScaleId, isDeleted])
 }
 
 model Exam {
@@ -65,6 +72,7 @@ model Exam {
 
   @@unique([academicYearId, classId, name])
   @@index([academicYearId, classId])
+  @@index([academicYearId, classId, isDeleted])
 }
 
 model ExamSubject {
@@ -87,6 +95,7 @@ model ExamSubject {
   continuousAssessmentFullMarks Decimal? @db.Decimal(7, 2)
   continuousAssessmentPassMarks Decimal? @db.Decimal(7, 2)
   isOptional                    Boolean  @default(false) /// ঐচ্ছিক / ৪র্থ বিষয় হিসেবে নেওয়া সম্ভব কিনা
+  displayOrder                  Int      @default(0)     /// মার্কশিট, রেজাল্ট কার্ড ও রুটিনে বিষয়ের ক্রম
 
   exam           Exam                   @relation(fields: [examId], references: [id], onDelete: Cascade)
   subject        Subject                @relation(fields: [subjectId], references: [id], onDelete: Restrict)
@@ -97,6 +106,7 @@ model ExamSubject {
 
   @@unique([examId, subjectId])
   @@index([examId, groupId])
+  @@index([examId, displayOrder])
 }
 
 model ExamRoutine {
@@ -111,6 +121,8 @@ model ExamRoutine {
   roomNo       String?           @db.VarChar(50) /// পরীক্ষার রুম / হল নম্বর (যেমন: রুম ১০২)
   status       ExamRoutineStatus @default(SCHEDULED) /// রুটিন স্ট্যাটাস (SCHEDULED, POSTPONED, CANCELLED, COMPLETED)
   instructions String? /// বিশেষ নির্দেশনা (যেমন: ক্যালকুলেটর নিষিদ্ধ)
+  isDeleted    Boolean           @default(false)
+  deletedAt    DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -119,7 +131,8 @@ model ExamRoutine {
   examSubject ExamSubject @relation(fields: [examSubjectId], references: [id], onDelete: Restrict)
   section     Section?    @relation(fields: [sectionId], references: [id], onDelete: SetNull)
 
-  @@unique([examId, examSubjectId, sectionId])
+  @@index([examId, examSubjectId, sectionId])
+  @@index([examId, isDeleted])
   @@index([examId, examDate])
   @@index([examDate, roomNo])
 }

@@ -53,15 +53,53 @@ model GalleryMedia {
   @@index([galleryId, sortOrder])
 }
 
+/// ভর্তি সংক্রান্ত তথ্যাবলী ও আবেদন ফরম প্রদর্শনী (হোম পেজে হুবহু ফরমের আদলে দেখানোর জন্য)
 model AdmissionContent {
-  id            String   @id @default(uuid()) @db.Uuid
-  title         String   @db.VarChar(200)
-  description   String?
-  admissionInfo String?
-  image         String?
-  isPublished   Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                     String    @id @default(uuid()) @db.Uuid
+  title                  String    @default("ভর্তির আবেদন ফরম ও নির্দেশিকা") @db.VarChar(200)
+  academicSession        String?   @db.VarChar(50)  /// শিক্ষাবর্ষ (যেমন: "২০২৬")
+  
+  // --- স্কুলের পরিচিতি (ফরমের হেডার) ---
+  schoolNameBn           String?   @default("বিঝারী উপসী তারা প্রসন্ন উচ্চ বিদ্যালয়") @db.VarChar(200)
+  schoolNameEn           String?   @default("BIJHARI UPASHI T.P. HIGH SCHOOL") @db.VarChar(200)
+  schoolCode             String?   @default("৬১০২") @db.VarChar(50)
+  districtCode           String?   @default("৩০") @db.VarChar(50)
+  thanaCode              String?   @default("২৪১") @db.VarChar(50)
+  eiin                   String?   @default("113585") @db.VarChar(50)
+  schoolAddress          String?   @default("ডাকঘর : উপসী, উপজেলা : নড়িয়া, জেলা : শরীয়তপুর। স্থাপিত : ১৮৯৮ খ্রি.") @db.VarChar(250)
+  
+  // --- ফরমের ১৩টি মূল রিকোয়ারমেন্ট ফিল্ড (অভিভাবকদের জন্য তথ্যাবলী) ---
+  studentNameNotice      String?   @default("০১. শিক্ষার্থীর নাম (বাংলা ও ইংরেজিতে)")
+  fatherInfoNotice       String?   @default("০২. পিতার নাম (বাংলা ও ইংরেজিতে), পেশা, পিতার এনআইডি নং")
+  motherInfoNotice       String?   @default("০৩. মাতার নাম (বাংলা ও ইংরেজিতে), পেশা, মাতার এনআইডি নং")
+  addressInfoNotice      String?   @default("০৪. বর্তমান ও স্থায়ী ঠিকানা (গ্রাম, ডাকঘর, পোস্ট কোড, উপজেলা, জেলা)")
+  dobNotice              String?   @default("০৫. শিক্ষার্থীর জন্ম তারিখ")
+  birthCertificateNotice String?   @default("০৬. শিক্ষার্থীর ১৭ ডিজিটের ডিজিটাল জন্ম সনদ নং")
+  religionNotice         String?   @default("০৭. শিক্ষার্থীর ধর্ম")
+  prevExamNotice         String?   @default("০৮. পি.এস.সি / জে.এস.সি পাসের সন, রোল নম্বর, রেজিঃ নং, প্রাপ্ত জি.পি.এ.")
+  prevSchoolNotice       String?   @default("০৯. পূর্বে অধ্যয়নরত বিদ্যালয়ের নাম, শ্রেণি, শিক্ষাবর্ষ, প্রাপ্ত গ্রেড, জি.পি.এ. ও ঠিকানা")
+  admissionTypeNotice    String?   @default("১০. নতুন ভর্তি / পুনঃ ভর্তি (টিক চিহ্ন)")
+  classesAndSections     String?   @default("১১. ৬ষ্ঠ / ৭ম / ৮ম / ৯ম শ্রেণি : শাখা ক / খ / গ / ঘ, রোল নং")
+  availableGroups        String?   @default("১২. ৯ম শ্রেণির শাখা : বিজ্ঞান / মানবিক / ব্যবসায় শিক্ষা শাখা")
+  optionalSubjects       String?   @default("১৩. ৪র্থ বিষয় : উচ্চতর গণিত / কৃষি শিক্ষা / গার্হস্থ্য অর্থনীতি / কম্পিউটার শিক্ষা")
+  
+  // --- অঙ্গীকারনামা ও প্রবেশপত্র ---
+  declarationText        String?   @default("আমি এই মর্মে অঙ্গীকার করিতেছি যে, আমার পুত্র / কন্যা / আত্মীয় অন্য কোন বিদ্যালয়ে ভর্তি হয় নাই। সে অত্র বিদ্যালয়ের সকল প্রকার বিধি-বিধান মানিয়া চলিতে বাধ্য থাকিবে এবং আমার উপরে বর্ণিত সকল তথ্যাবলী সঠিক।") @db.Text
+  admitCardNotice        String?   @default("ভর্তি পরীক্ষার প্রবেশপত্র (রোল নং, পরীক্ষার তারিখ, প্রধান শিক্ষকের স্বাক্ষর)")
+  admissionTestDate      DateTime? @db.Date         /// ভর্তি পরীক্ষার তারিখ
+  
+  // --- তারিখ, ফি ও ডাউনলোড লিংক ---
+  startDate              DateTime? @db.Date         /// ফরম বিতরণ শুরুর তারিখ
+  endDate                DateTime? @db.Date         /// ফরম জমা দেওয়ার শেষ তারিখ
+  applicationFee         Decimal?  @db.Decimal(7, 2) /// ফরমের মূল্য (যদি থাকে)
+  helplinePhone          String?   @db.VarChar(50)  /// ভর্তি সংক্রান্ত হেল্পলাইন / ফোন নম্বর
+  formPdfUrl             String?                    /// মূল PDF ফরম ডাউনলোড লিংক
+  isPublished            Boolean   @default(true)   /// ওয়েবসাইটে প্রদর্শিত হবে কি না
+  
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([isPublished])
 }
 
 model ContactInformation {

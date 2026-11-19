@@ -15,7 +15,7 @@
     "lint:fix": "eslint . --ext .ts,.js,.jsx,.tsx --fix",
     "start": "npx prisma generate && node dist/src/main",
     "dev": "npx prisma generate && nest start --watch",
-    "start:dev": "nest start --watch",
+    "start:dev": "npx prisma generate && nest start --watch",
     "start:prod": "npx prisma migrate deploy && node dist/src/main",
     "start:docker": "prisma generate && prisma migrate deploy && node dist/src/main",
     "prisma:validate": "npx prisma validate",
