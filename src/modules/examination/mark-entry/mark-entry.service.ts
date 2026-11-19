@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateMarkDto } from './dto/create-mark.dto';
+import { UpdateMarkDto } from './dto/update-mark.dto';
 import {
   BulkCreateMarkDto,
   StudentMarkEntryItemDto,
@@ -980,6 +981,314 @@ export class MarkEntryService {
         },
       },
       'Mark entry details retrieved successfully',
+    );
+  }
+
+  /**
+   * Update mark entry with strict validation, teacher authorization, and score bounds
+   */
+  async updateMark(id: string, dto: UpdateMarkDto, currentUser: any) {
+    const mark = await this.prisma.mark.findUnique({
+      where: { id },
+      include: {
+        enrollment: {
+          include: {
+            student: true,
+            section: true,
+            schoolClass: true,
+          },
+        },
+        examSubject: {
+          include: {
+            subject: true,
+            exam: {
+              include: {
+                academicYear: true,
+                schoolClass: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!mark) {
+      throw new NotFoundException('Mark entry record not found');
+    }
+
+    const roles: string[] = currentUser.roles || [];
+    const isAdmin =
+      roles.includes('ADMIN') || roles.includes('SUPER_ADMIN');
+
+    // 1. Mark lock check: If already locked, only admins can modify or unlock
+    if (mark.isLocked && !isAdmin) {
+      throw new BadRequestException(
+        'This mark entry is locked. Only an administrator can unlock or modify it.',
+      );
+    }
+
+    // 2. Lock permission check: Only admins can alter isLocked
+    if (dto.isLocked !== undefined && !isAdmin) {
+      throw new ForbiddenException(
+        'Access denied: Only administrators have permission to lock or unlock mark records.',
+      );
+    }
+
+    const exam = mark.examSubject.exam;
+
+    // 3. Operational status and deadline checks
+    this.verifyExamOperationalStatus(exam, currentUser);
+
+    // 4. Find curriculum classSubject
+    const classSubject = await this.prisma.classSubject.findFirst({
+      where: {
+        academicYearId: exam.academicYearId,
+        classId: exam.classId,
+        subjectId: mark.examSubject.subjectId,
+        isActive: true,
+      },
+    });
+
+    if (!classSubject) {
+      throw new BadRequestException(
+        `Subject '${mark.examSubject.subject.name}' is not configured in this class curriculum.`,
+      );
+    }
+
+    // 5. Verify teacher authorization for this section & subject
+    await this.verifyTeacherPermission(
+      currentUser,
+      exam,
+      mark.enrollment,
+      classSubject,
+      mark.examSubject,
+    );
+
+    // 6. Verify student subject eligibility
+    this.verifyStudentSubjectEligibility(
+      mark.enrollment,
+      mark.examSubject,
+      classSubject,
+    );
+
+    // 7. Calculate and validate component scores
+    const effectiveAbsent =
+      dto.isAbsent !== undefined ? dto.isAbsent : mark.isAbsent;
+
+    let written = 0;
+    let mcq = 0;
+    let practical = 0;
+    let ca = 0;
+    let totalMarks = 0;
+
+    if (effectiveAbsent) {
+      // If student is absent, all component scores must be zero
+      written = 0;
+      mcq = 0;
+      practical = 0;
+      ca = 0;
+      totalMarks = 0;
+    } else {
+      // Determine scores: new DTO value if specified, otherwise keep previous value
+      written =
+        dto.writtenMarks !== undefined
+          ? Number(dto.writtenMarks)
+          : Number(mark.writtenMarks);
+      mcq =
+        dto.mcqMarks !== undefined
+          ? Number(dto.mcqMarks)
+          : Number(mark.mcqMarks);
+      practical =
+        dto.practicalMarks !== undefined
+          ? Number(dto.practicalMarks)
+          : Number(mark.practicalMarks);
+      ca =
+        dto.continuousAssessmentMarks !== undefined
+          ? Number(dto.continuousAssessmentMarks)
+          : Number(mark.continuousAssessmentMarks);
+
+      // Validate Written Component
+      if (mark.examSubject.hasWritten) {
+        const maxWritten = Number(mark.examSubject.writtenFullMarks || 0);
+        if (written < 0 || written > maxWritten) {
+          throw new BadRequestException(
+            `Written marks (${written}) must be between 0 and maximum allowed (${maxWritten}).`,
+          );
+        }
+      } else if (written > 0) {
+        throw new BadRequestException(
+          `Subject '${mark.examSubject.subject.name}' does not have a written component.`,
+        );
+      }
+
+      // Validate MCQ Component
+      if (mark.examSubject.hasMcq) {
+        const maxMcq = Number(mark.examSubject.mcqFullMarks || 0);
+        if (mcq < 0 || mcq > maxMcq) {
+          throw new BadRequestException(
+            `MCQ marks (${mcq}) must be between 0 and maximum allowed (${maxMcq}).`,
+          );
+        }
+      } else if (mcq > 0) {
+        throw new BadRequestException(
+          `Subject '${mark.examSubject.subject.name}' does not have an MCQ component.`,
+        );
+      }
+
+      // Validate Practical Component
+      if (mark.examSubject.hasPractical) {
+        const maxPractical = Number(mark.examSubject.practicalFullMarks || 0);
+        if (practical < 0 || practical > maxPractical) {
+          throw new BadRequestException(
+            `Practical marks (${practical}) must be between 0 and maximum allowed (${maxPractical}).`,
+          );
+        }
+      } else if (practical > 0) {
+        throw new BadRequestException(
+          `Subject '${mark.examSubject.subject.name}' does not have a practical component.`,
+        );
+      }
+
+      // Validate Continuous Assessment Component
+      if (mark.examSubject.hasContinuousAssessment) {
+        const maxCA = Number(
+          mark.examSubject.continuousAssessmentFullMarks || 0,
+        );
+        if (ca < 0 || ca > maxCA) {
+          throw new BadRequestException(
+            `Continuous assessment marks (${ca}) must be between 0 and maximum allowed (${maxCA}).`,
+          );
+        }
+      } else if (ca > 0) {
+        throw new BadRequestException(
+          `Subject '${mark.examSubject.subject.name}' does not have continuous assessment.`,
+        );
+      }
+
+      totalMarks = written + mcq + practical + ca;
+      const maxSubjectTotal = Number(mark.examSubject.fullMarks);
+
+      if (totalMarks > maxSubjectTotal) {
+        throw new BadRequestException(
+          `Calculated total marks (${totalMarks}) cannot exceed subject full marks (${maxSubjectTotal}).`,
+        );
+      }
+    }
+
+    // 8. Persist the updated mark record
+    const updated = await this.prisma.mark.update({
+      where: { id },
+      data: {
+        isAbsent: effectiveAbsent,
+        writtenMarks: written,
+        mcqMarks: mcq,
+        practicalMarks: practical,
+        continuousAssessmentMarks: ca,
+        totalMarks,
+        ...(dto.isLocked !== undefined && isAdmin
+          ? { isLocked: dto.isLocked }
+          : {}),
+        enteredBy: currentUser.id,
+      },
+      include: {
+        enrollment: {
+          include: {
+            student: true,
+            section: true,
+            schoolClass: true,
+          },
+        },
+        examSubject: {
+          include: {
+            subject: true,
+            exam: true,
+          },
+        },
+        creator: {
+          select: { id: true, name: true, email: true },
+        },
+      },
+    });
+
+    return ResponseHelper.success(
+      {
+        id: updated.id,
+        student: {
+          enrollmentId: updated.enrollment.id,
+          studentId: updated.enrollment.student.studentId,
+          name: updated.enrollment.student.nameEn,
+          roll: updated.enrollment.roll,
+          section: updated.enrollment.section.name,
+          class: updated.enrollment.schoolClass.name,
+        },
+        subject: {
+          id: updated.examSubject.subject.id,
+          name: updated.examSubject.subject.name,
+          code: updated.examSubject.subject.officialCode,
+          fullMarks: Number(updated.examSubject.fullMarks),
+          passMarks: Number(updated.examSubject.passMarks),
+        },
+        isAbsent: updated.isAbsent,
+        writtenMarks: Number(updated.writtenMarks),
+        mcqMarks: Number(updated.mcqMarks),
+        practicalMarks: Number(updated.practicalMarks),
+        continuousAssessmentMarks: Number(updated.continuousAssessmentMarks),
+        totalMarks: Number(updated.totalMarks),
+        isLocked: updated.isLocked,
+        updatedAt: updated.updatedAt,
+        updatedBy: updated.creator?.name || 'System',
+      },
+      'Mark entry updated successfully',
+    );
+  }
+
+  /**
+   * Lock or unlock a mark entry (Admins only)
+   */
+  async toggleMarkLock(id: string, isLocked: boolean, currentUser: any) {
+    const roles: string[] = currentUser.roles || [];
+    const isAdmin =
+      roles.includes('ADMIN') || roles.includes('SUPER_ADMIN');
+
+    if (!isAdmin) {
+      throw new ForbiddenException(
+        'Access denied: Only administrators can lock or unlock mark records.',
+      );
+    }
+
+    const mark = await this.prisma.mark.findUnique({
+      where: { id },
+      include: {
+        enrollment: {
+          include: {
+            student: true,
+          },
+        },
+        examSubject: {
+          include: {
+            subject: true,
+          },
+        },
+      },
+    });
+
+    if (!mark) {
+      throw new NotFoundException('Mark entry record not found');
+    }
+
+    const updated = await this.prisma.mark.update({
+      where: { id },
+      data: { isLocked },
+    });
+
+    return ResponseHelper.success(
+      {
+        id: updated.id,
+        isLocked: updated.isLocked,
+        studentName: mark.enrollment.student.nameEn,
+        subject: mark.examSubject.subject.name,
+      },
+      `Mark entry ${isLocked ? 'locked' : 'unlocked'} successfully`,
     );
   }
 }

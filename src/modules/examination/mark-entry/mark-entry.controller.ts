@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -17,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { MarkEntryService } from './mark-entry.service';
 import { CreateMarkDto } from './dto/create-mark.dto';
+import { UpdateMarkDto } from './dto/update-mark.dto';
 import { BulkCreateMarkDto } from './dto/bulk-create-mark.dto';
 import { QueryGradeSheetDto } from './dto/query-grade-sheet.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
@@ -168,5 +170,69 @@ export class MarkEntryController {
   })
   async getMarkById(@Param('id', ParseUUIDPipe) id: string) {
     return this.markEntryService.getMarkById(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN', 'TEACHER')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update mark entry for a student (Teachers / Admins)',
+    description:
+      'Updates component scores (written, MCQ, practical, continuous assessment) or absent status with strict validations: mark lock check, exam status check, submission deadline check, teacher assignment authorization, and component full mark limits.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Mark entry updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Validation failed, mark is locked, exam is locked or cancelled, results published, deadline passed, or scores out of bounds',
+  })
+  @ApiResponse({
+    status: 403,
+    description:
+      'Access denied: Teacher is not assigned to this subject/section, or attempted to change lock status without Admin privileges',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Mark entry record not found',
+  })
+  async updateMark(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateMarkDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.markEntryService.updateMark(id, dto, user);
+  }
+
+  @Patch(':id/lock')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Lock or unlock a mark entry record (Admins only)',
+    description:
+      'Allows administrators to lock or unlock a specific student mark record to prevent or enable edits by teachers.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Mark entry lock status updated successfully',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Only administrators can lock or unlock mark records',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Mark entry record not found',
+  })
+  async toggleMarkLock(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body('isLocked') isLocked: boolean,
+    @CurrentUser() user: any,
+  ) {
+    return this.markEntryService.toggleMarkLock(id, isLocked ?? true, user);
   }
 }
