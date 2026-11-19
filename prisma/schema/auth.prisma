@@ -64,12 +64,12 @@ model AuditLog {
   userId    String?  @db.Uuid
   action    String   @db.VarChar(100)
   module    String   @db.VarChar(100)
-  details   String?
   ipAddress String?  @db.VarChar(50)
+  userAgent String?
   createdAt DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([userId, createdAt])
-  @@index([module, action])
+  @@index([module, createdAt])
 }

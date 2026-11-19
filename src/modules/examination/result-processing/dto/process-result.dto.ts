@@ -21,4 +21,14 @@ export class ProcessResultDto {
   @IsOptional()
   @IsBoolean()
   lockExamOnProcess?: boolean = false;
+
+  @ApiPropertyOptional({
+    example: false,
+    description:
+      'Whether to allow processing results even if some subjects have missing/pending marks. If false, processing is safely blocked until all marks are entered.',
+    default: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  allowIncomplete?: boolean = false;
 }

@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
-import { ResultStatus } from '@prisma/client';
+import { ResultStatus } from '../../../../../prisma/generated/client';
 
 export class QueryTabulationSheetDto {
   @ApiPropertyOptional({

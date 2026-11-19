@@ -12,7 +12,7 @@ import {
   ExamStatus,
   ResultPublicationStatus,
   ResultStatus,
-} from '@prisma/client';
+} from '../../../../prisma/generated/client';
 
 @Injectable()
 export class ResultProcessingService {
@@ -134,6 +134,57 @@ export class ResultProcessingService {
       marksMap.set(`${m.studentEnrollmentId}_${m.examSubjectId}`, m);
     }
 
+    // 4. Missing marks check (unless allowIncomplete: true)
+    if (!dto.allowIncomplete) {
+      const pendingSubjectsReport: {
+        subjectName: string;
+        missingStudents: number;
+      }[] = [];
+
+      for (const examSubject of exam.examSubjects) {
+        const classSubject = classSubjectMap.get(examSubject.subjectId);
+        let missingCount = 0;
+
+        for (const enrollment of enrollments) {
+          if (
+            examSubject.groupId &&
+            enrollment.groupId !== examSubject.groupId
+          ) {
+            continue;
+          }
+          const isOptional =
+            (examSubject.isOptional || classSubject?.isOptional) &&
+            enrollment.optionalClassSubjectId === classSubject?.id;
+          if (
+            (examSubject.isOptional || classSubject?.isOptional) &&
+            !isOptional
+          ) {
+            continue;
+          }
+
+          if (!marksMap.has(`${enrollment.id}_${examSubject.id}`)) {
+            missingCount++;
+          }
+        }
+
+        if (missingCount > 0) {
+          pendingSubjectsReport.push({
+            subjectName: examSubject.subject.name,
+            missingStudents: missingCount,
+          });
+        }
+      }
+
+      if (pendingSubjectsReport.length > 0) {
+        const details = pendingSubjectsReport
+          .map((p) => `${p.subjectName} (${p.missingStudents} pending)`)
+          .join(', ');
+        throw new BadRequestException(
+          `Cannot process results: Mark entry is not finished yet. Pending marks in: ${details}. Please ensure all teachers have submitted marks, or send 'allowIncomplete: true' to process partial results.`,
+        );
+      }
+    }
+
     // Helper: Determine letter grade & grade point from percentage score
     const evaluateGrade = (pct: number) => {
       for (const range of gradeRanges) {
@@ -177,6 +228,7 @@ export class ResultProcessingService {
       let coreGradePointsSum = 0;
       let coreSubjectsCount = 0;
       let bonusGradePointTotal = 0;
+      let hasMissingMarks = false;
 
       for (const examSubject of exam.examSubjects) {
         // Group check: student must belong to the subject's group if specified
@@ -193,6 +245,13 @@ export class ResultProcessingService {
         const isOptional =
           (examSubject.isOptional || classSubject?.isOptional) &&
           enrollment.optionalClassSubjectId === classSubject?.id;
+
+        if (
+          (examSubject.isOptional || classSubject?.isOptional) &&
+          !isOptional
+        ) {
+          continue;
+        }
 
         const mark = marksMap.get(`${enrollment.id}_${examSubject.id}`);
         const subjectFullMarks = Number(examSubject.fullMarks);
@@ -268,6 +327,8 @@ export class ResultProcessingService {
               bonusGradePoint = gradePoint > 2.0 ? gradePoint - 2.0 : 0.0;
             }
           }
+        } else {
+          hasMissingMarks = true;
         }
 
         totalObtainedMarks += totalMarks;
@@ -308,7 +369,10 @@ export class ResultProcessingService {
       let overallGrade = 'F';
       let resultStatus: ResultStatus = ResultStatus.FAIL;
 
-      if (failedSubjectCount === 0) {
+      if (hasMissingMarks) {
+        resultStatus = ResultStatus.INCOMPLETE;
+        overallGrade = 'INCOMPLETE';
+      } else if (failedSubjectCount === 0) {
         const calculatedGpaWithBonus = Number(
           ((coreGradePointsSum + bonusGradePointTotal) / coreCount).toFixed(2),
         );
@@ -340,6 +404,9 @@ export class ResultProcessingService {
     );
     const failedStudents = studentSummaryList.filter(
       (s) => s.resultStatus === ResultStatus.FAIL,
+    );
+    const incompleteStudents = studentSummaryList.filter(
+      (s) => s.resultStatus === ResultStatus.INCOMPLETE,
     );
 
     const sortFn = (a: any, b: any) => {
@@ -387,7 +454,11 @@ export class ResultProcessingService {
     }
 
     // 6. Execute atomic persistence in a Prisma Transaction
-    const allSummaries = [...passedStudents, ...failedStudents];
+    const allSummaries = [
+      ...passedStudents,
+      ...failedStudents,
+      ...incompleteStudents,
+    ];
 
     await this.prisma.$transaction(async (tx) => {
       // Clean existing calculated subject results for this exam
