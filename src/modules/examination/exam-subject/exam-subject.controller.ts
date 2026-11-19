@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseUUIDPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -15,6 +17,7 @@ import {
 } from '@nestjs/swagger';
 import { ExamSubjectService } from './exam-subject.service';
 import { CreateExamSubjectDto } from './dto/create-exam-subject.dto';
+import { QueryExamSubjectDto } from './dto/query-exam-subject.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -56,5 +59,54 @@ export class ExamSubjectController {
     @Body() dto: CreateExamSubjectDto,
   ) {
     return this.examSubjectService.create(examId, dto);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get all configured subjects for an examination',
+    description:
+      'Returns all subjects configured for an exam with marks breakdown, group distribution, and total marks summary.',
+  })
+  @ApiParam({ name: 'examId', description: 'Exam UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Exam subjects retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Examination not found',
+  })
+  async findAllByExam(
+    @Param('examId', ParseUUIDPipe) examId: string,
+    @Query() query: QueryExamSubjectDto,
+  ) {
+    return this.examSubjectService.findAllByExam(examId, query);
+  }
+
+  @Get(':subjectConfigId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get specific exam subject details by ID',
+    description:
+      'Returns complete marks configuration, curriculum subject information, and associated counts.',
+  })
+  @ApiParam({ name: 'examId', description: 'Exam UUID' })
+  @ApiParam({ name: 'subjectConfigId', description: 'Exam Subject Config UUID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Exam subject details retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Exam subject configuration or Examination not found',
+  })
+  async findOne(
+    @Param('examId', ParseUUIDPipe) examId: string,
+    @Param('subjectConfigId', ParseUUIDPipe) subjectConfigId: string,
+  ) {
+    return this.examSubjectService.findOne(examId, subjectConfigId);
   }
 }

@@ -6,9 +6,11 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateExamSubjectDto } from './dto/create-exam-subject.dto';
+import { QueryExamSubjectDto } from './dto/query-exam-subject.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 import {
   ExamStatus,
+  Prisma,
   ResultPublicationStatus,
 } from '../../../../prisma/generated/client';
 
@@ -290,6 +292,142 @@ export class ExamSubjectService {
     return ResponseHelper.created(
       examSubject,
       `Subject '${subject.name}' added successfully to examination '${exam.name}'`,
+    );
+  }
+
+  /**
+   * Get all subjects configured for an examination with group and marks summary
+   */
+  async findAllByExam(examId: string, query: QueryExamSubjectDto) {
+    const exam = await this.prisma.exam.findFirst({
+      where: { id: examId, isDeleted: false },
+      include: {
+        academicYear: {
+          select: { id: true, name: true, startDate: true, endDate: true },
+        },
+        schoolClass: {
+          select: { id: true, name: true, numericValue: true },
+        },
+      },
+    });
+
+    if (!exam) {
+      throw new NotFoundException('Examination not found');
+    }
+
+    const whereClause: Prisma.ExamSubjectWhereInput = {
+      examId,
+    };
+
+    if (query.groupId) {
+      whereClause.groupId = query.groupId;
+    }
+
+    if (query.isOptional !== undefined) {
+      whereClause.isOptional = query.isOptional;
+    }
+
+    const examSubjects = await this.prisma.examSubject.findMany({
+      where: whereClause,
+      include: {
+        subject: {
+          select: {
+            id: true,
+            name: true,
+            officialCode: true,
+            category: true,
+            paperNumber: true,
+          },
+        },
+        group: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            marks: true,
+            examRoutines: true,
+          },
+        },
+      },
+      orderBy: [{ displayOrder: 'asc' }],
+    });
+
+    const totalCoreMarks = examSubjects
+      .filter((s) => !s.isOptional)
+      .reduce((sum, s) => sum + Number(s.fullMarks), 0);
+
+    const totalOptionalMarks = examSubjects
+      .filter((s) => s.isOptional)
+      .reduce((sum, s) => sum + Number(s.fullMarks), 0);
+
+    return ResponseHelper.success(
+      {
+        examination: {
+          id: exam.id,
+          name: exam.name,
+          examType: exam.examType,
+          status: exam.status,
+          startDate: exam.startDate,
+          endDate: exam.endDate,
+          allowCombinedPass: exam.allowCombinedPass,
+          weightagePercentage: exam.weightagePercentage,
+          academicYear: exam.academicYear,
+          schoolClass: exam.schoolClass,
+        },
+        summary: {
+          totalSubjects: examSubjects.length,
+          coreSubjectsCount: examSubjects.filter((s) => !s.isOptional).length,
+          optionalSubjectsCount: examSubjects.filter((s) => s.isOptional).length,
+          totalCoreMarks,
+          totalOptionalMarks,
+        },
+        subjects: examSubjects,
+      },
+      `Exam subjects for '${exam.name}' retrieved successfully`,
+    );
+  }
+
+  /**
+   * Get single configured subject details by ID
+   */
+  async findOne(examId: string, examSubjectId: string) {
+    const examSubject = await this.prisma.examSubject.findFirst({
+      where: { id: examSubjectId, examId },
+      include: {
+        subject: true,
+        group: true,
+        exam: {
+          select: {
+            id: true,
+            name: true,
+            examType: true,
+            status: true,
+            startDate: true,
+            endDate: true,
+            academicYear: { select: { id: true, name: true } },
+            schoolClass: { select: { id: true, name: true } },
+          },
+        },
+        _count: {
+          select: {
+            marks: true,
+            examRoutines: true,
+            subjectResults: true,
+          },
+        },
+      },
+    });
+
+    if (!examSubject) {
+      throw new NotFoundException('Exam subject configuration not found');
+    }
+
+    return ResponseHelper.success(
+      examSubject,
+      `Exam subject '${examSubject.subject.name}' details retrieved successfully`,
     );
   }
 }
