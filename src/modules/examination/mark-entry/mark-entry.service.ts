@@ -1291,4 +1291,124 @@ export class MarkEntryService {
       `Mark entry ${isLocked ? 'locked' : 'unlocked'} successfully`,
     );
   }
+
+  /**
+   * Delete / Reset a mark entry (Admin only with strict safeguards)
+   */
+  async deleteMark(id: string, currentUser: any) {
+    const roles: string[] = currentUser.roles || [];
+    const isAdmin =
+      roles.includes('ADMIN') || roles.includes('SUPER_ADMIN');
+
+    if (!isAdmin) {
+      throw new ForbiddenException(
+        'Access denied: Only administrators are permitted to delete or reset mark records.',
+      );
+    }
+
+    const mark = await this.prisma.mark.findUnique({
+      where: { id },
+      include: {
+        enrollment: {
+          include: {
+            student: true,
+            section: true,
+            schoolClass: true,
+          },
+        },
+        examSubject: {
+          include: {
+            subject: true,
+            exam: true,
+          },
+        },
+      },
+    });
+
+    if (!mark) {
+      throw new NotFoundException('Mark entry record not found');
+    }
+
+    const exam = mark.examSubject.exam;
+
+    // 1. Published Results Guard
+    if (exam.resultStatus === ResultPublicationStatus.PUBLISHED) {
+      throw new BadRequestException(
+        `Cannot delete mark record. Results for examination '${exam.name}' have already been published.`,
+      );
+    }
+
+    // 2. Exam Locked Guard
+    if (exam.isLocked) {
+      throw new BadRequestException(
+        `Cannot delete mark record. Examination '${exam.name}' is currently locked.`,
+      );
+    }
+
+    // 3. Mark Locked Guard
+    if (mark.isLocked) {
+      throw new BadRequestException(
+        'This mark entry is currently locked. You must explicitly unlock the mark entry before it can be deleted.',
+      );
+    }
+
+    // 4. Exam Status Guard
+    if (exam.status === ExamStatus.CANCELLED) {
+      throw new BadRequestException(
+        `Cannot delete marks for cancelled examination '${exam.name}'.`,
+      );
+    }
+
+    // 5. Check if formal subject result was already calculated for this student & subject
+    const existingSubjectResult =
+      await this.prisma.studentSubjectResult.findFirst({
+        where: {
+          examSubjectId: mark.examSubjectId,
+          studentEnrollmentId: mark.studentEnrollmentId,
+        },
+      });
+
+    if (existingSubjectResult) {
+      throw new BadRequestException(
+        'Cannot delete mark record because formal subject results have already been generated for this student. Reset results first.',
+      );
+    }
+
+    // Delete the mark record
+    await this.prisma.mark.delete({
+      where: { id },
+    });
+
+    return ResponseHelper.success(
+      {
+        id: mark.id,
+        deletedAt: new Date(),
+        student: {
+          enrollmentId: mark.enrollment.id,
+          studentId: mark.enrollment.student.studentId,
+          name: mark.enrollment.student.nameEn,
+          roll: mark.enrollment.roll,
+          class: mark.enrollment.schoolClass.name,
+          section: mark.enrollment.section.name,
+        },
+        subject: {
+          name: mark.examSubject.subject.name,
+          code: mark.examSubject.subject.officialCode,
+        },
+        exam: {
+          id: exam.id,
+          name: exam.name,
+        },
+        deletedScore: {
+          totalMarks: Number(mark.totalMarks),
+          writtenMarks: Number(mark.writtenMarks),
+          mcqMarks: Number(mark.mcqMarks),
+          practicalMarks: Number(mark.practicalMarks),
+          continuousAssessmentMarks: Number(mark.continuousAssessmentMarks),
+          isAbsent: mark.isAbsent,
+        },
+      },
+      `Mark entry for '${mark.enrollment.student.nameEn}' in '${mark.examSubject.subject.name}' has been permanently deleted and reset.`,
+    );
+  }
 }

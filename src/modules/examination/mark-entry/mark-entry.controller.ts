@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -234,5 +235,38 @@ export class MarkEntryController {
     @CurrentUser() user: any,
   ) {
     return this.markEntryService.toggleMarkLock(id, isLocked ?? true, user);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete or reset a student mark entry (Admins only)',
+    description:
+      'Permanently removes a student mark record with strict safeguards: blocked if results are already published, blocked if exam or mark is locked, and blocked if formal subject results have already been generated.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Mark entry deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot delete: results published, exam locked, mark locked, or formal subject results already generated',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Access denied: Only administrators can delete mark entries',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Mark entry record not found',
+  })
+  async deleteMark(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: any,
+  ) {
+    return this.markEntryService.deleteMark(id, user);
   }
 }
