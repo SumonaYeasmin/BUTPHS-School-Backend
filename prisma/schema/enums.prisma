@@ -8,7 +8,21 @@ enum StaffType {
 
 enum StaffStatus {
   ACTIVE
-  FORMER
+  RESIGNED
+  RETIRED
+  TERMINATED
+}
+
+enum EmploymentType {
+  PERMANENT
+  PROBATIONARY
+  CONTRACTUAL
+  PART_TIME
+}
+
+enum DepartmentStatus {
+  ACTIVE
+  INACTIVE
 }
 
 enum Gender {
@@ -29,6 +43,12 @@ enum EnrollmentStatus {
   PROMOTED
   TRANSFERRED
   COMPLETED
+}
+
+enum PromotionType {
+  PROMOTED
+  RETAINED
+  DOUBLE_PROMOTED
 }
 
 enum RelationshipType {
@@ -78,13 +98,29 @@ enum SmsStatus {
 enum ExamType {
   HALF_YEARLY
   ANNUAL
+  MODEL_TEST
   SELECTION
-  OTHER
+  CONSOLIDATED
+}
+
+enum ExamStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum ExamRoutineStatus {
+  SCHEDULED
+  POSTPONED
+  CANCELLED
+  COMPLETED
 }
 
 enum ResultPublicationStatus {
   DRAFT
   PUBLISHED
+  WITHHELD
 }
 
 enum ResultStatus {
@@ -168,15 +204,52 @@ enum PublicationType {
   OTHER
 }
 
-enum AdmissionApplicationStatus {
-  PENDING
-  REVIEWING
-  APPROVED
-  REJECTED
-}
-
 enum AchievementType {
   INSTITUTION_ACHIEVEMENT
   STUDENT_STAR
   NOTABLE_ALUMNI
+}
+
+enum BookType {
+  TEXTBOOK
+  SUPPLEMENTARY
+  GRAMMAR
+  REFERENCE
+}
+
+enum SubjectCategory {
+  GENERAL
+  LANGUAGE
+  MATHEMATICS
+  SCIENCE
+  SOCIAL_SCIENCE
+  RELIGION
+  COMMERCE
+  TECHNICAL
+}
+
+enum Religion {
+  ISLAM
+  HINDUISM
+  BUDDHISM
+  CHRISTIANITY
+  OTHER
+}
+
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+}
+
+enum CardStatus {
+  ACTIVE
+  LOST
+  DAMAGED
+  BLOCKED
 }

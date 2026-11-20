@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class UpdateSectionDto {
   @ApiPropertyOptional({
@@ -10,5 +10,13 @@ export class UpdateSectionDto {
   @IsString()
   @MaxLength(50)
   name?: string;
+
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Whether the section is active',
+  })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }
 
