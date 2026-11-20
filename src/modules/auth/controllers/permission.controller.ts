@@ -24,7 +24,7 @@ import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
 
-@ApiTags('Permissions')
+@ApiTags('(Auth) Permissions')
 @Controller('permissions')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('ADMIN')
@@ -34,74 +34,46 @@ export class PermissionController {
 
   @Post()
   @ApiOperation({
-    summary: 'Create a new permission (Admins only)',
+    summary: 'নতুন পারমিশন তৈরি করা (Create a new permission)',
     description:
-      'Creates a new unique system permission identifier (e.g. EXAM_CREATE, MARKS_ENTRY, FEES_COLLECT).',
+      'সিস্টেমে একটি নতুন পারমিশন কি-ওয়ার্ড (যেমন: EXAM_CREATE, MARKS_ENTRY, FEES_COLLECT) তৈরি করা যাবে।',
   })
-  @ApiResponse({
-    status: 201,
-    description: 'Permission created successfully',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Permission with this name already exists',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Forbidden: Only administrators can create permissions',
-  })
+  @ApiResponse({ status: 201, description: 'পারমিশন সফলভাবে তৈরি হয়েছে' })
+  @ApiResponse({ status: 400, description: 'এই নামের পারমিশন আগে থেকেই বিদ্যমান' })
   async create(@Body() dto: CreatePermissionDto) {
     return this.permissionService.create(dto);
   }
 
   @Get()
   @ApiOperation({
-    summary: 'Get all permissions with pagination and search (Admins only)',
+    summary: 'সকল পারমিশনের তালিকা দেখা (Get all permissions)',
     description:
-      'Retrieves the list of all defined permissions with name/description search and pagination.',
+      'সিস্টেমের সমস্ত পারমিশনের তালিকা, বিবরণ এবং পেজিনেশন ও সার্চিং সুবিধা দেখা যাবে।',
   })
-  @ApiResponse({
-    status: 200,
-    description: 'Permissions list retrieved successfully',
-  })
+  @ApiResponse({ status: 200, description: 'পারমিশন তালিকা সফলভাবে পাওয়া গেছে' })
   async findAll(@Query() query: QueryPermissionDto) {
     return this.permissionService.findAll(query);
   }
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Get single permission detail by ID (Admins only)',
-    description: 'Retrieves details of a specific permission.',
+    summary: 'নির্দিষ্ট পারমিশনের বিবরণ দেখা (Get single permission detail)',
+    description: 'পারমিশন আইডি দিয়ে নির্দিষ্ট একটি পারমিশনের বিস্তারিত তথ্য দেখা যাবে।',
   })
-  @ApiResponse({
-    status: 200,
-    description: 'Permission detail retrieved successfully',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Permission not found',
-  })
+  @ApiResponse({ status: 200, description: 'পারমিশন তথ্য সফলভাবে পাওয়া গেছে' })
+  @ApiResponse({ status: 404, description: 'পারমিশন খুঁজে পাওয়া যায়নি' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.permissionService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Update permission details (Admins only)',
-    description: 'Updates permission identifier name or description.',
+    summary: 'পারমিশন আপডেট করা (Update permission details)',
+    description: 'পারমিশনের নাম বা বিবরণ পরিবর্তন করা যাবে। নাম পরিবর্তন করলে ডুপ্লিকেট নাম প্রতিরোধ করা হবে।',
   })
-  @ApiResponse({
-    status: 200,
-    description: 'Permission updated successfully',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Permission with updated name already exists',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Permission not found',
-  })
+  @ApiResponse({ status: 200, description: 'পারমিশন সফলভাবে আপডেট হয়েছে' })
+  @ApiResponse({ status: 400, description: 'ভ্যালিডেশন ব্যর্থ বা পারমিশনের নাম ইতিমধ্যে বিদ্যমান' })
+  @ApiResponse({ status: 404, description: 'পারমিশন খুঁজে পাওয়া যায়নি' })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdatePermissionDto,
@@ -111,22 +83,13 @@ export class PermissionController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Delete permission with safeguards (Admins only)',
+    summary: 'পারমিশন ডিলিট করা (Delete a permission)',
     description:
-      'Deletes a permission record. Safeguarded: blocked if the permission is currently assigned to any active role.',
+      'একটি অব্যবহৃত পারমিশন মুছে ফেলা যাবে। তবে কোনো রোলের সাথে যুক্ত পারমিশন সরাসরি মোছা যাবে না।',
   })
-  @ApiResponse({
-    status: 200,
-    description: 'Permission deleted successfully',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Cannot delete: permission is currently assigned to active roles',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Permission not found',
-  })
+  @ApiResponse({ status: 200, description: 'পারমিশন সফলভাবে ডিলিট হয়েছে' })
+  @ApiResponse({ status: 400, description: 'পারমিশনটি কোনো রোলের সাথে যুক্ত থাকায় ডিলিট করা যায়নি' })
+  @ApiResponse({ status: 404, description: 'পারমিশন খুঁজে পাওয়া যায়নি' })
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return this.permissionService.delete(id);
   }
