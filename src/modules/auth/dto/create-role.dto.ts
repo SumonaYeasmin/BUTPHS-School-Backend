@@ -1,17 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-  MaxLength,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateRoleDto {
   @ApiProperty({
     example: 'TEACHER',
-    description: 'Unique name of the role (e.g. TEACHER, ACCOUNTANT, LIBRARIAN)',
+    description: 'Unique role name (e.g. TEACHER, ACCOUNTANT, LIBRARIAN)',
   })
   @IsNotEmpty()
   @IsString()
@@ -19,21 +12,11 @@ export class CreateRoleDto {
   name: string;
 
   @ApiPropertyOptional({
-    example: 'School teacher with mark entry and attendance rights',
-    description: 'Detailed description of this role',
+    example: 'Subject and class teachers in the institution',
+    description: 'Description of the role responsibilities',
   })
   @IsOptional()
   @IsString()
   @MaxLength(255)
   description?: string;
-
-  @ApiPropertyOptional({
-    example: ['11111111-1111-1111-1111-111111111111'],
-    description: 'Array of Permission UUIDs to assign to this role initially',
-    type: [String],
-  })
-  @IsOptional()
-  @IsArray()
-  @IsUUID('4', { each: true })
-  permissionIds?: string[];
 }
