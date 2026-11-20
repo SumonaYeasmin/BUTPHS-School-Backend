@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -16,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { PermissionService } from '../services/permission.service';
 import { CreatePermissionDto } from '../dto/create-permission.dto';
+import { UpdatePermissionDto } from '../dto/update-permission.dto';
 import { QueryPermissionDto } from '../dto/query-permission.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -80,5 +83,51 @@ export class PermissionController {
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.permissionService.findOne(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Update permission details (Admins only)',
+    description: 'Updates permission identifier name or description.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Permission updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Permission with updated name already exists',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Permission not found',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdatePermissionDto,
+  ) {
+    return this.permissionService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete permission with safeguards (Admins only)',
+    description:
+      'Deletes a permission record. Safeguarded: blocked if the permission is currently assigned to any active role.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Permission deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot delete: permission is currently assigned to active roles',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Permission not found',
+  })
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return this.permissionService.delete(id);
   }
 }

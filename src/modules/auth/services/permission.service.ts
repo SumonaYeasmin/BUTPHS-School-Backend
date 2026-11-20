@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreatePermissionDto } from '../dto/create-permission.dto';
+import { UpdatePermissionDto } from '../dto/update-permission.dto';
 import { QueryPermissionDto } from '../dto/query-permission.dto';
 import { ResponseHelper } from '../../../common/helpers/response.helper';
 
@@ -102,6 +103,76 @@ export class PermissionService {
     return ResponseHelper.success(
       permission,
       'Permission detail retrieved successfully',
+    );
+  }
+
+  /**
+   * Update permission name or description with uniqueness check
+   */
+  async update(id: string, dto: UpdatePermissionDto) {
+    const permission = await this.prisma.permission.findUnique({
+      where: { id },
+    });
+
+    if (!permission) {
+      throw new NotFoundException(`Permission with ID '${id}' was not found.`);
+    }
+
+    if (dto.name && dto.name.trim().toUpperCase() !== permission.name) {
+      const newName = dto.name.trim().toUpperCase();
+      const existing = await this.prisma.permission.findUnique({
+        where: { name: newName },
+      });
+      if (existing && existing.id !== id) {
+        throw new BadRequestException(
+          `Permission with name '${newName}' already exists.`,
+        );
+      }
+    }
+
+    const updated = await this.prisma.permission.update({
+      where: { id },
+      data: {
+        name: dto.name ? dto.name.trim().toUpperCase() : undefined,
+        description:
+          dto.description !== undefined ? dto.description?.trim() : undefined,
+      },
+    });
+
+    return ResponseHelper.success(
+      updated,
+      `Permission '${updated.name}' updated successfully`,
+    );
+  }
+
+  /**
+   * Delete permission with dependency safeguard (blocked if currently assigned to active roles)
+   */
+  async delete(id: string) {
+    const permission = await this.prisma.permission.findUnique({
+      where: { id },
+      include: {
+        _count: { select: { roles: true } },
+      },
+    });
+
+    if (!permission) {
+      throw new NotFoundException(`Permission with ID '${id}' was not found.`);
+    }
+
+    if (permission._count.roles > 0) {
+      throw new BadRequestException(
+        `Cannot delete permission '${permission.name}'. It is currently assigned to ${permission._count.roles} role(s). Remove it from those roles first to prevent authorization errors.`,
+      );
+    }
+
+    await this.prisma.permission.delete({
+      where: { id },
+    });
+
+    return ResponseHelper.success(
+      { id, name: permission.name },
+      `Permission '${permission.name}' has been deleted successfully.`,
     );
   }
 }
