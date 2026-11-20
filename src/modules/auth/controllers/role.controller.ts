@@ -20,6 +20,8 @@ import { RoleService } from '../services/role.service';
 import { CreateRoleDto } from '../dto/create-role.dto';
 import { UpdateRoleDto } from '../dto/update-role.dto';
 import { QueryRoleDto } from '../dto/query-role.dto';
+import { AssignPermissionsDto } from '../dto/assign-permissions.dto';
+import { UpdateRolePermissionsDto } from '../dto/update-role-permissions.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -92,5 +94,62 @@ export class RoleController {
   @ApiResponse({ status: 404, description: 'Role not found' })
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return this.roleService.delete(id);
+  }
+
+  @Post(':roleId/permissions')
+  @ApiOperation({
+    summary: 'Assign permissions to a role (Admins only)',
+    description:
+      'Assigns a list of permissions to a specified role. Duplicate assignments are safely ignored.',
+  })
+  @ApiResponse({ status: 201, description: 'Permissions assigned successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid permission IDs provided' })
+  @ApiResponse({ status: 404, description: 'Role not found' })
+  async assignPermissions(
+    @Param('roleId', ParseUUIDPipe) roleId: string,
+    @Body() dto: AssignPermissionsDto,
+  ) {
+    return this.roleService.assignPermissions(roleId, dto);
+  }
+
+  @Patch(':roleId/permissions')
+  @ApiOperation({
+    summary: 'Update/sync role permissions (Admins only)',
+    description:
+      'Replaces the current set of assigned permissions for this role with the provided list of permission UUIDs.',
+  })
+  @ApiResponse({ status: 200, description: 'Role permissions updated successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid permission IDs provided' })
+  @ApiResponse({ status: 404, description: 'Role not found' })
+  async updateRolePermissions(
+    @Param('roleId', ParseUUIDPipe) roleId: string,
+    @Body() dto: UpdateRolePermissionsDto,
+  ) {
+    return this.roleService.updateRolePermissions(roleId, dto);
+  }
+
+  @Get(':roleId/permissions')
+  @ApiOperation({
+    summary: 'Get assigned permissions of a role (Admins only)',
+    description: 'Retrieves all permissions currently assigned to the given role.',
+  })
+  @ApiResponse({ status: 200, description: 'Assigned permissions retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Role not found' })
+  async getRolePermissions(@Param('roleId', ParseUUIDPipe) roleId: string) {
+    return this.roleService.getRolePermissions(roleId);
+  }
+
+  @Delete(':roleId/permissions/:permissionId')
+  @ApiOperation({
+    summary: 'Revoke/remove a permission from a role (Admins only)',
+    description: 'Removes an assigned permission from the specified role.',
+  })
+  @ApiResponse({ status: 200, description: 'Permission removed successfully' })
+  @ApiResponse({ status: 404, description: 'Role or permission assignment not found' })
+  async removePermission(
+    @Param('roleId', ParseUUIDPipe) roleId: string,
+    @Param('permissionId', ParseUUIDPipe) permissionId: string,
+  ) {
+    return this.roleService.removePermission(roleId, permissionId);
   }
 }
