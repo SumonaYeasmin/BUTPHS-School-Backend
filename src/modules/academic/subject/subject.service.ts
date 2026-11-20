@@ -32,7 +32,7 @@ export class SubjectService {
     // 2. Check if subject with same board code already exists (if code provided)
     if (trimmedCode) {
       const existingByCode = await this.prisma.subject.findUnique({
-        where: { code: trimmedCode },
+        where: { officialCode: trimmedCode },
       });
 
       if (existingByCode) {
@@ -46,7 +46,7 @@ export class SubjectService {
     const subject = await this.prisma.subject.create({
       data: {
         name: trimmedName,
-        code: trimmedCode,
+        officialCode: trimmedCode,
         description: dto.description?.trim() || null,
       },
     });
@@ -64,7 +64,7 @@ export class SubjectService {
       const term = query.search.trim();
       where.OR = [
         { name: { contains: term, mode: 'insensitive' } },
-        { code: { contains: term, mode: 'insensitive' } },
+        { officialCode: { contains: term, mode: 'insensitive' } },
       ];
     }
 
@@ -158,10 +158,10 @@ export class SubjectService {
 
     if (dto.code !== undefined) {
       const trimmedCode = dto.code.trim() || null;
-      if (trimmedCode !== existing.code) {
+      if (trimmedCode !== existing.officialCode) {
         if (trimmedCode) {
           const duplicateCode = await this.prisma.subject.findUnique({
-            where: { code: trimmedCode },
+            where: { officialCode: trimmedCode },
           });
 
           if (duplicateCode) {
@@ -170,7 +170,7 @@ export class SubjectService {
             );
           }
         }
-        data.code = trimmedCode;
+        data.officialCode = trimmedCode;
       }
     }
 

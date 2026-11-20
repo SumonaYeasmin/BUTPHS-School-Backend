@@ -158,6 +158,12 @@ export class AcademicYearService {
       throw new BadRequestException('Start date must be earlier than end date');
     }
 
+    if (existing.isActive && dto.isActive === false) {
+      throw new BadRequestException(
+        'Cannot directly deactivate the active academic year. Please set another academic year as active instead.',
+      );
+    }
+
     const updated = await this.prisma.$transaction(async (tx) => {
       if (dto.isActive === true && !existing.isActive) {
         await tx.academicYear.updateMany({
