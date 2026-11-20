@@ -110,12 +110,12 @@ export class PromotionService {
         );
       }
     } else {
-      // Auto-detect published ANNUAL exam
+      // Auto-detect published promotion authority exam (CONSOLIDATED preferred, then ANNUAL fallback)
       exam = await this.prisma.exam.findFirst({
         where: {
           academicYearId: dto.academicYearId,
           classId: dto.classId,
-          examType: 'ANNUAL',
+          examType: 'CONSOLIDATED',
           resultStatus: 'PUBLISHED',
         },
         select: {
@@ -126,6 +126,24 @@ export class PromotionService {
           publishedAt: true,
         },
       });
+
+      if (!exam) {
+        exam = await this.prisma.exam.findFirst({
+          where: {
+            academicYearId: dto.academicYearId,
+            classId: dto.classId,
+            examType: 'ANNUAL',
+            resultStatus: 'PUBLISHED',
+          },
+          select: {
+            id: true,
+            name: true,
+            examType: true,
+            resultStatus: true,
+            publishedAt: true,
+          },
+        });
+      }
     }
 
     // 7. Query active enrollments for this class/section
@@ -532,18 +550,32 @@ export class PromotionService {
         );
       }
     } else {
+      // Auto-detect published promotion authority exam (CONSOLIDATED preferred, then ANNUAL fallback)
       exam = await this.prisma.exam.findFirst({
         where: {
           academicYearId: dto.sourceAcademicYearId,
           classId: dto.sourceClassId,
-          examType: 'ANNUAL',
+          examType: 'CONSOLIDATED',
           resultStatus: 'PUBLISHED',
         },
         select: { id: true, name: true },
       });
+
+      if (!exam) {
+        exam = await this.prisma.exam.findFirst({
+          where: {
+            academicYearId: dto.sourceAcademicYearId,
+            classId: dto.sourceClassId,
+            examType: 'ANNUAL',
+            resultStatus: 'PUBLISHED',
+          },
+          select: { id: true, name: true },
+        });
+      }
+
       if (!exam) {
         throw new BadRequestException(
-          `No published ANNUAL examination found for '${sourceClass.name}' in academic year '${sourceYear.name}'. Published exam results are required for automated bulk promotion.`,
+          `No published CONSOLIDATED or ANNUAL examination found for '${sourceClass.name}' in academic year '${sourceYear.name}'. Published exam results are required for automated bulk promotion.`,
         );
       }
     }

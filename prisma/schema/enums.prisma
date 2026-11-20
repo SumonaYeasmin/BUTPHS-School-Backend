@@ -100,6 +100,7 @@ enum ExamType {
   ANNUAL
   MODEL_TEST
   SELECTION
+  CONSOLIDATED
 }
 
 enum ExamStatus {
