@@ -1,7 +1,11 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -12,6 +16,7 @@ import {
 } from '@nestjs/swagger';
 import { PermissionService } from '../services/permission.service';
 import { CreatePermissionDto } from '../dto/create-permission.dto';
+import { QueryPermissionDto } from '../dto/query-permission.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -44,5 +49,36 @@ export class PermissionController {
   })
   async create(@Body() dto: CreatePermissionDto) {
     return this.permissionService.create(dto);
+  }
+
+  @Get()
+  @ApiOperation({
+    summary: 'Get all permissions with pagination and search (Admins only)',
+    description:
+      'Retrieves the list of all defined permissions with name/description search and pagination.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Permissions list retrieved successfully',
+  })
+  async findAll(@Query() query: QueryPermissionDto) {
+    return this.permissionService.findAll(query);
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Get single permission detail by ID (Admins only)',
+    description: 'Retrieves details of a specific permission.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Permission detail retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Permission not found',
+  })
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.permissionService.findOne(id);
   }
 }
